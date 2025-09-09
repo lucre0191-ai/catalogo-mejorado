@@ -25,6 +25,34 @@
             color: white;
             padding: 1rem 0;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background-image: var(--header-bg-image, none);
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+        }
+
+        .custom-banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-image: var(--banner-bg-image, none);
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+        }
+
+        .custom-banner h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .custom-banner p {
+            font-size: 1.2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
 
         .header-content {
@@ -38,8 +66,8 @@
         }
 
         .logo {
-            max-width: 150px;
-            max-height: 80px;
+            max-width: 200px;
+            max-height: 120px;
             object-fit: contain;
             border-radius: 8px;
             border: 2px solid rgba(255,255,255,0.2);
@@ -342,19 +370,106 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            cursor: pointer;
+            cursor: zoom-in;
             position: relative;
         }
 
         .product-image img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
             transition: transform 0.3s;
         }
 
         .product-image:hover img {
-            transform: scale(1.05);
+            transform: scale(1.1);
+        }
+
+        /* Modal de imagen */
+        .image-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .image-modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+
+        .modal-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: -40px;
+            right: -10px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        .modal-close:hover {
+            background: rgba(255,255,255,0.4);
+        }
+
+        .modal-info {
+            position: absolute;
+            bottom: -60px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            padding: 10px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 6px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Cursor pointer para indicar que es clickeable */
+        .product-image:hover::after {
+            content: "🔍";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            padding: 5px 8px;
+            border-radius: 15px;
+            font-size: 12px;
+            opacity: 0.8;
         }
 
         .product-info {
@@ -414,6 +529,106 @@
             background: #f59e0b;
         }
 
+        /* Estilos de impresión */
+        @media print {
+            .header, .nav, .btn, .form-control, .card h3, 
+            .product-actions, .toast, .cloud-status,
+            .github-config, .form-group, .form-grid {
+                display: none !important;
+            }
+            
+            body {
+                font-size: 12px;
+                background: white !important;
+                color: black !important;
+                line-height: 1.4;
+            }
+            
+            .container {
+                max-width: none !important;
+                margin: 0 !important;
+                padding: 10px !important;
+            }
+            
+            .section {
+                display: block !important;
+            }
+            
+            .section:not(#catalogo) {
+                display: none !important;
+            }
+            
+            .products-grid {
+                display: grid !important;
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 10px !important;
+                page-break-inside: avoid;
+            }
+            
+            .product-card {
+                border: 1px solid #ddd !important;
+                border-radius: 8px !important;
+                padding: 8px !important;
+                margin-bottom: 10px !important;
+                page-break-inside: avoid;
+                background: white !important;
+                box-shadow: none !important;
+            }
+            
+            .product-image {
+                height: 120px !important;
+                margin-bottom: 8px !important;
+                border: 1px solid #eee !important;
+                border-radius: 4px !important;
+            }
+            
+            .product-image img {
+                object-fit: contain !important;
+            }
+            
+            .product-title {
+                font-size: 11px !important;
+                font-weight: bold !important;
+                margin-bottom: 4px !important;
+                color: black !important;
+            }
+            
+            .product-meta, .product-description {
+                font-size: 9px !important;
+                color: #555 !important;
+                margin-bottom: 2px !important;
+                line-height: 1.2 !important;
+            }
+            
+            .custom-banner {
+                background: #f8f9fa !important;
+                color: black !important;
+                border: 2px solid #ddd !important;
+                margin-bottom: 20px !important;
+            }
+            
+            .custom-banner h1 {
+                color: black !important;
+                text-shadow: none !important;
+            }
+            
+            .custom-banner p {
+                color: #555 !important;
+                text-shadow: none !important;
+            }
+            
+            h2, h3, h4 {
+                color: black !important;
+                page-break-after: avoid;
+            }
+            
+            /* Evitar saltos de página dentro de secciones */
+            h2 {
+                page-break-before: auto;
+                margin-top: 20px !important;
+            }
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .form-grid {
@@ -429,6 +644,18 @@
 <body>
     <!-- Toast -->
     <div id="toast" class="toast"></div>
+
+    <!-- Modal de imagen -->
+    <div id="imageModal" class="image-modal" onclick="closeImageModal(event)">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeImageModal()">&times;</button>
+            <img id="modalImage" class="modal-image" src="" alt="">
+            <div class="modal-info">
+                <div id="modalProductName"></div>
+                <small>Haz clic fuera de la imagen para cerrar</small>
+            </div>
+        </div>
+    </div>
 
     <!-- Header -->
     <header class="header">
@@ -527,8 +754,19 @@
 
         <!-- Sección: Catálogo -->
         <section id="catalogo" class="section">
+            <div class="custom-banner" id="catalogBanner">
+                <h1 id="bannerTitle">Catálogo de Productos - Libomi</h1>
+                <p id="bannerSubtitle">Productos de calidad para tu negocio</p>
+            </div>
+            
             <div class="card">
-                <h3>Catálogo de Productos</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3>Catálogo de Productos</h3>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button class="btn btn-primary" onclick="printCatalog()">🖨️ Imprimir Catálogo</button>
+                        <button class="btn btn-outline" onclick="downloadPDF()">📄 Descargar PDF</button>
+                    </div>
+                </div>
                 <div id="catalogContent"></div>
             </div>
         </section>
@@ -576,6 +814,44 @@
             </div>
 
             <div class="card">
+                <h3>Personalización del Banner del Catálogo</h3>
+                <div class="github-config">
+                    <div class="form-group">
+                        <label>Título del Banner:</label>
+                        <input type="text" id="bannerTitleConfig" class="form-control" 
+                               value="Catálogo de Productos - Libomi" 
+                               placeholder="Título principal del catálogo">
+                    </div>
+                    <div class="form-group">
+                        <label>Subtítulo del Banner:</label>
+                        <input type="text" id="bannerSubtitleConfig" class="form-control" 
+                               value="Productos de calidad para tu negocio" 
+                               placeholder="Subtítulo o descripción">
+                    </div>
+                    <div class="form-group">
+                        <label>Imagen de fondo del Banner (URL):</label>
+                        <input type="url" id="bannerBgImage" class="form-control" 
+                               placeholder="https://raw.githubusercontent.com/usuario/repo/main/banner-fondo.jpg">
+                        <small style="color: #666; font-size: 0.8rem; margin-top: 0.25rem; display: block;">
+                            Opcional: Imagen de fondo para el banner del catálogo
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label>Imagen de fondo del Header (URL):</label>
+                        <input type="url" id="headerBgImage" class="form-control" 
+                               placeholder="https://raw.githubusercontent.com/usuario/repo/main/header-fondo.jpg">
+                        <small style="color: #666; font-size: 0.8rem; margin-top: 0.25rem; display: block;">
+                            Opcional: Imagen de fondo para el header principal
+                        </small>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button class="btn btn-primary" onclick="saveConfig()">Guardar Configuración</button>
+                    <button class="btn btn-outline" onclick="previewBanner()">Vista Previa</button>
+                </div>
+            </div>
+
+            <div class="card">
                 <h3>Configuración de Sincronización</h3>
                 <p style="color: #666; margin-bottom: 1rem;">
                     Para mantener tus datos sincronizados entre diferentes ordenadores, puedes usar:
@@ -588,7 +864,7 @@
                         </p>
                     </div>
                     <div style="background: #fef3c7; padding: 1rem; border-radius: 8px; border: 1px solid #fbbf24;">
-                        <h4 style="color: #92400e; margin-bottom: 0.5rem;">☁️ Método Automático (Avanzado)</h4>
+                        <h4 style="color: #92400e; margin-bottom: 0.5rem;">⚠️ Método Automático (Avanzado)</h4>
                         <p style="color: #92400e; font-size: 0.875rem;">
                             Configura un servicio de almacenamiento en la nube como Firebase, Supabase o similar.
                         </p>
@@ -666,6 +942,7 @@
             renderProducts();
             renderCatalog();
             loadConfig();
+            applyBannerConfig();
             updateCloudStatus();
             
             // Event listeners
@@ -739,14 +1016,77 @@
             if (config.githubBaseUrl) {
                 githubBaseUrl.value = config.githubBaseUrl;
             }
+            
+            // Cargar configuración del banner
+            if (config.bannerTitle) {
+                document.getElementById('bannerTitleConfig').value = config.bannerTitle;
+                document.getElementById('bannerTitle').textContent = config.bannerTitle;
+            }
+            if (config.bannerSubtitle) {
+                document.getElementById('bannerSubtitleConfig').value = config.bannerSubtitle;
+                document.getElementById('bannerSubtitle').textContent = config.bannerSubtitle;
+            }
+            if (config.bannerBgImage) {
+                document.getElementById('bannerBgImage').value = config.bannerBgImage;
+                document.documentElement.style.setProperty('--banner-bg-image', `url(${config.bannerBgImage})`);
+            }
+            if (config.headerBgImage) {
+                document.getElementById('headerBgImage').value = config.headerBgImage;
+                document.documentElement.style.setProperty('--header-bg-image', `url(${config.headerBgImage})`);
+            }
+            
             updateExampleUrl();
         }
 
         function saveConfig() {
             config.githubBaseUrl = document.getElementById('githubBaseUrl').value;
+            config.bannerTitle = document.getElementById('bannerTitleConfig').value;
+            config.bannerSubtitle = document.getElementById('bannerSubtitleConfig').value;
+            config.bannerBgImage = document.getElementById('bannerBgImage').value;
+            config.headerBgImage = document.getElementById('headerBgImage').value;
+            
             localStorage.setItem('libomi_config_v3', JSON.stringify(config));
             showToast('Configuración guardada');
             updateExampleUrl();
+            applyBannerConfig();
+        }
+
+        function applyBannerConfig() {
+            // Aplicar configuración del banner
+            if (config.bannerTitle) {
+                document.getElementById('bannerTitle').textContent = config.bannerTitle;
+            }
+            if (config.bannerSubtitle) {
+                document.getElementById('bannerSubtitle').textContent = config.bannerSubtitle;
+            }
+            if (config.bannerBgImage) {
+                document.documentElement.style.setProperty('--banner-bg-image', `url(${config.bannerBgImage})`);
+            }
+            if (config.headerBgImage) {
+                document.documentElement.style.setProperty('--header-bg-image', `url(${config.headerBgImage})`);
+            }
+        }
+
+        function previewBanner() {
+            const title = document.getElementById('bannerTitleConfig').value;
+            const subtitle = document.getElementById('bannerSubtitleConfig').value;
+            const bannerBg = document.getElementById('bannerBgImage').value;
+            const headerBg = document.getElementById('headerBgImage').value;
+            
+            // Aplicar vista previa temporal
+            document.getElementById('bannerTitle').textContent = title || 'Catálogo de Productos - Libomi';
+            document.getElementById('bannerSubtitle').textContent = subtitle || 'Productos de calidad para tu negocio';
+            
+            if (bannerBg) {
+                document.documentElement.style.setProperty('--banner-bg-image', `url(${bannerBg})`);
+            }
+            if (headerBg) {
+                document.documentElement.style.setProperty('--header-bg-image', `url(${headerBg})`);
+            }
+            
+            // Cambiar a la pestaña del catálogo para ver la vista previa
+            showSection('catalogo');
+            showToast('Vista previa aplicada - Revisa el catálogo');
         }
 
         function updateExampleUrl() {
@@ -1121,7 +1461,7 @@
             
             container.innerHTML = products.map(product => `
                 <div class="product-card">
-                    <div class="product-image">
+                    <div class="product-image" onclick="openImageModal('${product.image && product.image !== PLACEHOLDER ? product.image : ''}', '${escapeHtml(product.name)}')">
                         ${product.image && product.image !== PLACEHOLDER ? 
                             `<img src="${product.image}" alt="${escapeHtml(product.name)}" onerror="this.src='${PLACEHOLDER}'">` : 
                             '<div style="color: #999; font-size: 0.875rem;">Sin imagen</div>'
@@ -1198,7 +1538,7 @@
                         groupedProducts[warehouse][category][subcategory].forEach(product => {
                             html += `
                                 <div class="product-card">
-                                    <div class="product-image">
+                                    <div class="product-image" onclick="openImageModal('${product.image && product.image !== PLACEHOLDER ? product.image : ''}', '${escapeHtml(product.name)}')">
                                         ${product.image && product.image !== PLACEHOLDER ? 
                                             `<img src="${product.image}" alt="${escapeHtml(product.name)}" onerror="this.src='${PLACEHOLDER}'">` : 
                                             '<div style="color: #999; font-size: 0.875rem;">Sin imagen</div>'
@@ -1226,6 +1566,64 @@
             });
             
             container.innerHTML = html;
+        }
+
+        // Funciones del modal de imágenes
+        function openImageModal(imageSrc, productName) {
+            if (!imageSrc || imageSrc === PLACEHOLDER) return;
+            
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            const modalProductName = document.getElementById('modalProductName');
+            
+            modalImage.src = imageSrc;
+            modalImage.alt = productName;
+            modalProductName.textContent = productName;
+            
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden'; // Prevenir scroll del body
+        }
+
+        function closeImageModal(event) {
+            // Si se hace clic en la imagen misma, no cerrar
+            if (event && event.target.classList.contains('modal-image')) {
+                return;
+            }
+            
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('show');
+            document.body.style.overflow = ''; // Restaurar scroll del body
+        }
+
+        // Cerrar modal con tecla Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeImageModal();
+            }
+        });
+
+        // Funciones de impresión y PDF
+        function printCatalog() {
+            // Aplicar configuración antes de imprimir
+            applyBannerConfig();
+            
+            // Asegurarse de que el catálogo esté renderizado
+            renderCatalog();
+            
+            // Cambiar a la vista de catálogo
+            showSection('catalogo');
+            
+            // Imprimir después de un pequeño delay para asegurar que se renderice
+            setTimeout(() => {
+                window.print();
+            }, 500);
+        }
+
+        function downloadPDF() {
+            // Para la descarga PDF, podríamos usar jsPDF o html2pdf
+            // Por ahora, mostraremos instrucciones para usar la función de impresión del navegador
+            showToast('Usa "Imprimir Catálogo" y selecciona "Guardar como PDF" en tu navegador');
+            printCatalog();
         }
 
         // Funciones de importar/exportar
