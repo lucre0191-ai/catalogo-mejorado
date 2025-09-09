@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo Libomi</title>
+    <style>
+        /* Reset básico */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background-image: var(--header-bg-image, none);
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+        }
+
+        .custom-banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-image: var(--banner-bg-image, none);
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+        }
+
+        .custom-banner h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .custom-banner p {
+            font-size: 1.2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .logo-container {
+            max-width: 300px;
+            max-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .header-title {
+            flex: 1;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .url-info {
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-family: monospace;
+            word-break: break-all;
+        }
+
+        /* Navegación */
+        .nav {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e0e6ed;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            background: transparent;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            color: #64748b;
+        }
+
+        .tab.active {
+            background: #667eea;
+            color: white;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .tab:hover:not(.active) {
+            background: #f1f5f9;
+        }
+
+        /* Container principal */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* Secciones */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .card h3 {
+            margin-bottom: 1rem;
+            color: #1e293b;
+        }
+
+        /* Grid de productos */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            cursor: zoom-in;
+            position: relative;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.3s;
+        }
+
+        .product-image:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Modal de imagen */
+        .image-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .image-modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+
+        .modal-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: -40px;
+            right: -10px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        .modal-close:hover {
+            background: rgba(255,255,255,0.4);
+        }
+
+        .modal-info {
+            position: absolute;
+            bottom: -60px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            padding: 10px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 6px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Cursor pointer para indicar que es clickeable */
+        .product-image:hover::after {
+            content: "🔍";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            padding: 5px 8px;
+            border-radius: 15px;
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .product-info {
+            padding: 1rem;
+        }
+
+        .product-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #1e293b;
+        }
+
+        .product-meta {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-description {
+            font-size: 0.875rem;
+            color: #4b5563;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .product-actions {
+            display: none !important; /* Ocultar botones de edición para clientes */
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: #10b981;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transform: translateX(100%);
+            transition: transform 0.3s;
+            z-index: 1001;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.error {
+            background: #ef4444;
+        }
+
+        .toast.warning {
+            background: #f59e0b;
+        }
+
+        /* Estilos de impresión */
+        @media print {
+            .nav, .btn, .form-control, .card h3,
+            .product-actions, .toast, .cloud-status,
+            .github-config, .form-group, .form-grid {
+                display: none !important;
+            }
+            
+            body {
+                font-size: 12px;
+                background: white !important;
+                color: black !important;
+                line-height: 1.4;
+            }
+
+            .container {
+                max-width: none !important;
+                margin: 0 !important;
+                padding: 10px !important;
+            }
+            
+            .header-content {
+                display: flex !important;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 1rem;
+                background-color: transparent !important;
+            }
+            .logo-container {
+                display: block !important;
+                max-width: 150px;
+                max-height: 80px;
+                border: none;
+            }
+            .header-title {
+                flex: none;
+                text-align: left;
+                font-size: 1.5rem;
+                margin-left: 1rem;
+            }
+
+            .custom-banner {
+                display: block !important;
+                background: #f8f9fa !important;
+                background-image: var(--banner-bg-image, none) !important;
+                background-size: cover !important;
+                background-position: center !important;
+                color: black !important;
+                border: 2px solid #ddd !important;
+                margin-bottom: 20px !important;
+            }
+
+            .custom-banner h1, .custom-banner p {
+                color: black !important;
+                text-shadow: none !important;
+            }
+
+            .products-grid {
+                display: grid !important;
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 10px !important;
+                page-break-inside: avoid;
+            }
+            .section {
+                display: none;
+            }
+            .section.active {
+                display: block !important;
+            }
+            #catalogo {
+                display: block !important;
+            }
+
+            .product-card {
+                border: 1px solid #ddd !important;
+                border-radius: 8px !important;
+                padding: 8px !important;
+                margin-bottom: 10px !important;
+                page-break-inside: avoid;
+                background: white !important;
+                box-shadow: none !important;
+            }
+
+            .product-image {
+                height: 120px !important;
+                margin-bottom: 8px !important;
+                border: 1px solid #eee !important;
+                border-radius: 4px !important;
+            }
+
+            .product-image img {
+                object-fit: contain !important;
+            }
+
+            .product-title {
+                font-size: 11px !important;
+                font-weight: bold !important;
+                margin-bottom: 4px !important;
+                color: black !important;
+            }
+
+            .product-meta, .product-description {
+                font-size: 9px !important;
+                color: #555 !important;
+                margin-bottom: 2px !important;
+                line-height: 1.2 !important;
+            }
+
+            h2, h3, h4 {
+                color: black !important;
+                page-break-after: avoid;
+            }
+
+            /* Evitar saltos de página dentro de secciones */
+            h2 {
+                page-break-before: auto;
+                margin-top: 20px !important;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .url-info {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="toast" class="toast"></div>
+
+    <div id="imageModal" class="image-modal" onclick="closeImageModal(event)">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeImageModal()">&times;</button>
+            <img id="modalImage" class="modal-image" src="" alt="">
+            <div class="modal-info">
+                <div id="modalProductName"></div>
+                <small>Haz clic fuera de la imagen para cerrar</small>
+            </div>
+        </div>
+    </div>
+
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-container">
+                <img id="logoImage" class="logo" src="https://raw.githubusercontent.com/lucre0191-ai/catalogo-mejorado/main/images/logo.png" alt="Logo" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'60\' height=\'60\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23f3f4f6\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%239ca3af\' font-size=\'10\'%3ESin Logo%3C/text%3E%3C/svg%3E'">
+            </div>
+            <h1 class="header-title">Catálogo de Productos - Libomi</h1>
+        </div>
+    </header>
+
+    <nav class="nav">
+        <div class="nav-content">
+            <button class="tab active" onclick="showSection('catalogo')">Ver Catálogo</button>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section id="catalogo" class="section active">
+            <div class="custom-banner" id="catalogBanner">
+                <h1 id="bannerTitle">Catálogo de Productos - Libomi</h1>
+                <p id="bannerSubtitle">Productos de calidad para tu negocio</p>
+            </div>
+
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3>Catálogo de Productos</h3>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button class="btn btn-primary" onclick="printCatalog()">🖨️ Imprimir Catálogo</button>
+                        <button class="btn btn-outline" onclick="downloadPDF()">📄 Descargar PDF</button>
+                    </div>
+                </div>
+                <div id="catalogContent"></div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Variables globales
+        let products = JSON.parse(localStorage.getItem('libomi_products_v3') || '[]');
+        let categories = JSON.parse(localStorage.getItem('libomi_categories_v3') || '{"General": ["Varios"]}');
+        let warehouses = JSON.parse(localStorage.getItem('libomi_warehouses_v3') || '["Almacén Principal"]');
+        let config = JSON.parse(localStorage.getItem('libomi_config_v3') || '{}');
+
+        // Placeholder para imágenes
+        const PLACEHOLDER = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+            `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300"><rect width="100%" height="100%" fill="#f3f4f6"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#9ca3af" font-size="16" font-family="Arial">Sin imagen</text></svg>`
+        );
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            renderCatalog();
+            loadConfig();
+        });
+
+        // Funciones de utilidad
+        function escapeHtml(text) {
+            if (!text) return '';
+            return String(text)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        // Funciones de configuración
+        function loadConfig() {
+            // Cargar configuración del banner
+            if (config.bannerTitle) {
+                document.getElementById('bannerTitle').textContent = config.bannerTitle;
+            }
+            if (config.bannerSubtitle) {
+                document.getElementById('bannerSubtitle').textContent = config.bannerSubtitle;
+            }
+            if (config.bannerBgImage) {
+                document.documentElement.style.setProperty('--banner-bg-image', `url(${config.bannerBgImage})`);
+            }
+            if (config.headerBgImage) {
+                document.documentElement.style.setProperty('--header-bg-image', `url(${config.headerBgImage})`);
+            }
+
+            // Carga del logo
+            if (config.logoImage) {
+                document.getElementById('logoImage').src = config.logoImage;
+            } else {
+                document.getElementById('logoImage').src = 'https://raw.githubusercontent.com/lucre0191-ai/catalogo-mejorado/main/images/logo.png';
+            }
+        }
+
+        // Funciones del catálogo
+        function renderCatalog() {
+            const container = document.getElementById('catalogContent');
+
+            if (products.length === 0) {
+                container.innerHTML = '<p>No hay productos para mostrar en el catálogo.</p>';
+                return;
+            }
+
+            // Agrupar por almacenes, luego por categorías
+            const groupedProducts = {};
+            products.forEach(product => {
+                const warehouse = product.warehouse || 'Sin almacén';
+                const category = product.category || 'Sin categoría';
+                const subcategory = product.subcategory || 'General';
+
+                if (!groupedProducts[warehouse]) {
+                    groupedProducts[warehouse] = {};
+                }
+                if (!groupedProducts[warehouse][category]) {
+                    groupedProducts[warehouse][category] = {};
+                }
+                if (!groupedProducts[warehouse][category][subcategory]) {
+                    groupedProducts[warehouse][category][subcategory] = [];
+                }
+
+                groupedProducts[warehouse][category][subcategory].push(product);
+            });
+
+            // Renderizar agrupados
+            let html = '';
+            Object.keys(groupedProducts).forEach(warehouse => {
+                html += `<div style="margin-bottom: 2rem;">`;
+                html += `<h2 style="color: #1e293b; font-size: 1.5rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e5e7eb;">${escapeHtml(warehouse)}</h2>`;
+
+                Object.keys(groupedProducts[warehouse]).forEach(category => {
+                    html += `<div style="margin-bottom: 1.5rem;">`;
+                    html += `<h3 style="color: #4b5563; font-size: 1.25rem; margin-bottom: 0.75rem;">${escapeHtml(category)}</h3>`;
+
+                    Object.keys(groupedProducts[warehouse][category]).forEach(subcategory => {
+                        if (subcategory !== 'General') {
+                            html += `<h4 style="color: #6b7280; font-size: 1.1rem; margin: 1rem 0 0.5rem; font-weight: 500;">${escapeHtml(subcategory)}</h4>`;
+                        }
+
+                        html += `<div class="products-grid">`;
+                        groupedProducts[warehouse][category][subcategory].forEach(product => {
+                            html += `
+                                <div class="product-card">
+                                    <div class="product-image" onclick="openImageModal('${product.image && product.image !== PLACEHOLDER ? product.image : ''}', '${escapeHtml(product.name)}')">
+                                        ${product.image && product.image !== PLACEHOLDER ?
+                                            `<img src="${product.image}" alt="${escapeHtml(product.name)}" onerror="this.src='${PLACEHOLDER}'">` :
+                                            '<div style="color: #999; font-size: 0.875rem;">Sin imagen</div>'
+                                        }
+                                    </div>
+                                    <div class="product-info">
+                                        <div class="product-title">${escapeHtml(product.name)}</div>
+                                        <div class="product-meta">
+                                            ${product.code ? `Código: ${escapeHtml(product.code)}` : ''}
+                                        </div>
+                                        <div class="product-description">
+                                            ${escapeHtml(product.description || 'Sin descripción')}
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        html += `</div>`;
+                    });
+
+                    html += `</div>`;
+                });
+
+                html += `</div>`;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Funciones del modal de imágenes
+        function openImageModal(imageSrc, productName) {
+            if (!imageSrc || imageSrc === PLACEHOLDER) return;
+
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            const modalProductName = document.getElementById('modalProductName');
+
+            modalImage.src = imageSrc;
+            modalImage.alt = productName;
+            modalProductName.textContent = productName;
+
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden'; // Prevenir scroll del body
+        }
+
+        function closeImageModal(event) {
+            // Si se hace clic en la imagen misma, no cerrar
+            if (event && event.target.classList.contains('modal-image')) {
+                return;
+            }
+
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('show');
+            document.body.style.overflow = ''; // Restaurar scroll del body
+        }
+
+        // Cerrar modal con tecla Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeImageModal();
+            }
+        });
+
+        // Funciones de impresión y PDF
+        function printCatalog() {
+            // Asegurarse de que el catálogo esté renderizado
+            renderCatalog();
+
+            // Cambiar a la vista de catálogo
+            showSection('catalogo');
+
+            // Imprimir después de un pequeño delay para asegurar que se renderice
+            setTimeout(() => {
+                window.print();
+            }, 500);
+        }
+
+        function downloadPDF() {
+            // Para la descarga PDF, podríamos usar jsPDF o html2pdf
+            // Por ahora, mostraremos instrucciones para usar la función de impresión del navegador
+            showToast('Usa "Imprimir Catálogo" y selecciona "Guardar como PDF" en tu navegador');
+            printCatalog();
+        }
+
+        // Funciones de toast
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type === 'error' ? 'error' : type === 'warning' ? 'warning' : ''}`;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+    </script>
+</body>
+</html>
