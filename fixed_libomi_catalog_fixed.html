@@ -25,6 +25,34 @@
             color: white;
             padding: 1rem 0;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background-image: var(--header-bg-image, none);
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+        }
+
+        .custom-banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-image: var(--banner-bg-image, none);
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+        }
+
+        .custom-banner h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .custom-banner p {
+            font-size: 1.2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
 
         .header-content {
@@ -38,8 +66,8 @@
         }
 
         .logo {
-            max-width: 150px;
-            max-height: 80px;
+            max-width: 200px;
+            max-height: 120px;
             object-fit: contain;
             border-radius: 8px;
             border: 2px solid rgba(255,255,255,0.2);
@@ -132,6 +160,62 @@
         .card h3 {
             margin-bottom: 1rem;
             color: #1e293b;
+        }
+
+        /* Cloud storage status */
+        .cloud-status {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .cloud-status.connected {
+            background: rgba(34, 197, 94, 0.1);
+            border-color: rgba(34, 197, 94, 0.2);
+            color: #16a34a;
+        }
+
+        .cloud-status.error {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.2);
+            color: #dc2626;
+        }
+
+        /* Image URL configurator */
+        .github-config {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .github-config label {
+            font-weight: 500;
+            color: #374151;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .github-config input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.875rem;
+        }
+
+        .github-config .example {
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+            font-family: monospace;
         }
 
         /* Formulario */
@@ -286,7 +370,7 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            cursor: pointer;
+            cursor: zoom-in;
             position: relative;
         }
 
@@ -298,26 +382,94 @@
         }
 
         .product-image:hover img {
-            transform: scale(1.05);
+            transform: scale(1.1);
         }
 
-        .product-image::after {
-            content: '🔍 Click para ampliar';
+        /* Modal de imagen */
+        .image-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .image-modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+
+        .modal-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        .modal-close {
             position: absolute;
-            bottom: 0;
+            top: -40px;
+            right: -10px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        .modal-close:hover {
+            background: rgba(255,255,255,0.4);
+        }
+
+        .modal-info {
+            position: absolute;
+            bottom: -60px;
             left: 0;
             right: 0;
-            background: linear-gradient(transparent, rgba(0,0,0,0.8));
-            color: white;
-            padding: 1rem 0.5rem;
             text-align: center;
-            font-size: 0.75rem;
-            opacity: 0;
-            transition: opacity 0.3s;
+            color: white;
+            padding: 10px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 6px;
         }
 
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Cursor pointer para indicar que es clickeable */
         .product-image:hover::after {
-            opacity: 1;
+            content: "🔍";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            padding: 5px 8px;
+            border-radius: 15px;
+            font-size: 12px;
+            opacity: 0.8;
         }
 
         .product-info {
@@ -350,162 +502,6 @@
             padding: 0 1rem 1rem;
         }
 
-        /* Toolbar */
-        .toolbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        .search-filters {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        /* Categorías */
-        .categories-list {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-
-        .category-section h4 {
-            margin-bottom: 1rem;
-            color: #1e293b;
-        }
-
-        .list-container {
-            background: white;
-            border-radius: 8px;
-            border: 1px solid #e5e7eb;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .list-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.75rem;
-            border-bottom: 1px solid #f3f4f6;
-        }
-
-        .list-item:last-child {
-            border-bottom: none;
-        }
-
-        /* Modal mejorado */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.95);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            cursor: zoom-out;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            position: relative;
-            max-width: 95vw;
-            max-height: 95vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-image {
-            max-width: 100%;
-            max-height: 100%;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-            cursor: grab;
-            transition: transform 0.3s ease;
-        }
-
-        .modal-image:active {
-            cursor: grabbing;
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: rgba(255,255,255,0.2);
-            color: white;
-            border: none;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.25rem;
-            backdrop-filter: blur(10px);
-            transition: background 0.3s, transform 0.2s;
-        }
-
-        .modal-close:hover {
-            background: rgba(255,255,255,0.3);
-            transform: scale(1.1);
-        }
-
-        .modal-info {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(transparent, rgba(0,0,0,0.8));
-            color: white;
-            padding: 2rem;
-            text-align: center;
-            transform: translateY(100%);
-            transition: transform 0.3s;
-        }
-
-        .modal.show-info .modal-info {
-            transform: translateY(0);
-        }
-
-        .zoom-controls {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            display: flex;
-            gap: 8px;
-            flex-direction: column;
-        }
-
-        .zoom-btn {
-            background: rgba(255,255,255,0.2);
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-            transition: background 0.3s, transform 0.2s;
-        }
-
-        .zoom-btn:hover {
-            background: rgba(255,255,255,0.3);
-            transform: scale(1.1);
-        }
-
         /* Toast */
         .toast {
             position: fixed;
@@ -533,177 +529,103 @@
             background: #f59e0b;
         }
 
-        /* Print Header (hidden by default) */
-        .print-header {
-            display: none;
-        }
-
-        /* ESTILOS DE IMPRESIÓN MEJORADOS */
+        /* Estilos de impresión */
         @media print {
-            * {
-                -webkit-print-color-adjust: exact !important;
-                color-adjust: exact !important;
-            }
-
-            html, body {
-                background: #fff !important;
-                color: #000 !important;
-                margin: 0;
-                padding: 0;
-                font-size: 12pt;
-            }
-
-            /* Ocultar elementos interactivos */
-            .header, .nav, .toolbar, .btn, input, textarea, .toast,
-            .modal, .product-actions, .logo-controls, .url-info {
+            .header, .nav, .btn, .form-control, .card h3, 
+            .product-actions, .toast, .cloud-status,
+            .github-config, .form-group, .form-grid {
                 display: none !important;
             }
-
-            /* Mostrar header de impresión */
-            .print-header {
-                display: flex !important;
-                align-items: center;
-                justify-content: space-between;
-                padding: 20px 0;
-                margin-bottom: 30px;
-                border-bottom: 3px solid #667eea;
-                page-break-after: avoid;
+            
+            body {
+                font-size: 12px;
+                background: white !important;
+                color: black !important;
+                line-height: 1.4;
             }
-
-            .print-logo {
-                height: 80px;
-                width: auto;
-                border-radius: 8px;
-                border: 2px solid #e5e5e5;
-            }
-
-            .print-title {
-                flex: 1;
-                text-align: center;
-                font-size: 24pt;
-                font-weight: bold;
-                color: #667eea !important;
-                margin: 0 20px;
-                letter-spacing: 1px;
-            }
-
-            .print-date {
-                font-size: 12pt;
-                color: #666 !important;
-                text-align: right;
-            }
-
+            
             .container {
                 max-width: none !important;
-                padding: 0 !important;
-            }
-
-            /* Secciones de almacén */
-            .warehouse-section {
-                page-break-inside: avoid;
-                margin-bottom: 40px;
-            }
-
-            .warehouse-title {
-                font-size: 20pt !important;
-                font-weight: bold !important;
-                color: #667eea !important;
-                text-align: center;
-                margin: 25px 0 20px 0 !important;
-                padding-bottom: 10px;
-                border-bottom: 3px solid #667eea;
-                page-break-after: avoid;
-            }
-
-            /* Secciones de categorías */
-            .category-section {
-                page-break-inside: avoid;
-                margin-bottom: 30px;
-            }
-
-            .category-title {
-                font-size: 18pt !important;
-                font-weight: bold !important;
-                color: #1e293b !important;
-                margin: 20px 0 10px 0 !important;
-                padding-bottom: 8px;
-                border-bottom: 2px solid #e5e5e5;
-                page-break-after: avoid;
-            }
-
-            .subcategory-title {
-                font-size: 16pt !important;
-                font-weight: 600 !important;
-                color: #4b5563 !important;
-                margin: 15px 0 10px 0 !important;
-                page-break-after: avoid;
-            }
-
-            .products-grid {
-                display: grid !important;
-                grid-template-columns: repeat(2, 1fr) !important;
-                gap: 15px !important;
-                margin-bottom: 25px;
-            }
-
-            .product-card {
-                width: 100% !important;
                 margin: 0 !important;
-                box-shadow: none !important;
-                border: 1px solid #ddd !important;
-                border-radius: 8px !important;
-                overflow: hidden;
-                page-break-inside: avoid;
-                break-inside: avoid;
-            }
-
-            .product-image {
-                height: 120px !important;
-                width: 100% !important;
-            }
-
-            .product-image::after {
-                display: none !important;
-            }
-
-            .product-image img {
-                width: 100% !important;
-                height: 100% !important;
-                object-fit: cover !important;
-                transform: none !important;
-            }
-
-            .product-info {
                 padding: 10px !important;
             }
-
+            
+            .section {
+                display: block !important;
+            }
+            
+            .section:not(#catalogo) {
+                display: none !important;
+            }
+            
+            .products-grid {
+                display: grid !important;
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 10px !important;
+                page-break-inside: avoid;
+            }
+            
+            .product-card {
+                border: 1px solid #ddd !important;
+                border-radius: 8px !important;
+                padding: 8px !important;
+                margin-bottom: 10px !important;
+                page-break-inside: avoid;
+                background: white !important;
+                box-shadow: none !important;
+            }
+            
+            .product-image {
+                height: 120px !important;
+                margin-bottom: 8px !important;
+                border: 1px solid #eee !important;
+                border-radius: 4px !important;
+            }
+            
+            .product-image img {
+                object-fit: contain !important;
+            }
+            
             .product-title {
-                font-size: 14pt !important;
+                font-size: 11px !important;
                 font-weight: bold !important;
-                margin: 0 0 4px 0 !important;
-                color: #000 !important;
+                margin-bottom: 4px !important;
+                color: black !important;
             }
-
-            .product-meta {
-                font-size: 10pt !important;
-                color: #666 !important;
-                margin-bottom: 2px;
+            
+            .product-meta, .product-description {
+                font-size: 9px !important;
+                color: #555 !important;
+                margin-bottom: 2px !important;
+                line-height: 1.2 !important;
             }
-
-            .product-description {
-                font-size: 10pt !important;
-                color: #444 !important;
-                line-height: 1.3;
-                margin-top: 4px;
+            
+            .custom-banner {
+                background: #f8f9fa !important;
+                color: black !important;
+                border: 2px solid #ddd !important;
+                margin-bottom: 20px !important;
             }
-
-            @page {
-                margin: 15mm 12mm;
-                size: A4;
+            
+            .custom-banner h1 {
+                color: black !important;
+                text-shadow: none !important;
             }
-
-            h3, h4, .category-title, .subcategory-title, .warehouse-title {
+            
+            .custom-banner p {
+                color: #555 !important;
+                text-shadow: none !important;
+            }
+            
+            h2, h3, h4 {
+                color: black !important;
                 page-break-after: avoid;
+            }
+            
+            /* Evitar saltos de página dentro de secciones */
+            h2 {
+                page-break-before: auto;
+                margin-top: 20px !important;
             }
         }
 
@@ -713,19 +635,6 @@
                 grid-template-columns: 1fr;
             }
 
-            .categories-list {
-                grid-template-columns: 1fr;
-            }
-
-            .toolbar {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .search-filters {
-                flex-direction: column;
-            }
-
             .url-info {
                 display: none;
             }
@@ -733,51 +642,28 @@
     </style>
 </head>
 <body>
-    <!-- Header de impresión -->
-    <div class="print-header">
-        <img id="printLogo" class="print-logo" alt="Logo">
-        <div class="print-title">CATÁLOGO DE PRODUCTOS - LIBOMI</div>
-        <div class="print-date">
-            Fecha: <span id="printDate"></span>
-        </div>
-    </div>
-
-    <!-- Modal de imagen mejorado -->
-    <div id="imageModal" class="modal">
-        <button class="modal-close" onclick="closeModal()">&times;</button>
-        <div class="modal-content">
-            <img id="modalImage" class="modal-image" alt="">
-            <div class="modal-info" id="modalInfo">
-                <h3 id="modalTitle"></h3>
-                <p id="modalDescription"></p>
-            </div>
-        </div>
-        <div class="zoom-controls">
-            <button class="zoom-btn" id="zoomIn">+</button>
-            <button class="zoom-btn" id="zoomOut">−</button>
-            <button class="zoom-btn" id="zoomReset">⌂</button>
-        </div>
-    </div>
-
     <!-- Toast -->
     <div id="toast" class="toast"></div>
+
+    <!-- Modal de imagen -->
+    <div id="imageModal" class="image-modal" onclick="closeImageModal(event)">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeImageModal()">&times;</button>
+            <img id="modalImage" class="modal-image" src="" alt="">
+            <div class="modal-info">
+                <div id="modalProductName"></div>
+                <small>Haz clic fuera de la imagen para cerrar</small>
+            </div>
+        </div>
+    </div>
 
     <!-- Header -->
     <header class="header">
         <div class="header-content">
-            <img id="logoImage" class="logo" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Crect width='100%25' height='100%25' fill='%23f3f4f6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%239ca3af' font-size='10'%3ESin Logo%3C/text%3E%3C/svg%3E" alt="Logo">
+            <img id="logoImage" class="logo" src="https://raw.githubusercontent.com/lucre0191-ai/catalogo-mejorado/main/images/logo.png" alt="Logo" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'60\' height=\'60\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23f3f4f6\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%239ca3af\' font-size=\'10\'%3ESin Logo%3C/text%3E%3C/svg%3E'">
             <h1 class="header-title">Catálogo de Productos - Libomi</h1>
             <div class="url-info" id="urlDisplay">
                 🌐 <span id="currentUrl"></span>
-            </div>
-            <div class="logo-controls">
-                <input type="file" id="logoInput" accept="image/*" style="display: none;">
-                <button class="btn btn-outline" onclick="document.getElementById('logoInput').click()">
-                    Cambiar Logo
-                </button>
-                <button class="btn btn-secondary" onclick="clearLogo()">
-                    Quitar Logo
-                </button>
             </div>
         </div>
     </header>
@@ -789,7 +675,8 @@
             <button class="tab" onclick="showSection('catalogo')">Ver Catálogo</button>
             <button class="tab" onclick="showSection('categorias')">Categorías</button>
             <button class="tab" onclick="showSection('almacenes')">Almacenes</button>
-            <button class="tab" onclick="showSection('respaldo')">Importar/Exportar</button>
+            <button class="tab" onclick="showSection('configuracion')">Configuración</button>
+            <button class="tab" onclick="showSection('respaldo')">Sincronización</button>
         </div>
     </nav>
 
@@ -797,6 +684,14 @@
     <main class="container">
         <!-- Sección: Productos -->
         <section id="productos" class="section active">
+            <div class="cloud-status" id="cloudStatus">
+                <span>📊</span>
+                <span id="cloudStatusText">Estado de sincronización</span>
+                <button class="btn btn-outline" onclick="syncData()" style="margin-left: auto; padding: 0.25rem 0.75rem;">
+                    Sincronizar
+                </button>
+            </div>
+
             <div class="card">
                 <h3>Agregar / Editar Producto</h3>
                 <form id="productForm" class="form-grid">
@@ -833,12 +728,19 @@
                     </div>
                     <div>
                         <div class="form-group">
-                            <label>Imagen</label>
+                            <label>Imagen (usar URL de GitHub)</label>
+                            <input type="url" id="productImageUrl" class="form-control" placeholder="https://raw.githubusercontent.com/usuario/repo/main/images/producto.jpg">
+                            <small style="color: #666; font-size: 0.8rem; margin-top: 0.25rem; display: block;">
+                                Sube tu imagen a GitHub y pega aquí la URL raw
+                            </small>
+                        </div>
+                        <div class="form-group">
                             <div id="imagePreview" class="image-preview empty">
-                                <span>Selecciona una imagen</span>
+                                <span>Ingresa una URL de imagen</span>
                             </div>
-                            <input type="file" id="productImage" class="form-control" accept="image/*">
-                            <small class="form-text text-muted">La imagen se comprimirá automáticamente (máx 1000×1000). Si supera 2MB se mostrará una alerta.</small>
+                            <button type="button" class="btn btn-outline" onclick="previewImageFromUrl()">
+                                Ver Vista Previa
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -852,23 +754,21 @@
 
         <!-- Sección: Catálogo -->
         <section id="catalogo" class="section">
-            <div class="toolbar">
-                <div class="search-filters">
-                    <input type="search" id="searchInput" class="form-control" placeholder="Buscar productos..." style="width: 300px;">
-                    <select id="warehouseFilter" class="form-control" style="width: 200px;">
-                        <option value="">Todos los almacenes</option>
-                    </select>
-                    <select id="categoryFilter" class="form-control" style="width: 200px;">
-                        <option value="">Todas las categorías</option>
-                    </select>
-                </div>
-                <div style="display: flex; gap: 0.5rem;">
-                    <button class="btn btn-secondary" onclick="expandAll()">Expandir Todo</button>
-                    <button class="btn btn-secondary" onclick="collapseAll()">Colapsar Todo</button>
-                    <button class="btn btn-primary" onclick="printCatalog()">Imprimir</button>
-                </div>
+            <div class="custom-banner" id="catalogBanner">
+                <h1 id="bannerTitle">Catálogo de Productos - Libomi</h1>
+                <p id="bannerSubtitle">Productos de calidad para tu negocio</p>
             </div>
-            <div id="catalogContent"></div>
+            
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3>Catálogo de Productos</h3>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button class="btn btn-primary" onclick="printCatalog()">🖨️ Imprimir Catálogo</button>
+                        <button class="btn btn-outline" onclick="downloadPDF()">📄 Descargar PDF</button>
+                    </div>
+                </div>
+                <div id="catalogContent"></div>
+            </div>
         </section>
 
         <!-- Sección: Categorías -->
@@ -880,17 +780,7 @@
                     <input type="text" id="newSubcategoryName" class="form-control" placeholder="Nueva subcategoría">
                     <button class="btn btn-primary" onclick="addCategory()">Agregar</button>
                 </div>
-            </div>
-
-            <div class="categories-list">
-                <div class="category-section">
-                    <h4>Categorías</h4>
-                    <div id="categoriesList" class="list-container"></div>
-                </div>
-                <div class="category-section">
-                    <h4>Subcategorías</h4>
-                    <div id="subcategoriesList" class="list-container"></div>
-                </div>
+                <div id="categoriesList"></div>
             </div>
         </section>
 
@@ -902,49 +792,130 @@
                     <input type="text" id="newWarehouseName" class="form-control" placeholder="Nuevo almacén">
                     <button class="btn btn-primary" onclick="addWarehouse()">Agregar</button>
                 </div>
-            </div>
-
-            <div class="category-section">
-                <h4>Almacenes Registrados</h4>
-                <div id="warehousesList" class="list-container"></div>
+                <div id="warehousesList"></div>
             </div>
         </section>
 
-        <!-- Sección: Respaldo -->
-        <section id="respaldo" class="section">
+        <!-- Sección: Configuración -->
+        <section id="configuracion" class="section">
             <div class="card">
-                <h3>Importar / Exportar Datos</h3>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
-                    <div>
-                        <label>Exportar datos (copiar JSON):</label>
-                        <textarea id="exportData" class="form-control" rows="10" readonly></textarea>
-                        <button class="btn btn-primary" onclick="exportData()" style="margin-top: 1rem;">Generar Exportación</button>
-                    </div>
-                    <div>
-                        <label>Importar datos (pegar JSON):</label>
-                        <textarea id="importData" class="form-control" rows="10"></textarea>
-                        <button class="btn btn-primary" onclick="importData()" style="margin-top: 1rem;">Importar</button>
+                <h3>Configuración de GitHub</h3>
+                <div class="github-config">
+                    <label>URL base para imágenes:</label>
+                    <input type="url" id="githubBaseUrl" class="form-control" 
+                           value="https://raw.githubusercontent.com/lucre0191-ai/catalogo-mejorado/main/images/"
+                           placeholder="https://raw.githubusercontent.com/usuario/repo/main/images/">
+                    <div class="example">
+                        Ejemplo: Si subes "producto1.jpg" a GitHub, la URL completa será:<br>
+                        <span id="exampleUrl">https://raw.githubusercontent.com/usuario/repo/main/images/producto1.jpg</span>
                     </div>
                 </div>
-                <div style="margin-top: 2rem; text-align: center;">
-                    <button class="btn btn-danger" onclick="resetAllData()">Borrar Todos los Datos</button>
+                <button class="btn btn-primary" onclick="saveConfig()">Guardar Configuración</button>
+            </div>
+
+            <div class="card">
+                <h3>Personalización del Banner del Catálogo</h3>
+                <div class="github-config">
+                    <div class="form-group">
+                        <label>Título del Banner:</label>
+                        <input type="text" id="bannerTitleConfig" class="form-control" 
+                               value="Catálogo de Productos - Libomi" 
+                               placeholder="Título principal del catálogo">
+                    </div>
+                    <div class="form-group">
+                        <label>Subtítulo del Banner:</label>
+                        <input type="text" id="bannerSubtitleConfig" class="form-control" 
+                               value="Productos de calidad para tu negocio" 
+                               placeholder="Subtítulo o descripción">
+                    </div>
+                    <div class="form-group">
+                        <label>Imagen de fondo del Banner (URL):</label>
+                        <input type="url" id="bannerBgImage" class="form-control" 
+                               placeholder="https://raw.githubusercontent.com/usuario/repo/main/banner-fondo.jpg">
+                        <small style="color: #666; font-size: 0.8rem; margin-top: 0.25rem; display: block;">
+                            Opcional: Imagen de fondo para el banner del catálogo
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label>Imagen de fondo del Header (URL):</label>
+                        <input type="url" id="headerBgImage" class="form-control" 
+                               placeholder="https://raw.githubusercontent.com/usuario/repo/main/header-fondo.jpg">
+                        <small style="color: #666; font-size: 0.8rem; margin-top: 0.25rem; display: block;">
+                            Opcional: Imagen de fondo para el header principal
+                        </small>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button class="btn btn-primary" onclick="saveConfig()">Guardar Configuración</button>
+                    <button class="btn btn-outline" onclick="previewBanner()">Vista Previa</button>
                 </div>
             </div>
 
-            <!-- Instrucciones para hacer accesible -->
+            <div class="card">
+                <h3>Configuración de Sincronización</h3>
+                <p style="color: #666; margin-bottom: 1rem;">
+                    Para mantener tus datos sincronizados entre diferentes ordenadores, puedes usar:
+                </p>
+                <div style="display: grid; gap: 1rem;">
+                    <div style="background: #f8fafc; padding: 1rem; border-radius: 8px; border: 1px solid #e2e8f0;">
+                        <h4 style="color: #1e293b; margin-bottom: 0.5rem;">📱 Método Manual (Recomendado)</h4>
+                        <p style="color: #64748b; font-size: 0.875rem;">
+                            Usa la función "Exportar/Importar" en la pestaña Sincronización para copiar/pegar tus datos entre ordenadores.
+                        </p>
+                    </div>
+                    <div style="background: #fef3c7; padding: 1rem; border-radius: 8px; border: 1px solid #fbbf24;">
+                        <h4 style="color: #92400e; margin-bottom: 0.5rem;">⚠️ Método Automático (Avanzado)</h4>
+                        <p style="color: #92400e; font-size: 0.875rem;">
+                            Configura un servicio de almacenamiento en la nube como Firebase, Supabase o similar.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección: Sincronización -->
+        <section id="respaldo" class="section">
+            <div class="card">
+                <h3>Exportar / Importar Datos</h3>
+                <p style="color: #666; margin-bottom: 1rem;">
+                    Usa estas funciones para mantener tus datos sincronizados entre diferentes ordenadores.
+                </p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div>
+                        <label><strong>📤 Exportar datos (copiar):</strong></label>
+                        <textarea id="exportData" class="form-control" rows="10" readonly placeholder="Haz clic en 'Generar Exportación' para ver los datos aquí"></textarea>
+                        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                            <button class="btn btn-primary" onclick="exportData()">Generar Exportación</button>
+                            <button class="btn btn-outline" onclick="copyToClipboard('exportData')">Copiar al Portapapeles</button>
+                        </div>
+                    </div>
+                    <div>
+                        <label><strong>📥 Importar datos (pegar):</strong></label>
+                        <textarea id="importData" class="form-control" rows="10" placeholder="Pega aquí los datos exportados desde otro ordenador"></textarea>
+                        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                            <button class="btn btn-primary" onclick="importData()">Importar Datos</button>
+                            <button class="btn btn-outline" onclick="pasteFromClipboard('importData')">Pegar del Portapapeles</button>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top: 2rem; text-align: center; padding-top: 2rem; border-top: 1px solid #e5e7eb;">
+                    <button class="btn btn-danger" onclick="resetAllData()">🗑️ Borrar Todos los Datos</button>
+                </div>
+            </div>
+
+            <!-- Instrucciones mejoradas -->
             <div class="card" style="background:#f0f9ff; border:1px solid #38bdf8">
-                <h3 style="color:#0369a1">🌐 Hacer accesible desde cualquier ordenador</h3>
+                <h3 style="color:#0369a1">🔄 Cómo sincronizar entre ordenadores</h3>
                 <div style="color:#0c4a6e; line-height:1.6">
-                    <p><strong>Opciones recomendadas (GRATUITAS):</strong></p>
-                    <ol>
-                        <li><strong>GitHub Pages:</strong> Sube este archivo HTML a GitHub → Settings → Pages</li>
-                        <li><strong>Netlify:</strong> Ve a <code>netlify.com</code> → Arrastra el archivo → Obtén URL</li>
-                        <li><strong>Vercel:</strong> Similar a Netlify, muy fácil de usar</li>
+                    <ol style="padding-left: 1.5rem;">
+                        <li><strong>En el ordenador A:</strong> Ve a "Sincronización" → "Generar Exportación" → Copia los datos</li>
+                        <li><strong>Comparte los datos:</strong> Email, WhatsApp, USB, etc.</li>
+                        <li><strong>En el ordenador B:</strong> Ve a "Sincronización" → Pega los datos → "Importar Datos"</li>
+                        <li><strong>¡Listo!</strong> Todos tus productos, categorías y almacenes estarán disponibles</li>
                     </ol>
-                    <p><strong>Para red local:</strong> Comparte la URL que aparece arriba en el header</p>
-                    <p style="margin-top:12px; padding:8px; background:rgba(59,130,246,0.1); border-radius:6px">
-                        💡 <strong>Tip:</strong> Una vez subido a cualquier hosting, podrás acceder desde cualquier dispositivo con internet
-                    </p>
+                    <div style="margin-top:12px; padding:12px; background:rgba(59,130,246,0.1); border-radius:6px">
+                        💡 <strong>Tip:</strong> Exporta tus datos regularmente como respaldo
+                    </div>
                 </div>
             </div>
         </section>
@@ -952,15 +923,11 @@
 
     <script>
         // Variables globales
-        let products = JSON.parse(localStorage.getItem('libomi_products_v2') || '[]');
-        let categories = JSON.parse(localStorage.getItem('libomi_categories_v2') || '{"General": ["Varios"]}');
-        let warehouses = JSON.parse(localStorage.getItem('libomi_warehouses_v2') || '["Almacén Principal"]');
+        let products = JSON.parse(localStorage.getItem('libomi_products_v3') || '[]');
+        let categories = JSON.parse(localStorage.getItem('libomi_categories_v3') || '{"General": ["Varios"]}');
+        let warehouses = JSON.parse(localStorage.getItem('libomi_warehouses_v3') || '["Almacén Principal"]');
+        let config = JSON.parse(localStorage.getItem('libomi_config_v3') || '{}');
         let currentEditId = null;
-
-        // Variables para lightbox con zoom
-        let currentZoom = 1;
-        let isDragging = false;
-        let startX, startY, currentX = 0, currentY = 0;
 
         // Placeholder para imágenes
         const PLACEHOLDER = 'data:image/svg+xml;utf8,' + encodeURIComponent(
@@ -969,46 +936,20 @@
 
         // Inicialización
         document.addEventListener('DOMContentLoaded', function() {
-            // Migrar datos antiguos si existen
-            migrateOldData();
-            
-            loadLogo();
             updateUrlDisplay();
             renderWarehouses();
             renderCategories();
             renderProducts();
             renderCatalog();
-            updatePrintHeader();
-            initLightbox();
+            loadConfig();
+            applyBannerConfig();
+            updateCloudStatus();
             
             // Event listeners
-            document.getElementById('logoInput').addEventListener('change', handleLogoChange);
             document.getElementById('productForm').addEventListener('submit', saveProduct);
-            document.getElementById('productImage').addEventListener('change', handleImagePreview);
             document.getElementById('productCategory').addEventListener('change', loadSubcategories);
-            document.getElementById('searchInput').addEventListener('input', renderCatalog);
-            document.getElementById('warehouseFilter').addEventListener('change', renderCatalog);
-            document.getElementById('categoryFilter').addEventListener('change', renderCatalog);
+            document.getElementById('githubBaseUrl').addEventListener('input', updateExampleUrl);
         });
-
-        // Migración de datos antiguos
-        function migrateOldData() {
-            const oldProducts = localStorage.getItem('libomi_products');
-            const oldCategories = localStorage.getItem('libomi_categories');
-            const oldLogo = localStorage.getItem('libomi_logo');
-
-            if (oldProducts && !localStorage.getItem('libomi_products_v2')) {
-                localStorage.setItem('libomi_products_v2', oldProducts);
-                products = JSON.parse(oldProducts);
-            }
-            if (oldCategories && !localStorage.getItem('libomi_categories_v2')) {
-                localStorage.setItem('libomi_categories_v2', oldCategories);
-                categories = JSON.parse(oldCategories);
-            }
-            if (oldLogo && !localStorage.getItem('libomi_logo_v2')) {
-                localStorage.setItem('libomi_logo_v2', oldLogo);
-            }
-        }
 
         // Funciones de utilidad
         function showToast(message, type = 'success') {
@@ -1027,15 +968,12 @@
         }
 
         function showSection(sectionName) {
-            // Ocultar todas las secciones
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             
-            // Mostrar sección seleccionada
             document.getElementById(sectionName).classList.add('active');
             event.target.classList.add('active');
             
-            // Actualizar contenido si es necesario
             if (sectionName === 'catalogo') {
                 renderCatalog();
             } else if (sectionName === 'categorias') {
@@ -1051,9 +989,11 @@
 
         function saveData() {
             try {
-                localStorage.setItem('libomi_products_v2', JSON.stringify(products));
-                localStorage.setItem('libomi_categories_v2', JSON.stringify(categories));
-                localStorage.setItem('libomi_warehouses_v2', JSON.stringify(warehouses));
+                localStorage.setItem('libomi_products_v3', JSON.stringify(products));
+                localStorage.setItem('libomi_categories_v3', JSON.stringify(categories));
+                localStorage.setItem('libomi_warehouses_v3', JSON.stringify(warehouses));
+                localStorage.setItem('libomi_config_v3', JSON.stringify(config));
+                updateCloudStatus();
             } catch (e) {
                 console.error('Error guardando en localStorage', e);
                 showToast('No se pudo guardar localmente', 'error');
@@ -1070,95 +1010,157 @@
                 .replace(/'/g, '&#39;');
         }
 
-        // Funciones del logo
-        function loadLogo() {
-            const savedLogo = localStorage.getItem('libomi_logo_v2') || localStorage.getItem('libomi_logo');
-            const defaultLogo = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Crect width='100%25' height='100%25' fill='%23f3f4f6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%239ca3af' font-size='10'%3ESin Logo%3C/text%3E%3C/svg%3E";
+        // Funciones de configuración
+        function loadConfig() {
+            const githubBaseUrl = document.getElementById('githubBaseUrl');
+            if (config.githubBaseUrl) {
+                githubBaseUrl.value = config.githubBaseUrl;
+            }
             
-            if (savedLogo) {
-                document.getElementById('logoImage').src = savedLogo;
-                document.getElementById('printLogo').src = savedLogo;
+            // Cargar configuración del banner
+            if (config.bannerTitle) {
+                document.getElementById('bannerTitleConfig').value = config.bannerTitle;
+                document.getElementById('bannerTitle').textContent = config.bannerTitle;
+            }
+            if (config.bannerSubtitle) {
+                document.getElementById('bannerSubtitleConfig').value = config.bannerSubtitle;
+                document.getElementById('bannerSubtitle').textContent = config.bannerSubtitle;
+            }
+            if (config.bannerBgImage) {
+                document.getElementById('bannerBgImage').value = config.bannerBgImage;
+                document.documentElement.style.setProperty('--banner-bg-image', `url(${config.bannerBgImage})`);
+            }
+            if (config.headerBgImage) {
+                document.getElementById('headerBgImage').value = config.headerBgImage;
+                document.documentElement.style.setProperty('--header-bg-image', `url(${config.headerBgImage})`);
+            }
+            
+            updateExampleUrl();
+        }
+
+        function saveConfig() {
+            config.githubBaseUrl = document.getElementById('githubBaseUrl').value;
+            config.bannerTitle = document.getElementById('bannerTitleConfig').value;
+            config.bannerSubtitle = document.getElementById('bannerSubtitleConfig').value;
+            config.bannerBgImage = document.getElementById('bannerBgImage').value;
+            config.headerBgImage = document.getElementById('headerBgImage').value;
+            
+            localStorage.setItem('libomi_config_v3', JSON.stringify(config));
+            showToast('Configuración guardada');
+            updateExampleUrl();
+            applyBannerConfig();
+        }
+
+        function applyBannerConfig() {
+            // Aplicar configuración del banner
+            if (config.bannerTitle) {
+                document.getElementById('bannerTitle').textContent = config.bannerTitle;
+            }
+            if (config.bannerSubtitle) {
+                document.getElementById('bannerSubtitle').textContent = config.bannerSubtitle;
+            }
+            if (config.bannerBgImage) {
+                document.documentElement.style.setProperty('--banner-bg-image', `url(${config.bannerBgImage})`);
+            }
+            if (config.headerBgImage) {
+                document.documentElement.style.setProperty('--header-bg-image', `url(${config.headerBgImage})`);
+            }
+        }
+
+        function previewBanner() {
+            const title = document.getElementById('bannerTitleConfig').value;
+            const subtitle = document.getElementById('bannerSubtitleConfig').value;
+            const bannerBg = document.getElementById('bannerBgImage').value;
+            const headerBg = document.getElementById('headerBgImage').value;
+            
+            // Aplicar vista previa temporal
+            document.getElementById('bannerTitle').textContent = title || 'Catálogo de Productos - Libomi';
+            document.getElementById('bannerSubtitle').textContent = subtitle || 'Productos de calidad para tu negocio';
+            
+            if (bannerBg) {
+                document.documentElement.style.setProperty('--banner-bg-image', `url(${bannerBg})`);
+            }
+            if (headerBg) {
+                document.documentElement.style.setProperty('--header-bg-image', `url(${headerBg})`);
+            }
+            
+            // Cambiar a la pestaña del catálogo para ver la vista previa
+            showSection('catalogo');
+            showToast('Vista previa aplicada - Revisa el catálogo');
+        }
+
+        function updateExampleUrl() {
+            const baseUrl = document.getElementById('githubBaseUrl').value;
+            const exampleUrl = document.getElementById('exampleUrl');
+            if (baseUrl && exampleUrl) {
+                exampleUrl.textContent = baseUrl + 'producto1.jpg';
+            }
+        }
+
+        // Funciones de imagen
+        function previewImageFromUrl() {
+            const url = document.getElementById('productImageUrl').value.trim();
+            const preview = document.getElementById('imagePreview');
+            
+            if (!url) {
+                preview.innerHTML = '<span>Ingresa una URL de imagen</span>';
+                preview.classList.add('empty');
+                return;
+            }
+
+            // Mostrar loading
+            preview.innerHTML = '<span>Cargando imagen...</span>';
+            preview.classList.add('empty');
+
+            // Crear imagen para probar si carga
+            const img = new Image();
+            img.onload = function() {
+                preview.innerHTML = `<img src="${url}" alt="Vista previa">`;
+                preview.classList.remove('empty');
+                showToast('Imagen cargada correctamente');
+            };
+            img.onerror = function() {
+                preview.innerHTML = '<span style="color: #dc2626;">Error: No se pudo cargar la imagen</span>';
+                preview.classList.add('empty');
+                showToast('No se pudo cargar la imagen. Verifica la URL', 'error');
+            };
+            img.src = url;
+        }
+
+        // Funciones de cloud status
+        function updateCloudStatus() {
+            const status = document.getElementById('cloudStatus');
+            const statusText = document.getElementById('cloudStatusText');
+            
+            const totalItems = products.length + Object.keys(categories).length + warehouses.length;
+            const lastSync = localStorage.getItem('libomi_last_sync');
+            
+            if (lastSync) {
+                const syncDate = new Date(lastSync);
+                statusText.textContent = `Última sincronización: ${syncDate.toLocaleString()} (${totalItems} elementos)`;
+                status.className = 'cloud-status connected';
             } else {
-                document.getElementById('logoImage').src = defaultLogo;
-                document.getElementById('printLogo').src = defaultLogo;
+                statusText.textContent = `${totalItems} elementos guardados localmente - Sin sincronizar`;
+                status.className = 'cloud-status';
             }
         }
 
-        function handleLogoChange(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            
-            if (file.size > 2 * 1024 * 1024) {
-                showToast('Imagen > 2MB: se comprimirá al guardar', 'warning', 3000);
-            }
-            
-            compressImage(file, 600, 600, 0.85)
-                .then(logoData => {
-                    document.getElementById('logoImage').src = logoData;
-                    document.getElementById('printLogo').src = logoData;
-                    localStorage.setItem('libomi_logo_v2', logoData);
-                    showToast('Logo actualizado');
-                })
-                .catch(err => {
-                    console.error(err);
-                    showToast('No se pudo procesar logo', 'error');
-                });
-        }
-
-        function clearLogo() {
-            const defaultLogo = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Crect width='100%25' height='100%25' fill='%23f3f4f6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%239ca3af' font-size='10'%3ESin Logo%3C/text%3E%3C/svg%3E";
-            document.getElementById('logoImage').src = defaultLogo;
-            document.getElementById('printLogo').src = defaultLogo;
-            localStorage.removeItem('libomi_logo_v2');
-            showToast('Logo eliminado', 'warning');
-        }
-
-        // Funciones de compresión de imagen
-        function compressImage(file, maxW = 1000, maxH = 1000, quality = 0.75) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onerror = () => reject(new Error('Error leyendo archivo'));
-                reader.onload = () => {
-                    const img = new Image();
-                    img.onload = () => {
-                        let w = img.width, h = img.height;
-                        const ratio = Math.min(1, maxW / w, maxH / h);
-                        const cw = Math.round(w * ratio), ch = Math.round(h * ratio);
-                        const canvas = document.createElement('canvas');
-                        canvas.width = cw;
-                        canvas.height = ch;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, cw, ch);
-                        canvas.toBlob(blob => {
-                            if (!blob) return reject(new Error('No se generó imagen'));
-                            const fr2 = new FileReader();
-                            fr2.onerror = () => reject(new Error('Error leyendo blob'));
-                            fr2.onload = () => resolve(fr2.result);
-                            fr2.readAsDataURL(blob);
-                        }, 'image/jpeg', quality);
-                    };
-                    img.onerror = () => reject(new Error('Error cargando imagen'));
-                    img.src = reader.result;
-                };
-                reader.readAsDataURL(file);
-            });
+        function syncData() {
+            // Simular sincronización (en una implementación real, aquí conectarías con tu API)
+            localStorage.setItem('libomi_last_sync', new Date().toISOString());
+            updateCloudStatus();
+            showToast('Datos sincronizados localmente');
         }
 
         // Funciones de almacenes
         function renderWarehouses() {
             const warehouseSelect = document.getElementById('productWarehouse');
-            const filterSelect = document.getElementById('warehouseFilter');
             
-            // Limpiar selects
-            warehouseSelect.innerHTML = '';
-            filterSelect.innerHTML = '<option value="">Todos los almacenes</option>';
+            warehouseSelect.innerHTML = '<option value="">Seleccionar almacén...</option>';
             
-            // Agregar almacenes
             warehouses.forEach(warehouse => {
-                const option1 = new Option(warehouse, warehouse);
-                const option2 = new Option(warehouse, warehouse);
-                warehouseSelect.add(option1);
-                filterSelect.add(option2);
+                const option = new Option(warehouse, warehouse);
+                warehouseSelect.add(option);
             });
         }
 
@@ -1168,7 +1170,7 @@
             let warehousesHtml = '';
             warehouses.forEach(warehouse => {
                 warehousesHtml += `
-                    <div class="list-item">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: white; border-radius: 8px; margin-bottom: 0.5rem; border: 1px solid #e5e7eb;">
                         <span><strong>${escapeHtml(warehouse)}</strong></span>
                         <button class="btn btn-danger" onclick="deleteWarehouse('${escapeHtml(warehouse)}')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">
                             Eliminar
@@ -1176,7 +1178,7 @@
                     </div>
                 `;
             });
-            warehousesList.innerHTML = warehousesHtml || '<div class="list-item">No hay almacenes</div>';
+            warehousesList.innerHTML = warehousesHtml || '<p>No hay almacenes registrados.</p>';
         }
 
         function addWarehouse() {
@@ -1203,7 +1205,6 @@
         function deleteWarehouse(warehouseName) {
             if (confirm(`¿Eliminar el almacén "${warehouseName}"?`)) {
                 warehouses = warehouses.filter(w => w !== warehouseName);
-                // Limpiar productos que usen este almacén
                 products.forEach(product => {
                     if (product.warehouse === warehouseName) {
                         product.warehouse = '';
@@ -1220,21 +1221,14 @@
         // Funciones de categorías
         function renderCategories() {
             const categorySelect = document.getElementById('productCategory');
-            const filterSelect = document.getElementById('categoryFilter');
             
-            // Limpiar selects
-            categorySelect.innerHTML = '';
-            filterSelect.innerHTML = '<option value="">Todas las categorías</option>';
+            categorySelect.innerHTML = '<option value="">Seleccionar categoría...</option>';
             
-            // Agregar categorías
             Object.keys(categories).forEach(cat => {
-                const option1 = new Option(cat, cat);
-                const option2 = new Option(cat, cat);
-                categorySelect.add(option1);
-                filterSelect.add(option2);
+                const option = new Option(cat, cat);
+                categorySelect.add(option);
             });
             
-            // Cargar subcategorías para la primera categoría
             if (Object.keys(categories).length > 0) {
                 loadSubcategories();
             }
@@ -1252,44 +1246,42 @@
                     subcategorySelect.add(new Option(sub, sub));
                 });
             }
-            
-            renderCategoryLists();
         }
 
         function renderCategoryLists() {
             const categoriesList = document.getElementById('categoriesList');
-            const subcategoriesList = document.getElementById('subcategoriesList');
             
-            // Renderizar categorías
-            let categoriesHtml = '';
+            let categoriesHtml = '<h4 style="margin-bottom: 1rem;">Categorías Existentes</h4>';
             Object.keys(categories).forEach(cat => {
                 categoriesHtml += `
-                    <div class="list-item">
-                        <span><strong>${escapeHtml(cat)}</strong></span>
-                        <button class="btn btn-danger" onclick="deleteCategory('${escapeHtml(cat)}')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">
-                            Eliminar
-                        </button>
-                    </div>
-                `;
-            });
-            categoriesList.innerHTML = categoriesHtml || '<div class="list-item">No hay categorías</div>';
-            
-            // Renderizar subcategorías
-            let subcategoriesHtml = '';
-            const selectedCategory = document.getElementById('productCategory').value || Object.keys(categories)[0];
-            if (selectedCategory && categories[selectedCategory]) {
-                categories[selectedCategory].forEach(sub => {
-                    subcategoriesHtml += `
-                        <div class="list-item">
-                            <span>${escapeHtml(sub)}</span>
-                            <button class="btn btn-danger" onclick="deleteSubcategory('${escapeHtml(selectedCategory)}', '${escapeHtml(sub)}')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">
+                    <div style="margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: white; border-radius: 8px; border: 1px solid #e5e7eb;">
+                            <span><strong>${escapeHtml(cat)}</strong></span>
+                            <button class="btn btn-danger" onclick="deleteCategory('${escapeHtml(cat)}')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">
                                 Eliminar
                             </button>
                         </div>
-                    `;
-                });
-            }
-            subcategoriesList.innerHTML = subcategoriesHtml || '<div class="list-item">No hay subcategorías</div>';
+                `;
+                
+                if (categories[cat] && categories[cat].length > 0) {
+                    categoriesHtml += '<div style="margin-left: 1rem; margin-top: 0.5rem;">';
+                    categories[cat].forEach(sub => {
+                        categoriesHtml += `
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; background: #f8fafc; border-radius: 6px; margin-bottom: 0.25rem; border: 1px solid #e2e8f0;">
+                                <span>${escapeHtml(sub)}</span>
+                                <button class="btn btn-danger" onclick="deleteSubcategory('${escapeHtml(cat)}', '${escapeHtml(sub)}')" style="padding: 0.125rem 0.25rem; font-size: 0.625rem;">
+                                    ×
+                                </button>
+                            </div>
+                        `;
+                    });
+                    categoriesHtml += '</div>';
+                }
+                
+                categoriesHtml += '</div>';
+            });
+            
+            categoriesList.innerHTML = categoriesHtml;
         }
 
         function addCategory() {
@@ -1311,15 +1303,15 @@
             
             saveData();
             renderCategories();
+            renderCategoryLists();
             document.getElementById('newCategoryName').value = '';
             document.getElementById('newSubcategoryName').value = '';
             showToast('Categoría agregada exitosamente');
         }
 
         function deleteCategory(categoryName) {
-            if (confirm(`¿Eliminar la categoría "${categoryName}"?`)) {
+            if (confirm(`¿Eliminar la categoría "${categoryName}" y todas sus subcategorías?`)) {
                 delete categories[categoryName];
-                // Limpiar productos que usen esta categoría
                 products.forEach(product => {
                     if (product.category === categoryName) {
                         product.category = '';
@@ -1328,6 +1320,7 @@
                 });
                 saveData();
                 renderCategories();
+                renderCategoryLists();
                 renderProducts();
                 showToast('Categoría eliminada', 'warning');
             }
@@ -1336,7 +1329,6 @@
         function deleteSubcategory(categoryName, subcategoryName) {
             if (confirm(`¿Eliminar la subcategoría "${subcategoryName}"?`)) {
                 categories[categoryName] = categories[categoryName].filter(sub => sub !== subcategoryName);
-                // Limpiar productos que usen esta subcategoría
                 products.forEach(product => {
                     if (product.category === categoryName && product.subcategory === subcategoryName) {
                         product.subcategory = '';
@@ -1344,33 +1336,13 @@
                 });
                 saveData();
                 renderCategories();
+                renderCategoryLists();
                 renderProducts();
                 showToast('Subcategoría eliminada', 'warning');
             }
         }
 
         // Funciones de productos
-        function handleImagePreview(event) {
-            const file = event.target.files[0];
-            const preview = document.getElementById('imagePreview');
-            
-            if (file) {
-                if (file.size > 2 * 1024 * 1024) {
-                    showToast('Imagen > 2MB: se comprimirá al guardar', 'warning', 3000);
-                }
-                
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
-                    preview.classList.remove('empty');
-                };
-                reader.readAsDataURL(file);
-            } else {
-                preview.innerHTML = '<span>Selecciona una imagen</span>';
-                preview.classList.add('empty');
-            }
-        }
-
         function saveProduct(event) {
             event.preventDefault();
             
@@ -1385,7 +1357,7 @@
             const category = document.getElementById('productCategory').value;
             const subcategory = document.getElementById('productSubcategory').value;
             const description = document.getElementById('productDescription').value.trim();
-            const imageFile = document.getElementById('productImage').files[0];
+            const imageUrl = document.getElementById('productImageUrl').value.trim();
             
             if (!name || !warehouse || !category) {
                 showToast('Nombre, almacén y categoría son obligatorios', 'error');
@@ -1405,37 +1377,9 @@
                 category: category,
                 subcategory: subcategory,
                 description: description,
-                image: null
+                image: imageUrl || PLACEHOLDER
             };
             
-            if (imageFile) {
-                compressImage(imageFile, 1000, 1000, 0.75)
-                    .then(imageData => {
-                        productData.image = imageData;
-                        saveProductData(productData, existingProductIndex);
-                        saveButton.disabled = false;
-                        saveButton.textContent = originalText;
-                    })
-                    .catch(err => {
-                        console.error('Error al comprimir imagen', err);
-                        showToast('Error al procesar imagen', 'error');
-                        saveButton.disabled = false;
-                        saveButton.textContent = originalText;
-                    });
-            } else {
-                // Si estamos editando y no hay nueva imagen, mantener la anterior
-                if (existingProductIndex !== -1) {
-                    productData.image = products[existingProductIndex].image;
-                } else {
-                    productData.image = PLACEHOLDER;
-                }
-                saveProductData(productData, existingProductIndex);
-                saveButton.disabled = false;
-                saveButton.textContent = originalText;
-            }
-        }
-
-        function saveProductData(productData, existingProductIndex) {
             if (existingProductIndex !== -1) {
                 products[existingProductIndex] = productData;
                 showToast('Producto actualizado');
@@ -1448,11 +1392,14 @@
             renderProducts();
             renderCatalog();
             clearForm();
+            
+            saveButton.disabled = false;
+            saveButton.textContent = originalText;
         }
 
         function clearForm() {
             document.getElementById('productForm').reset();
-            document.getElementById('imagePreview').innerHTML = '<span>Selecciona una imagen</span>';
+            document.getElementById('imagePreview').innerHTML = '<span>Ingresa una URL de imagen</span>';
             document.getElementById('imagePreview').classList.add('empty');
             currentEditId = null;
             loadSubcategories();
@@ -1470,14 +1417,14 @@
             loadSubcategories();
             document.getElementById('productSubcategory').value = product.subcategory || '';
             document.getElementById('productDescription').value = product.description || '';
+            document.getElementById('productImageUrl').value = product.image && product.image !== PLACEHOLDER ? product.image : '';
             
             if (product.image && product.image !== PLACEHOLDER) {
                 const preview = document.getElementById('imagePreview');
-                preview.innerHTML = `<img src="${product.image}" alt="Preview">`;
+                preview.innerHTML = `<img src="${product.image}" alt="Vista previa">`;
                 preview.classList.remove('empty');
             }
             
-            // Cambiar a la pestaña de productos
             showSection('productos');
             document.querySelector('[onclick="showSection(\'productos\')"]').classList.add('active');
             
@@ -1514,9 +1461,9 @@
             
             container.innerHTML = products.map(product => `
                 <div class="product-card">
-                    <div class="product-image" onclick="openModal('${product.image || PLACEHOLDER}', '${escapeHtml(product.name)}', '${escapeHtml(product.description || '')}')">
+                    <div class="product-image" onclick="openImageModal('${product.image && product.image !== PLACEHOLDER ? product.image : ''}', '${escapeHtml(product.name)}')">
                         ${product.image && product.image !== PLACEHOLDER ? 
-                            `<img src="${product.image}" alt="${escapeHtml(product.name)}">` : 
+                            `<img src="${product.image}" alt="${escapeHtml(product.name)}" onerror="this.src='${PLACEHOLDER}'">` : 
                             '<div style="color: #999; font-size: 0.875rem;">Sin imagen</div>'
                         }
                     </div>
@@ -1546,31 +1493,15 @@
         // Funciones del catálogo
         function renderCatalog() {
             const container = document.getElementById('catalogContent');
-            const searchTerm = (document.getElementById('searchInput').value || '').trim().toLowerCase();
-            const warehouseFilter = document.getElementById('warehouseFilter').value || '';
-            const categoryFilter = document.getElementById('categoryFilter').value || '';
             
-            // Filtrar productos
-            let filteredProducts = products.filter(product => {
-                const matchesSearch = !searchTerm || 
-                    product.name.toLowerCase().includes(searchTerm) ||
-                    (product.code && product.code.toLowerCase().includes(searchTerm)) ||
-                    (product.description && product.description.toLowerCase().includes(searchTerm));
-                
-                const matchesWarehouse = !warehouseFilter || product.warehouse === warehouseFilter;
-                const matchesCategory = !categoryFilter || product.category === categoryFilter;
-                
-                return matchesSearch && matchesWarehouse && matchesCategory;
-            });
-            
-            if (filteredProducts.length === 0) {
-                container.innerHTML = '<p>No se encontraron productos.</p>';
+            if (products.length === 0) {
+                container.innerHTML = '<p>No hay productos para mostrar en el catálogo.</p>';
                 return;
             }
             
             // Agrupar por almacenes, luego por categorías
             const groupedProducts = {};
-            filteredProducts.forEach(product => {
+            products.forEach(product => {
                 const warehouse = product.warehouse || 'Sin almacén';
                 const category = product.category || 'Sin categoría';
                 const subcategory = product.subcategory || 'General';
@@ -1591,25 +1522,25 @@
             // Renderizar agrupados
             let html = '';
             Object.keys(groupedProducts).forEach(warehouse => {
-                html += `<div class="warehouse-section">`;
-                html += `<h2 class="warehouse-title">${escapeHtml(warehouse)}</h2>`;
+                html += `<div style="margin-bottom: 2rem;">`;
+                html += `<h2 style="color: #1e293b; font-size: 1.5rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e5e7eb;">${escapeHtml(warehouse)}</h2>`;
                 
                 Object.keys(groupedProducts[warehouse]).forEach(category => {
-                    html += `<div class="category-section">`;
-                    html += `<h3 class="category-title">${escapeHtml(category)}</h3>`;
+                    html += `<div style="margin-bottom: 1.5rem;">`;
+                    html += `<h3 style="color: #4b5563; font-size: 1.25rem; margin-bottom: 0.75rem;">${escapeHtml(category)}</h3>`;
                     
                     Object.keys(groupedProducts[warehouse][category]).forEach(subcategory => {
                         if (subcategory !== 'General') {
-                            html += `<h4 class="subcategory-title" style="margin: 1rem 0 0.5rem; color: #4b5563;">${escapeHtml(subcategory)}</h4>`;
+                            html += `<h4 style="color: #6b7280; font-size: 1.1rem; margin: 1rem 0 0.5rem; font-weight: 500;">${escapeHtml(subcategory)}</h4>`;
                         }
                         
                         html += `<div class="products-grid">`;
                         groupedProducts[warehouse][category][subcategory].forEach(product => {
                             html += `
                                 <div class="product-card">
-                                    <div class="product-image" onclick="openModal('${product.image || PLACEHOLDER}', '${escapeHtml(product.name)}', '${escapeHtml(product.description || '')}')">
+                                    <div class="product-image" onclick="openImageModal('${product.image && product.image !== PLACEHOLDER ? product.image : ''}', '${escapeHtml(product.name)}')">
                                         ${product.image && product.image !== PLACEHOLDER ? 
-                                            `<img src="${product.image}" alt="${escapeHtml(product.name)}">` : 
+                                            `<img src="${product.image}" alt="${escapeHtml(product.name)}" onerror="this.src='${PLACEHOLDER}'">` : 
                                             '<div style="color: #999; font-size: 0.875rem;">Sin imagen</div>'
                                         }
                                     </div>
@@ -1637,162 +1568,76 @@
             container.innerHTML = html;
         }
 
-        function expandAll() {
-            showToast('Expandir: vista ya expandida por defecto');
-        }
-
-        function collapseAll() {
-            showToast('Colapsar: no disponible en esta vista');
-        }
-
-        // Funciones del modal con zoom mejorado
-        function initLightbox() {
-            const modal = document.getElementById('imageModal');
-            const modalImage = document.getElementById('modalImage');
-            const modalClose = modal.querySelector('.modal-close');
-            const modalTitle = document.getElementById('modalTitle');
-            const modalDescription = document.getElementById('modalDescription');
-            const zoomIn = document.getElementById('zoomIn');
-            const zoomOut = document.getElementById('zoomOut');
-            const zoomReset = document.getElementById('zoomReset');
-
-            // Zoom controls
-            zoomIn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                currentZoom = Math.min(currentZoom * 1.5, 4);
-                updateImageTransform();
-            });
-
-            zoomOut.addEventListener('click', (e) => {
-                e.stopPropagation();
-                currentZoom = Math.max(currentZoom / 1.5, 0.5);
-                updateImageTransform();
-            });
-
-            zoomReset.addEventListener('click', (e) => {
-                e.stopPropagation();
-                resetImagePosition();
-            });
-
-            // Mouse drag functionality
-            modalImage.addEventListener('mousedown', (e) => {
-                if (currentZoom <= 1) return;
-                isDragging = true;
-                startX = e.clientX - currentX;
-                startY = e.clientY - currentY;
-                modalImage.style.cursor = 'grabbing';
-            });
-
-            document.addEventListener('mousemove', (e) => {
-                if (!isDragging) return;
-                e.preventDefault();
-                currentX = e.clientX - startX;
-                currentY = e.clientY - startY;
-                updateImageTransform();
-            });
-
-            document.addEventListener('mouseup', () => {
-                isDragging = false;
-                modalImage.style.cursor = currentZoom > 1 ? 'grab' : 'zoom-out';
-            });
-
-            // Touch support for mobile
-            let lastTouchDistance = 0;
-            modalImage.addEventListener('touchstart', (e) => {
-                if (e.touches.length === 2) {
-                    lastTouchDistance = Math.sqrt(
-                        Math.pow(e.touches[0].clientX - e.touches[1].clientX, 2) +
-                        Math.pow(e.touches[0].clientY - e.touches[1].clientY, 2)
-                    );
-                }
-            });
-
-            modalImage.addEventListener('touchmove', (e) => {
-                if (e.touches.length === 2) {
-                    e.preventDefault();
-                    const currentDistance = Math.sqrt(
-                        Math.pow(e.touches[0].clientX - e.touches[1].clientX, 2) +
-                        Math.pow(e.touches[0].clientY - e.touches[1].clientY, 2)
-                    );
-                    if (lastTouchDistance > 0) {
-                        const scale = currentDistance / lastTouchDistance;
-                        currentZoom = Math.min(Math.max(currentZoom * scale, 0.5), 4);
-                        updateImageTransform();
-                    }
-                    lastTouchDistance = currentDistance;
-                }
-            });
-
-            // Close events
-            modalClose.addEventListener('click', closeModal);
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) closeModal();
-            });
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && modal.classList.contains('active')) {
-                    closeModal();
-                }
-            });
-
-            // Mouse wheel zoom
-            modal.addEventListener('wheel', (e) => {
-                if (modal.classList.contains('active')) {
-                    e.preventDefault();
-                    const delta = e.deltaY > 0 ? 0.9 : 1.1;
-                    currentZoom = Math.min(Math.max(currentZoom * delta, 0.5), 4);
-                    updateImageTransform();
-                }
-            });
-        }
-
-        function openModal(imageSrc, title, description) {
+        // Funciones del modal de imágenes
+        function openImageModal(imageSrc, productName) {
             if (!imageSrc || imageSrc === PLACEHOLDER) return;
             
             const modal = document.getElementById('imageModal');
             const modalImage = document.getElementById('modalImage');
-            const modalTitle = document.getElementById('modalTitle');
-            const modalDescription = document.getElementById('modalDescription');
+            const modalProductName = document.getElementById('modalProductName');
             
             modalImage.src = imageSrc;
-            modalTitle.textContent = title;
-            modalDescription.textContent = description;
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            resetImagePosition();
+            modalImage.alt = productName;
+            modalProductName.textContent = productName;
             
-            // Show info after delay
-            setTimeout(() => modal.classList.add('show-info'), 500);
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden'; // Prevenir scroll del body
         }
 
-        function closeModal() {
+        function closeImageModal(event) {
+            // Si se hace clic en la imagen misma, no cerrar
+            if (event && event.target.classList.contains('modal-image')) {
+                return;
+            }
+            
             const modal = document.getElementById('imageModal');
-            modal.classList.remove('active', 'show-info');
-            document.body.style.overflow = '';
-            resetImagePosition();
+            modal.classList.remove('show');
+            document.body.style.overflow = ''; // Restaurar scroll del body
         }
 
-        function resetImagePosition() {
-            currentZoom = 1;
-            currentX = 0;
-            currentY = 0;
-            updateImageTransform();
+        // Cerrar modal con tecla Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeImageModal();
+            }
+        });
+
+        // Funciones de impresión y PDF
+        function printCatalog() {
+            // Aplicar configuración antes de imprimir
+            applyBannerConfig();
+            
+            // Asegurarse de que el catálogo esté renderizado
+            renderCatalog();
+            
+            // Cambiar a la vista de catálogo
+            showSection('catalogo');
+            
+            // Imprimir después de un pequeño delay para asegurar que se renderice
+            setTimeout(() => {
+                window.print();
+            }, 500);
         }
 
-        function updateImageTransform() {
-            const modalImage = document.getElementById('modalImage');
-            modalImage.style.transform = `translate(${currentX}px, ${currentY}px) scale(${currentZoom})`;
+        function downloadPDF() {
+            // Para la descarga PDF, podríamos usar jsPDF o html2pdf
+            // Por ahora, mostraremos instrucciones para usar la función de impresión del navegador
+            showToast('Usa "Imprimir Catálogo" y selecciona "Guardar como PDF" en tu navegador');
+            printCatalog();
         }
 
-        // Funciones de importar/exportar ARREGLADAS
+        // Funciones de importar/exportar
         function exportData() {
             const data = {
                 products: products,
                 categories: categories,
                 warehouses: warehouses,
-                logo: localStorage.getItem('libomi_logo_v2')
+                config: config,
+                exportDate: new Date().toISOString(),
+                version: 'v3'
             };
             document.getElementById('exportData').value = JSON.stringify(data, null, 2);
-            showToast('Datos exportados');
+            showToast('Datos exportados - Listo para copiar');
         }
 
         function importData() {
@@ -1814,44 +1659,27 @@
                 if (data.warehouses && Array.isArray(data.warehouses)) {
                     warehouses = data.warehouses;
                 }
-                if (data.logo) {
-                    localStorage.setItem('libomi_logo_v2', data.logo);
-                    loadLogo();
+                if (data.config && typeof data.config === 'object') {
+                    config = data.config;
                 }
                 
-                // ESTO ERA EL PROBLEMA: Faltaba actualizar la UI después de importar
-                saveData(); // Guardar en localStorage
+                saveData();
                 
-                // Actualizar TODA la interfaz
+                // Actualizar toda la interfaz
                 renderWarehouses();
                 renderCategories(); 
                 renderProducts();
                 renderCatalog();
                 renderWarehouseList();
                 renderCategoryLists();
-                updatePrintHeader();
+                loadConfig();
                 
                 showToast('Datos importados exitosamente');
                 document.getElementById('importData').value = '';
                 
-                // Forzar actualización si estamos en alguna sección específica
-                const activeSection = document.querySelector('.section.active');
-                if (activeSection) {
-                    const sectionId = activeSection.id;
-                    if (sectionId === 'catalogo') {
-                        renderCatalog();
-                    } else if (sectionId === 'categorias') {
-                        renderCategoryLists();
-                    } else if (sectionId === 'almacenes') {
-                        renderWarehouseList();
-                    } else if (sectionId === 'productos') {
-                        renderProducts();
-                    }
-                }
-                
             } catch (error) {
                 console.error('Error parsing JSON:', error);
-                showToast('Error en el formato JSON', 'error');
+                showToast('Error en el formato JSON. Verifica que los datos estén correctos.', 'error');
             }
         }
 
@@ -1860,44 +1688,50 @@
                 products = [];
                 categories = {"General": ["Varios"]};
                 warehouses = ["Almacén Principal"];
-                localStorage.removeItem('libomi_products_v2');
-                localStorage.removeItem('libomi_categories_v2');
-                localStorage.removeItem('libomi_warehouses_v2');
-                localStorage.removeItem('libomi_logo_v2');
+                config = {};
                 
-                clearLogo();
+                localStorage.removeItem('libomi_products_v3');
+                localStorage.removeItem('libomi_categories_v3');
+                localStorage.removeItem('libomi_warehouses_v3');
+                localStorage.removeItem('libomi_config_v3');
+                localStorage.removeItem('libomi_last_sync');
+                
                 renderWarehouses();
                 renderCategories();
                 renderProducts();
                 renderCatalog();
                 clearForm();
+                loadConfig();
+                updateCloudStatus();
                 
                 showToast('Todos los datos han sido eliminados', 'warning');
             }
         }
 
-        // Función de impresión
-        function printCatalog() {
-            updatePrintHeader();
-            window.print();
+        // Funciones de clipboard
+        async function copyToClipboard(elementId) {
+            try {
+                const text = document.getElementById(elementId).value;
+                if (!text) {
+                    showToast('No hay datos para copiar', 'warning');
+                    return;
+                }
+                await navigator.clipboard.writeText(text);
+                showToast('Datos copiados al portapapeles');
+            } catch (err) {
+                console.error('Error copying to clipboard:', err);
+                showToast('No se pudo copiar. Selecciona el texto manualmente.', 'error');
+            }
         }
 
-        function updatePrintHeader() {
-            const printDate = document.getElementById('printDate');
-            const printLogo = document.getElementById('printLogo');
-            
-            if (printDate) {
-                const now = new Date();
-                printDate.textContent = now.toLocaleDateString('es-ES', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                });
-            }
-            
-            if (printLogo) {
-                const logoSrc = localStorage.getItem('libomi_logo_v2') || localStorage.getItem('libomi_logo');
-                printLogo.src = logoSrc || document.getElementById('logoImage').src;
+        async function pasteFromClipboard(elementId) {
+            try {
+                const text = await navigator.clipboard.readText();
+                document.getElementById(elementId).value = text;
+                showToast('Datos pegados desde el portapapeles');
+            } catch (err) {
+                console.error('Error pasting from clipboard:', err);
+                showToast('No se pudo pegar. Pega manualmente con Ctrl+V.', 'error');
             }
         }
     </script>
