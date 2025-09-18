@@ -539,239 +539,138 @@
             background: #f59e0b;
         }
 
-        /* AGREGAR ESTOS ESTILOS ANTES DEL @media print */
-
-/* Controles de impresión */
-.print-controls {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    padding: 1.5rem;
-    margin-bottom: 1rem;
-}
-
-.warehouse-selector {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 1rem;
-    align-items: end;
-}
-
-@media (max-width: 768px) {
-    .warehouse-selector {
-        grid-template-columns: 1fr;
-    }
-}
         /* Estilos de impresión */
-@media print {
-    * {
-        -webkit-print-color-adjust: exact !important;
-        color-adjust: exact !important;
-        print-color-adjust: exact !important;
-    }
+        @media print {
+            .nav, .btn, .form-control, .card h3,
+            .product-actions, .toast, .cloud-status,
+            .github-config, .form-group, .form-grid {
+                display: none !important;
+            }
 
-    @page {
-        margin: 0.5in;
-        size: A4;
-    }
+            body {
+                font-size: 12px;
+                background: white !important;
+                color: black !important;
+                line-height: 1.4;
+            }
 
-    /* Ocultar elementos no necesarios para imprimir */
-    .nav, .btn, .form-control, .print-controls, .warehouse-selector, .cloud-status, .github-config, .form-group, .form-grid, #search-form {
-        display: none !important;
-    }
-    
-    body {
-        font-size: 11px;
-        background: white !important;
-        color: black !important;
-        line-height: 1.3;
-    }
+            .container {
+                max-width: none !important;
+                margin: 0 !important;
+                padding: 10px !important;
+            }
+            
+            /* INICIO: CORRECCIÓN DEL ERROR DE IMPRESIÓN DEL LOGO Y BANNER */
+            .header-content {
+                display: flex !important;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 1rem;
+                background-color: transparent !important;
+            }
+            .logo-container {
+                display: block !important;
+                max-width: 150px;
+                max-height: 80px;
+                border: none;
+            }
+            .header-title {
+                flex: none;
+                text-align: left;
+                font-size: 1.5rem;
+                margin-left: 1rem;
+            }
 
-    .container {
-        max-width: none !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
+            .custom-banner {
+                display: block !important;
+                background: #f8f9fa !important;
+                background-image: var(--banner-bg-image, none) !important;
+                background-size: cover !important;
+                background-position: center !important;
+                color: black !important;
+                border: 2px solid #ddd !important;
+                margin-bottom: 20px !important;
+            }
 
-    /* Header en cada página */
-    .print-header {
-        display: flex !important;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 15px;
-        padding-bottom: 10px;
-        border-bottom: 2px solid #333;
-        background: white;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 1000;
-        height: 60px;
-    }
+            .custom-banner h1, .custom-banner p {
+                color: black !important;
+                text-shadow: none !important;
+            }
+            /* FIN: CORRECCIÓN DEL ERROR DE IMPRESIÓN DEL LOGO Y BANNER */
 
-    .print-header .logo-container {
-        max-width: 80px;
-        max-height: 50px;
-    }
+            .products-grid {
+                display: grid !important;
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 10px !important;
+                page-break-inside: avoid;
+            }
+            .section {
+                display: none;
+            }
+            .section.active {
+                display: block !important;
+            }
+            #catalogo {
+                display: block !important;
+            }
 
-    .print-header .header-title {
-        font-size: 14px;
-        font-weight: bold;
-        text-align: center;
-        flex: 1;
-        color: black !important;
-    }
+            .product-card {
+                border: 1px solid #ddd !important;
+                border-radius: 8px !important;
+                padding: 8px !important;
+                margin-bottom: 10px !important;
+                page-break-inside: avoid;
+                background: white !important;
+                box-shadow: none !important;
+            }
 
-    /* Banner en la primera página */
-    .print-banner {
-        display: block !important;
-        background: #f0f0f0 !important;
-        color: black !important;
-        text-align: center;
-        padding: 20px;
-        margin: 70px 0 20px 0;
-        border: 2px solid #333;
-        page-break-after: avoid;
-    }
+            .product-image {
+                height: 120px !important;
+                margin-bottom: 8px !important;
+                border: 1px solid #eee !important;
+                border-radius: 4px !important;
+            }
 
-    .print-banner h1 {
-        font-size: 18px !important;
-        color: black !important;
-        text-shadow: none !important;
-        margin-bottom: 8px;
-    }
+            .product-image img {
+                object-fit: contain !important;
+            }
 
-    .print-banner p {
-        font-size: 12px !important;
-        color: black !important;
-        text-shadow: none !important;
-    }
+            .product-title {
+                font-size: 11px !important;
+                font-weight: bold !important;
+                margin-bottom: 4px !important;
+                color: black !important;
+            }
 
-    /* Contenido principal con margen para header fijo */
-    .print-content {
-        margin-top: 70px;
-        page-break-inside: avoid;
-    }
+            .product-meta, .product-description {
+                font-size: 9px !important;
+                color: #555 !important;
+                margin-bottom: 2px !important;
+                line-height: 1.2 !important;
+            }
 
-    /* Secciones de almacén */
-    .warehouse-section {
-        page-break-before: auto;
-        margin-bottom: 20px;
-    }
+            h2, h3, h4 {
+                color: black !important;
+                page-break-after: avoid;
+            }
 
-    .warehouse-title {
-        font-size: 16px !important;
-        font-weight: bold !important;
-        color: black !important;
-        margin: 20px 0 10px 0 !important;
-        padding-bottom: 5px !important;
-        border-bottom: 2px solid #666 !important;
-        page-break-after: avoid;
-    }
+            /* Evitar saltos de página dentro de secciones */
+            h2 {
+                page-break-before: auto;
+                margin-top: 20px !important;
+            }
+        }
 
-    /* Categorías */
-    .category-section {
-        margin-bottom: 15px;
-        page-break-inside: avoid;
-    }
+        /* Responsive */
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
 
-    .category-title {
-        font-size: 14px !important;
-        font-weight: bold !important;
-        color: black !important;
-        margin-bottom: 8px !important;
-        page-break-after: avoid;
-    }
-
-    .subcategory-title {
-        font-size: 12px !important;
-        font-weight: bold !important;
-        color: #333 !important;
-        margin: 10px 0 5px 0 !important;
-        page-break-after: avoid;
-    }
-
-    /* Grid de productos para impresión */
-    .products-print-grid {
-        display: grid !important;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
-        gap: 8px !important;
-        margin-bottom: 15px;
-        page-break-inside: avoid;
-    }
-
-    .products-grid {
-        display: grid !important;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
-        gap: 8px !important;
-        page-break-inside: avoid;
-    }
-
-    .section {
-        display: none !important;
-    }
-    
-    .section.active {
-        display: block !important;
-    }
-
-    #catalogo {
-        display: block !important;
-    }
-
-    .product-card {
-        border: 1px solid #ddd !important;
-        border-radius: 6px !important;
-        padding: 8px !important;
-        margin-bottom: 8px !important;
-        background: white !important;
-        box-shadow: none !important;
-        page-break-inside: avoid;
-        display: flex;
-        flex-direction: column;
-        height: auto;
-    }
-
-    .product-image {
-        height: 100px !important;
-        margin-bottom: 6px !important;
-        border: 1px solid #eee !important;
-        border-radius: 4px !important;
-        flex-shrink: 0;
-    }
-
-    .product-image img {
-        object-fit: contain !important;
-        max-width: 100%;
-        max-height: 100%;
-    }
-
-    .product-title {
-        font-size: 10px !important;
-        font-weight: bold !important;
-        margin-bottom: 3px !important;
-        color: black !important;
-        line-height: 1.2;
-    }
-
-    .product-meta, .product-description {
-        font-size: 8px !important;
-        color: #444 !important;
-        margin-bottom: 2px !important;
-        line-height: 1.1 !important;
-    }
-
-    /* Evitar rupturas de página problemáticas */
-    h1, h2, h3, h4, .warehouse-title, .category-title {
-        page-break-after: avoid;
-        color: black !important;
-    }
-
-    .warehouse-section:first-child {
-        page-break-before: auto;
-    }
-}
+            .url-info {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
@@ -788,16 +687,6 @@
         </div>
     </div>
 
-    <!-- AGREGAR DESPUÉS DEL imageModal Y ANTES DEL header -->
-<!-- Header fijo para impresión -->
-<div class="print-header" style="display: none;">
-    <div class="logo-container">
-        <img id="printLogo" class="logo" src="" alt="Logo">
-    </div>
-    <div class="header-title">Catálogo de Productos - Libomi</div>
-    <div style="width: 80px;"></div> <!-- Espaciador para centrar el título -->
-</div>
-    
     <header class="header">
         <div class="header-content">
             <div class="logo-container">
@@ -897,33 +786,16 @@
                 <p id="bannerSubtitle">Productos de calidad para tu negocio</p>
             </div>
 
-<!-- Banner para impresión -->
-<div class="print-banner" style="display: none;">
-    <h1 id="printBannerTitle">Catálogo de Productos - Libomi</h1>
-    <p id="printBannerSubtitle">Productos de calidad para tu negocio</p>
-</div>
             <div class="card">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                    <h3>Opciones de Impresión</h3>
-
-<div class="print-controls">
-    <div class="warehouse-selector">
-        <div>
-            <label><strong>Seleccionar almacén para imprimir:</strong></label>
-            <select id="warehouseFilter" class="form-control">
-                <option value="all">Todos los almacenes</option>
-            </select>
-        </div>
-        <div>
-            <button class="btn btn-primary" onclick="printSelectedWarehouse()">🖨️ Imprimir Seleccionado</button>
-            <button class="btn btn-outline" onclick="printAllWarehouses()">📄 Imprimir Todos</button>
-        </div>
-    </div>
-</div>
-
-<h3>Catálogo de Productos</h3>
-<div id="catalogContent"></div>
-</div>
+                    <h3>Catálogo de Productos</h3>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button class="btn btn-primary" onclick="printCatalog()">🖨️ Imprimir Catálogo</button>
+                        <button class="btn btn-outline" onclick="downloadPDF()">📄 Descargar PDF</button>
+                    </div>
+                </div>
+                <div id="catalogContent"></div>
+            </div>
         </section>
 
         <section id="categorias" class="section">
@@ -1103,8 +975,6 @@
 
         // Inicialización
         document.addEventListener('DOMContentLoaded', function() {
-            // AGREGAR ESTAS LÍNEAS EN DOMContentLoaded
-            loadWarehousesFilter();
             updateUrlDisplay();
             renderWarehouses();
             renderCategories();
@@ -1379,7 +1249,6 @@
 
         // Funciones de almacenes
         function renderWarehouses() {
-            loadWarehousesFilter();
             const warehouseSelect = document.getElementById('productWarehouse');
 
             warehouseSelect.innerHTML = '<option value="">Seleccionar almacén...</option>';
@@ -1423,7 +1292,6 @@
             warehouses.push(warehouseName);
             saveData();
             renderWarehouses();
-            loadWarehousesFilter();
             renderWarehouseList();
             document.getElementById('newWarehouseName').value = '';
             showToast('Almacén agregado exitosamente');
@@ -1794,78 +1662,6 @@
 
             container.innerHTML = html;
         }
-        // AGREGAR ESTAS FUNCIONES NUEVAS
-
-function loadWarehousesFilter() {
-    const warehouseFilter = document.getElementById('warehouseFilter');
-    if (!warehouseFilter) return;
-    
-    warehouseFilter.innerHTML = '<option value="all">Todos los almacenes</option>';
-    warehouses.forEach(warehouse => {
-        const option = new Option(warehouse, warehouse);
-        warehouseFilter.add(option);
-    });
-}
-
-function printSelectedWarehouse() {
-    const selectedWarehouse = document.getElementById('warehouseFilter').value;
-    
-    let productsToShow;
-    if (selectedWarehouse === 'all') {
-        productsToShow = products;
-    } else {
-        productsToShow = products.filter(p => p.warehouse === selectedWarehouse);
-    }
-    
-    if (productsToShow.length === 0) {
-        showToast('No hay productos para imprimir en el almacén seleccionado.', 'warning');
-        return;
-    }
-    
-    preparePrintContent(productsToShow);
-    setTimeout(() => {
-        window.print();
-    }, 500);
-}
-
-function printAllWarehouses() {
-    preparePrintContent(products);
-    setTimeout(() => {
-        window.print();
-    }, 500);
-}
-
-function preparePrintContent(productsToShow) {
-    // Mostrar header y banner para impresión
-    const printHeader = document.querySelector('.print-header');
-    const printBanner = document.querySelector('.print-banner');
-    
-    if (printHeader) printHeader.style.display = 'flex';
-    if (printBanner) printBanner.style.display = 'block';
-    
-    // Actualizar contenido para impresión
-    renderFilteredCatalog(productsToShow);
-    
-    // Sincronizar logos
-    const mainLogo = document.getElementById('logoImage');
-    const printLogo = document.getElementById('printLogo');
-    if (mainLogo && printLogo) {
-        printLogo.src = mainLogo.src;
-    }
-    
-    // Sincronizar títulos del banner
-    const bannerTitle = document.getElementById('bannerTitle');
-    const bannerSubtitle = document.getElementById('bannerSubtitle');
-    const printBannerTitle = document.getElementById('printBannerTitle');
-    const printBannerSubtitle = document.getElementById('printBannerSubtitle');
-    
-    if (bannerTitle && printBannerTitle) {
-        printBannerTitle.textContent = bannerTitle.textContent;
-    }
-    if (bannerSubtitle && printBannerSubtitle) {
-        printBannerSubtitle.textContent = bannerSubtitle.textContent;
-    }
-}
 
         // Funciones del modal de imágenes
         function openImageModal(imageSrc, productName) {
@@ -2035,19 +1831,6 @@ function preparePrintContent(productsToShow) {
                 showToast('No se pudo pegar. Pega manualmente con Ctrl+V.', 'error');
             }
         }
-        // AGREGAR AL FINAL DEL SCRIPT
-
-// Ocultar elementos de impresión después de imprimir
-window.addEventListener('afterprint', function() {
-    const printHeader = document.querySelector('.print-header');
-    const printBanner = document.querySelector('.print-banner');
-    
-    if (printHeader) printHeader.style.display = 'none';
-    if (printBanner) printBanner.style.display = 'none';
-    
-    // Restaurar contenido completo
-    renderCatalog();
-});
     </script>
 </body>
 </html>
