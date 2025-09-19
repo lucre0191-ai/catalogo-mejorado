@@ -540,25 +540,32 @@
         }
 
         /* Estilos de impresión */
-        @media print {
-            .nav, .btn, .form-control, .card h3,
-            .product-actions, .toast, .cloud-status,
-            .github-config, .form-group, .form-grid {
-                display: none !important;
-            }
+       @media print {
+  body {
+    background-color: #fff; /* Asegura que el fondo sea blanco */
+    color: #000; /* Asegura que el texto sea negro */
+    font-size: 12pt; /* Tamaño de fuente para mejor lectura */
+  }
 
-            body {
-                font-size: 12px;
-                background: white !important;
-                color: black !important;
-                line-height: 1.4;
-            }
+  /* Oculta la navegación y el pie de página */
+  .navbar, .footer, .ads {
+    display: none;
+  }
 
-            .container {
-                max-width: none !important;
-                margin: 0 !important;
-                padding: 10px !important;
-            }
+  /* Asegura que todos los elementos se impriman tal como están en pantalla */
+  .product-catalog {
+    /* Aquí puedes copiar los estilos de tu catálogo principal */
+    /* Por ejemplo: display: grid; grid-template-columns: repeat(3, 1fr); */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Si tienes imágenes con efectos, puedes ajustarlos */
+  img {
+    box-shadow: none;
+  }
+}
             
             /* INICIO: CORRECCIÓN DEL ERROR DE IMPRESIÓN DEL LOGO Y BANNER */
             .header-content {
