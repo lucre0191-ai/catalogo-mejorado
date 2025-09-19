@@ -3,56 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo Libomi - Gestión</title>
+    <title>Catálogo Libomi</title>
     <style>
+        /* CSS se mantiene dentro de este archivo */
+        /* Estilos de la página y catálogo */
         /* Reset básico */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #f5f7fa;
             color: #333;
             line-height: 1.6;
+            background-image: var(--catalog-bg-image, none);
+            background-attachment: fixed; /* Mantiene el fondo fijo al hacer scroll */
+            background-size: cover;
+            background-position: center center;
+            background-color: var(--catalog-bg-color, transparent);
+        }
+        
+        /* Contenedor principal para opacidad */
+        .main-content {
+            background-color: var(--catalog-bg-overlay, rgba(255, 255, 255, 0));
+            z-index: 1;
         }
 
-        /* Header */
-        .header {
+        /* Variables CSS para personalización */
+        :root {
+            --header-bg-image: none;
+            --catalog-bg-image: none;
+            --catalog-bg-overlay: transparent;
+            --catalog-bg-opacity: 0.8;
+            --catalog-text-color: #333;
+        }
+
+        /* Nuevo Header Personalizado */
+        .custom-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 1rem 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             background-image: var(--header-bg-image, none);
+            background-position: var(--header-bg-position, center center);
             background-size: cover;
-            background-position: center;
-            background-blend-mode: overlay;
-        }
-
-        .custom-banner {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            background-image: var(--banner-bg-image, none);
-            background-size: cover;
-            background-position: center;
             background-blend-mode: overlay;
             color: white;
             padding: 2rem 0;
             text-align: center;
             margin-bottom: 2rem;
-            border-radius: 12px;
-        }
-
-        .custom-banner h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .custom-banner p {
-            font-size: 1.2rem;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .header-content {
@@ -61,66 +60,64 @@
             padding: 0 1rem;
             display: flex;
             align-items: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        /* INICIO: CAMBIOS EN EL LOGO */
-        .logo-container {
-            max-width: 300px; /* Contenedor más amplio */
-            max-height: 150px; /* Contenedor más alto */
-            display: flex;
-            align-items: center;
             justify-content: center;
+            flex-direction: column;
+            gap: 1rem;
         }
-
-        .logo {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            border-radius: 8px;
-            border: 2px solid rgba(255,255,255,0.2);
-        }
-        /* FIN: CAMBIOS EN EL LOGO */
 
         .header-title {
-            flex: 1;
-            text-align: center;
-            font-size: 1.5rem;
+            font-size: 2.5rem;
             font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-align: center;
         }
 
-        .logo-controls {
-            display: flex;
-            gap: 0.5rem;
+        .header-subtitle {
+            font-size: 1.2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
-
-        .url-info {
-            background: rgba(255,255,255,0.15);
-            color: #fff;
-            padding: 8px 12px;
+        
+        /* Contenedor de la imagen personalizable */
+        .draggable-image-container {
+            width: 300px;
+            height: 150px;
+            overflow: hidden;
+            position: relative;
+            cursor: grab;
             border-radius: 8px;
-            font-size: 12px;
-            font-family: monospace;
-            word-break: break-all;
+            border: 2px solid rgba(255,255,255,0.2);
+            touch-action: none;
+            user-select: none;
         }
 
-        /* Navegación */
+        .draggable-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        /* Resto de los estilos se mantienen igual */
         .nav {
             background: rgba(255,255,255,0.95);
             backdrop-filter: blur(10px);
             padding: 0.5rem 0;
             border-bottom: 1px solid #e0e6ed;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
-
         .nav-content {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 1rem;
             display: flex;
             gap: 0.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
         }
-
         .tab {
             padding: 0.75rem 1.5rem;
             border: none;
@@ -131,34 +128,25 @@
             transition: all 0.3s;
             color: #64748b;
         }
-
         .tab.active {
             background: #667eea;
             color: white;
             box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
         }
-
         .tab:hover:not(.active) {
             background: #f1f5f9;
         }
-
-        /* Container principal */
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 2rem 1rem;
         }
-
-        /* Secciones */
         .section {
             display: none;
         }
-
         .section.active {
             display: block;
         }
-
-        /* Cards */
         .card {
             background: white;
             border-radius: 12px;
@@ -166,13 +154,10 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             margin-bottom: 1.5rem;
         }
-
         .card h3 {
             margin-bottom: 1rem;
             color: #1e293b;
         }
-
-        /* Cloud storage status */
         .cloud-status {
             background: rgba(59, 130, 246, 0.1);
             border: 1px solid rgba(59, 130, 246, 0.2);
@@ -183,20 +168,16 @@
             align-items: center;
             gap: 0.5rem;
         }
-
         .cloud-status.connected {
             background: rgba(34, 197, 94, 0.1);
             border-color: rgba(34, 197, 94, 0.2);
             color: #16a34a;
         }
-
         .cloud-status.error {
             background: rgba(239, 68, 68, 0.1);
             border-color: rgba(239, 68, 68, 0.2);
             color: #dc2626;
         }
-
-        /* Image URL configurator */
         .github-config {
             background: #f8fafc;
             border: 1px solid #e2e8f0;
@@ -204,14 +185,12 @@
             padding: 1rem;
             margin-bottom: 1rem;
         }
-
         .github-config label {
             font-weight: 500;
             color: #374151;
             display: block;
             margin-bottom: 0.5rem;
         }
-
         .github-config input {
             width: 100%;
             padding: 0.5rem;
@@ -220,32 +199,26 @@
             font-family: monospace;
             font-size: 0.875rem;
         }
-
         .github-config .example {
             font-size: 0.75rem;
             color: #6b7280;
             margin-top: 0.25rem;
             font-family: monospace;
         }
-
-        /* Formulario */
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 2rem;
         }
-
         .form-group {
             margin-bottom: 1rem;
         }
-
         .form-group label {
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 500;
             color: #374151;
         }
-
         .form-control {
             width: 100%;
             padding: 0.75rem;
@@ -254,18 +227,14 @@
             font-size: 1rem;
             transition: border-color 0.3s;
         }
-
         .form-control:focus {
             outline: none;
             border-color: #667eea;
         }
-
         textarea.form-control {
             resize: vertical;
             min-height: 100px;
         }
-
-        /* Botones */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -279,52 +248,41 @@
             transition: all 0.3s;
             text-decoration: none;
         }
-
         .btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
         }
-
         .btn-primary {
             background: #667eea;
             color: white;
         }
-
         .btn-primary:hover:not(:disabled) {
             background: #5a67d8;
             transform: translateY(-1px);
         }
-
         .btn-secondary {
             background: #6b7280;
             color: white;
         }
-
         .btn-secondary:hover {
             background: #4b5563;
         }
-
         .btn-danger {
             background: #ef4444;
             color: white;
         }
-
         .btn-danger:hover {
             background: #dc2626;
         }
-
         .btn-outline {
             background: transparent;
             color: #667eea;
             border: 2px solid #667eea;
         }
-
         .btn-outline:hover {
             background: #667eea;
             color: white;
         }
-
-        /* Vista previa de imagen */
         .image-preview {
             width: 200px;
             height: 200px;
@@ -337,28 +295,23 @@
             overflow: hidden;
             background: #f9fafb;
         }
-
         .image-preview img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-
         .image-preview.empty {
             color: #6b7280;
             font-size: 0.875rem;
             text-align: center;
             padding: 1rem;
         }
-
-        /* Grid de productos */
         .products-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 1.5rem;
             margin-top: 1.5rem;
         }
-
         .product-card {
             background: white;
             border-radius: 12px;
@@ -366,12 +319,10 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             transition: transform 0.3s, box-shadow 0.3s;
         }
-
         .product-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 16px rgba(0,0,0,0.15);
         }
-
         .product-image {
             width: 100%;
             height: 200px;
@@ -383,19 +334,15 @@
             cursor: zoom-in;
             position: relative;
         }
-
         .product-image img {
             width: 100%;
             height: 100%;
             object-fit: contain;
             transition: transform 0.3s;
         }
-
         .product-image:hover img {
             transform: scale(1.1);
         }
-
-        /* Modal de imagen */
         .image-modal {
             display: none;
             position: fixed;
@@ -407,784 +354,571 @@
             background-color: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(5px);
         }
-
         .image-modal.show {
             display: flex;
-            align-items: center;
             justify-content: center;
-            animation: fadeIn 0.3s ease;
+            align-items: center;
         }
-
         .modal-content {
             max-width: 90%;
             max-height: 90%;
-            position: relative;
-        }
-
-        .modal-image {
-            max-width: 100%;
-            max-height: 100%;
             object-fit: contain;
             border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
-
-        .modal-close {
+        .close-modal {
             position: absolute;
-            top: -40px;
-            right: -10px;
-            background: rgba(255,255,255,0.2);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            font-size: 20px;
+            top: 20px;
+            right: 30px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.3s;
         }
-
-        .modal-close:hover {
-            background: rgba(255,255,255,0.4);
-        }
-
-        .modal-info {
-            position: absolute;
-            bottom: -60px;
-            left: 0;
-            right: 0;
-            text-align: center;
-            color: white;
-            padding: 10px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 6px;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        /* Cursor pointer para indicar que es clickeable */
-        .product-image:hover::after {
-            content: "🔍";
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.6);
-            color: white;
-            padding: 5px 8px;
-            border-radius: 15px;
-            font-size: 12px;
-            opacity: 0.8;
-        }
-
         .product-info {
-            padding: 1rem;
-        }
-
-        .product-title {
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
+            padding: 1rem 1.5rem;
             color: #1e293b;
         }
-
-        .product-meta {
-            font-size: 0.875rem;
-            color: #64748b;
+        .product-name {
+            font-size: 1.25rem;
+            font-weight: 600;
             margin-bottom: 0.5rem;
         }
-
-        .product-description {
+        .product-category {
             font-size: 0.875rem;
-            color: #4b5563;
-            line-height: 1.5;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+        .product-description {
+            font-size: 0.9rem;
+            color: #475569;
             margin-bottom: 1rem;
         }
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1d4ed8;
+            margin-bottom: 1rem;
+        }
+        .product-sku, .product-stock {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+        .product-stock {
+            font-weight: 600;
+        }
+        .product-stock.low {
+            color: #ef4444;
+        }
+        .product-stock.high {
+            color: #16a34a;
+        }
+        /* Toast Notification */
+        #toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: flex-end;
+        }
+        .toast {
+            min-width: 250px;
+            background-color: #333;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            opacity: 0;
+            transition: opacity 0.5s, transform 0.5s;
+            transform: translateY(20px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .toast.success {
+            background-color: #28a745;
+        }
+        .toast.error {
+            background-color: #dc3545;
+        }
+        .toast.warning {
+            background-color: #ffc107;
+        }
 
-        .product-actions {
+        .toast-icon {
+            font-size: 1.5rem;
+        }
+        /* Nuevo estilo para las áreas de arrastre */
+        .draggable-area {
+            position: relative;
+            cursor: grab;
+            overflow: hidden;
+            height: 100px;
+            background-color: #f1f5f9;
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .draggable-area img {
+            position: absolute;
+            width: 100%;
+            min-width: 150%;
+            min-height: 150%;
+            object-fit: cover;
+            pointer-events: none;
+        }
+
+        .draggable-area:active {
+            cursor: grabbing;
+        }
+
+        .preview-controls {
             display: flex;
             gap: 0.5rem;
-            padding: 0 1rem 1rem;
+            margin-top: 1rem;
         }
 
-        /* Toast */
-        .toast {
-            position: fixed;
-            top: 2rem;
-            right: 2rem;
-            background: #10b981;
-            color: white;
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            transform: translateX(100%);
-            transition: transform 0.3s;
-            z-index: 1001;
-        }
-
-        .toast.show {
-            transform: translateX(0);
-        }
-
-        .toast.error {
-            background: #ef4444;
-        }
-
-        .toast.warning {
-            background: #f59e0b;
-        }
-
-        /* AGREGAR ESTOS ESTILOS ANTES DEL @media print */
-
-/* Controles de impresión */
-.print-controls {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    padding: 1.5rem;
-    margin-bottom: 1rem;
-}
-
-.warehouse-selector {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 1rem;
-    align-items: end;
-}
-
-@media (max-width: 768px) {
-    .warehouse-selector {
-        grid-template-columns: 1fr;
-    }
-}
         /* Estilos de impresión */
-@media print {
-    * {
-        -webkit-print-color-adjust: exact !important;
-        color-adjust: exact !important;
-        print-color-adjust: exact !important;
-    }
+        @media print {
+            .nav, .btn, .form-control, .card h3, .product-actions, #toast-container, .cloud-status, .github-config, .form-group, .form-grid, #search-form, .nav, .custom-header, #logo-display {
+                display: none !important;
+            }
+            
+            body {
+                font-size: 12px;
+                background: white !important;
+                color: black !important;
+                line-height: 1.4;
+            }
 
-    @page {
-        margin: 0.5in;
-        size: A4;
-    }
+            .container {
+                max-width: none !important;
+                margin: 0 !important;
+                padding: 10px !important;
+            }
 
-    /* Ocultar elementos no necesarios para imprimir */
-    .nav, .btn, .form-control, .print-controls, .warehouse-selector, .cloud-status, .github-config, .form-group, .form-grid, #search-form {
-        display: none !important;
-    }
-    
-    body {
-        font-size: 11px;
-        background: white !important;
-        color: black !important;
-        line-height: 1.3;
-    }
+            .main-content {
+                background-color: transparent !important;
+            }
 
-    .container {
-        max-width: none !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
+            .products-grid {
+                display: grid !important;
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 10px !important;
+                page-break-inside: avoid;
+            }
+            .section {
+                display: none;
+            }
+            .section.active {
+                display: block !important;
+            }
+            #catalogo {
+                display: block !important;
+            }
 
-    /* Header en cada página */
-    .print-header {
-        display: flex !important;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 15px;
-        padding-bottom: 10px;
-        border-bottom: 2px solid #333;
-        background: white;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 1000;
-        height: 60px;
-    }
+            .product-card {
+                border: 1px solid #ddd !important;
+                border-radius: 8px !important;
+                padding: 8px !important;
+                margin-bottom: 10px !important;
+                page-break-inside: avoid;
+                background: white !important;
+                box-shadow: none !important;
+            }
 
-    .print-header .logo-container {
-        max-width: 80px;
-        max-height: 50px;
-    }
+            .product-image {
+                height: 120px !important;
+                margin-bottom: 8px !important;
+                border: 1px solid #eee !important;
+                border-radius: 4px !important;
+            }
 
-    .print-header .header-title {
-        font-size: 14px;
-        font-weight: bold;
-        text-align: center;
-        flex: 1;
-        color: black !important;
-    }
+            .product-image img {
+                object-fit: contain !important;
+            }
 
-    /* Banner en la primera página */
-    .print-banner {
-        display: block !important;
-        background: #f0f0f0 !important;
-        color: black !important;
-        text-align: center;
-        padding: 20px;
-        margin: 70px 0 20px 0;
-        border: 2px solid #333;
-        page-break-after: avoid;
-    }
-
-    .print-banner h1 {
-        font-size: 18px !important;
-        color: black !important;
-        text-shadow: none !important;
-        margin-bottom: 8px;
-    }
-
-    .print-banner p {
-        font-size: 12px !important;
-        color: black !important;
-        text-shadow: none !important;
-    }
-
-    /* Contenido principal con margen para header fijo */
-    .print-content {
-        margin-top: 70px;
-        page-break-inside: avoid;
-    }
-
-    /* Secciones de almacén */
-    .warehouse-section {
-        page-break-before: auto;
-        margin-bottom: 20px;
-    }
-
-    .warehouse-title {
-        font-size: 16px !important;
-        font-weight: bold !important;
-        color: black !important;
-        margin: 20px 0 10px 0 !important;
-        padding-bottom: 5px !important;
-        border-bottom: 2px solid #666 !important;
-        page-break-after: avoid;
-    }
-
-    /* Categorías */
-    .category-section {
-        margin-bottom: 15px;
-        page-break-inside: avoid;
-    }
-
-    .category-title {
-        font-size: 14px !important;
-        font-weight: bold !important;
-        color: black !important;
-        margin-bottom: 8px !important;
-        page-break-after: avoid;
-    }
-
-    .subcategory-title {
-        font-size: 12px !important;
-        font-weight: bold !important;
-        color: #333 !important;
-        margin: 10px 0 5px 0 !important;
-        page-break-after: avoid;
-    }
-
-    /* Grid de productos para impresión */
-    .products-print-grid {
-        display: grid !important;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
-        gap: 8px !important;
-        margin-bottom: 15px;
-        page-break-inside: avoid;
-    }
-
-    .products-grid {
-        display: grid !important;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
-        gap: 8px !important;
-        page-break-inside: avoid;
-    }
-
-    .section {
-        display: none !important;
-    }
-    
-    .section.active {
-        display: block !important;
-    }
-
-    #catalogo {
-        display: block !important;
-    }
-
-    .product-card {
-        border: 1px solid #ddd !important;
-        border-radius: 6px !important;
-        padding: 8px !important;
-        margin-bottom: 8px !important;
-        background: white !important;
-        box-shadow: none !important;
-        page-break-inside: avoid;
-        display: flex;
-        flex-direction: column;
-        height: auto;
-    }
-
-    .product-image {
-        height: 100px !important;
-        margin-bottom: 6px !important;
-        border: 1px solid #eee !important;
-        border-radius: 4px !important;
-        flex-shrink: 0;
-    }
-
-    .product-image img {
-        object-fit: contain !important;
-        max-width: 100%;
-        max-height: 100%;
-    }
-
-    .product-title {
-        font-size: 10px !important;
-        font-weight: bold !important;
-        margin-bottom: 3px !important;
-        color: black !important;
-        line-height: 1.2;
-    }
-
-    .product-meta, .product-description {
-        font-size: 8px !important;
-        color: #444 !important;
-        margin-bottom: 2px !important;
-        line-height: 1.1 !important;
-    }
-
-    /* Evitar rupturas de página problemáticas */
-    h1, h2, h3, h4, .warehouse-title, .category-title {
-        page-break-after: avoid;
-        color: black !important;
-    }
-
-    .warehouse-section:first-child {
-        page-break-before: auto;
-    }
-}
-    </style>
-</head>
-<body>
-    <div id="toast" class="toast"></div>
-
-    <div id="imageModal" class="image-modal" onclick="closeImageModal(event)">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeImageModal()">&times;</button>
-            <img id="modalImage" class="modal-image" src="" alt="">
-            <div class="modal-info">
-                <div id="modalProductName"></div>
-                <small>Haz clic fuera de la imagen para cerrar</small>
-            </div>
-        </div>
-    </div>
-
-    <!-- AGREGAR DESPUÉS DEL imageModal Y ANTES DEL header -->
-<!-- Header fijo para impresión -->
-<div class="print-header" style="display: none;">
-    <div class="logo-container">
-        <img id="printLogo" class="logo" src="" alt="Logo">
-    </div>
-    <div class="header-title">Catálogo de Productos - Libomi</div>
-    <div style="width: 80px;"></div> <!-- Espaciador para centrar el título -->
-</div>
-    
-    <header class="header">
-        <div class="header-content">
-            <div class="logo-container">
-                <img id="logoImage" class="logo" src="https://raw.githubusercontent.com/lucre0191-ai/catalogo-mejorado/main/images/logo.png" alt="Logo" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'60\' height=\'60\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23f3f4f6\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%239ca3af\' font-size=\'10\'%3ESin Logo%3C/text%3E%3C/svg%3E'">
-            </div>
-            <h1 class="header-title">Catálogo de Productos - Libomi</h1>
-            <div class="url-info" id="urlDisplay">
-                🌐 <span id="currentUrl"></span>
-            </div>
-        </div>
-    </header>
-
-    <nav class="nav">
-        <div class="nav-content">
-            <button class="tab active" onclick="showSection('productos')">Entrada de Datos</button>
-            <button class="tab" onclick="showSection('catalogo')">Ver Catálogo</button>
-            <button class="tab" onclick="showSection('categorias')">Categorías</button>
-            <button class="tab" onclick="showSection('almacenes')">Almacenes</button>
-            <button class="tab" onclick="showSection('configuracion')">Configuración</button>
-            <button class="tab" onclick="showSection('respaldo')">Sincronización</button>
-        </div>
-    </nav>
-
-    <main class="container">
-        <section id="productos" class="section active">
-            <div class="cloud-status" id="cloudStatus">
-                <span>📊</span>
-                <span id="cloudStatusText">Estado de sincronización</span>
-                <button class="btn btn-outline" onclick="syncData()" style="margin-left: auto; padding: 0.25rem 0.75rem;">
-                    Sincronizar
-                </button>
-            </div>
-
-            <div class="card">
-                <h3>Agregar / Editar Producto</h3>
-                <form id="productForm" class="form-grid">
-                    <div>
-                        <div class="form-group">
-                            <label>Nombre *</label>
-                            <input type="text" id="productName" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Código</label>
-                            <input type="text" id="productCode" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label>Almacén *</label>
-                            <select id="productWarehouse" class="form-control" required></select>
-                        </div>
-                        <div class="form-group">
-                            <label>Categoría *</label>
-                            <select id="productCategory" class="form-control" required></select>
-                        </div>
-                        <div class="form-group">
-                            <label>Subcategoría</label>
-                            <select id="productSubcategory" class="form-control"></select>
-                        </div>
-                        <div class="form-group">
-                            <label>Descripción</label>
-                            <textarea id="productDescription" class="form-control" rows="4"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Guardar Producto</button>
-                            <button type="button" class="btn btn-secondary" onclick="clearForm()">Limpiar</button>
-                            <button type="button" class="btn btn-danger" onclick="deleteCurrentProduct()">Eliminar</button>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="form-group">
-                            <label>Imagen (usar URL de GitHub)</label>
-                            <input type="url" id="productImageUrl" class="form-control" placeholder="https://raw.githubusercontent.com/usuario/repo/main/images/producto.jpg">
-                            <small style="color: #666; font-size: 0.8rem; margin-top: 0.25rem; display: block;">
-                                Sube tu imagen a GitHub y pega aquí la URL raw
-                            </small>
-                        </div>
-                        <div class="form-group">
-                            <div id="imagePreview" class="image-preview empty">
-                                <span>Ingresa una URL de imagen</span>
-                            </div>
-                            <button type="button" class="btn btn-outline" onclick="previewImageFromUrl()">
-                                Ver Vista Previa
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-
-            <div class="card">
-                <h3>Lista de Productos</h3>
-                <div id="productsList" class="products-grid"></div>
-            </div>
-        </section>
-
-        <section id="catalogo" class="section">
-            <div class="custom-banner" id="catalogBanner">
-                <h1 id="bannerTitle">Catálogo de Productos - Libomi</h1>
-                <p id="bannerSubtitle">Productos de calidad para tu negocio</p>
-            </div>
-
-<!-- Banner para impresión -->
-<div class="print-banner" style="display: none;">
-    <h1 id="printBannerTitle">Catálogo de Productos - Libomi</h1>
-    <p id="printBannerSubtitle">Productos de calidad para tu negocio</p>
-</div>
-            <div class="card">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                    <h3>Opciones de Impresión</h3>
-
-<div class="print-controls">
-    <div class="warehouse-selector">
-        <div>
-            <label><strong>Seleccionar almacén para imprimir:</strong></label>
-            <select id="warehouseFilter" class="form-control">
-                <option value="all">Todos los almacenes</option>
-            </select>
-        </div>
-        <div>
-            <button class="btn btn-primary" onclick="printSelectedWarehouse()">🖨️ Imprimir Seleccionado</button>
-            <button class="btn btn-outline" onclick="printAllWarehouses()">📄 Imprimir Todos</button>
-        </div>
-    </div>
-</div>
-
-<h3>Catálogo de Productos</h3>
-<div id="catalogContent"></div>
-</div>
-        </section>
-
-        <section id="categorias" class="section">
-            <div class="card">
-                <h3>Gestión de Categorías</h3>
-                <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
-                    <input type="text" id="newCategoryName" class="form-control" placeholder="Nueva categoría">
-                    <input type="text" id="newSubcategoryName" class="form-control" placeholder="Nueva subcategoría">
-                    <button class="btn btn-primary" onclick="addCategory()">Agregar</button>
-                </div>
-                <div id="categoriesList"></div>
-            </div>
-        </section>
-
-        <section id="almacenes" class="section">
-            <div class="card">
-                <h3>Gestión de Almacenes</h3>
-                <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
-                    <input type="text" id="newWarehouseName" class="form-control" placeholder="Nuevo almacén">
-                    <button class="btn btn-primary" onclick="addWarehouse()">Agregar</button>
-                </div>
-                <div id="warehousesList"></div>
-            </div>
-        </section>
-
-        <section id="configuracion" class="section">
-            <div class="card">
-                <h3>Personalización del Logo</h3>
-                <div class="github-config">
-                    <div class="form-group">
-                        <label>Subir Logo (Archivo):</label>
-                        <input type="file" id="logoFile" class="form-control" accept="image/*">
-                        <small style="color: #666; font-size: 0.8rem; margin-top: 0.25rem; display: block;">
-                            Sube una imagen desde tu ordenador.
-                        </small>
-                    </div>
-                    <div class="form-group">
-                        <label>Logo (URL de GitHub):</label>
-                        <input type="url" id="logoUrl" class="form-control" placeholder="https://raw.githubusercontent.com/usuario/repo/main/logo.png">
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <h3>Configuración de GitHub</h3>
-                <div class="github-config">
-                    <label>URL base para imágenes:</label>
-                    <input type="url" id="githubBaseUrl" class="form-control"
-                           value="https://raw.githubusercontent.com/lucre0191-ai/catalogo-mejorado/main/images/"
-                           placeholder="https://raw.githubusercontent.com/usuario/repo/main/images/">
-                    <div class="example">
-                        Ejemplo: Si subes "producto1.jpg" a GitHub, la URL completa será:<br>
-                        <span id="exampleUrl">https://raw.githubusercontent.com/usuario/repo/main/images/producto1.jpg</span>
-                    </div>
-                </div>
-                <button class="btn btn-primary" onclick="saveConfig()">Guardar Configuración</button>
-            </div>
-
-            <div class="card">
-                <h3>Personalización del Banner del Catálogo</h3>
-                <div class="github-config">
-                    <div class="form-group">
-                        <label>Título del Banner:</label>
-                        <input type="text" id="bannerTitleConfig" class="form-control"
-                               value="Catálogo de Productos - Libomi"
-                               placeholder="Título principal del catálogo">
-                    </div>
-                    <div class="form-group">
-                        <label>Subtítulo del Banner:</label>
-                        <input type="text" id="bannerSubtitleConfig" class="form-control"
-                               value="Productos de calidad para tu negocio"
-                               placeholder="Subtítulo o descripción">
-                    </div>
-                    <div class="form-group">
-                        <label>Imagen de fondo del Banner (URL):</label>
-                        <input type="url" id="bannerBgImage" class="form-control"
-                               placeholder="https://raw.githubusercontent.com/usuario/repo/main/banner-fondo.jpg">
-                        <small style="color: #666; font-size: 0.8rem; margin-top: 0.25rem; display: block;">
-                            Opcional: Imagen de fondo para el banner del catálogo
-                        </small>
-                    </div>
-                    <div class="form-group">
-                        <label>Imagen de fondo del Header (URL):</label>
-                        <input type="url" id="headerBgImage" class="form-control"
-                               placeholder="https://raw.githubusercontent.com/usuario/repo/main/header-fondo.jpg">
-                        <small style="color: #666; font-size: 0.8rem; margin-top: 0.25rem; display: block;">
-                            Opcional: Imagen de fondo para el header principal
-                        </small>
-                    </div>
-                </div>
-                <div style="display: flex; gap: 0.5rem;">
-                    <button class="btn btn-primary" onclick="saveConfig()">Guardar Configuración</button>
-                    <button class="btn btn-outline" onclick="previewBanner()">Vista Previa</button>
-                </div>
-            </div>
-
-            <div class="card">
-                <h3>Configuración de Sincronización</h3>
-                <p style="color: #666; margin-bottom: 1rem;">
-                    Para mantener tus datos sincronizados entre diferentes ordenadores, puedes usar:
-                </p>
-                <div style="display: grid; gap: 1rem;">
-                    <div style="background: #f8fafc; padding: 1rem; border-radius: 8px; border: 1px solid #e2e8f0;">
-                        <h4 style="color: #1e293b; margin-bottom: 0.5rem;">📱 Método Manual (Recomendado)</h4>
-                        <p style="color: #64748b; font-size: 0.875rem;">
-                            Usa la función "Exportar/Importar" en la pestaña Sincronización para copiar/pegar tus datos entre ordenadores.
-                        </p>
-                    </div>
-                    <div style="background: #fef3c7; padding: 1rem; border-radius: 8px; border: 1px solid #fbbf24;">
-                        <h4 style="color: #92400e; margin-bottom: 0.5rem;">⚠️ Método Automático (Avanzado)</h4>
-                        <p style="color: #92400e; font-size: 0.875rem;">
-                            Configura un servicio de almacenamiento en la nube como Firebase, Supabase o similar.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="respaldo" class="section">
-            <div class="card">
-                <h3>Exportar / Importar Datos</h3>
-                <p style="color: #666; margin-bottom: 1rem;">
-                    Usa estas funciones para mantener tus datos sincronizados entre diferentes ordenadores.
-                </p>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
-                    <div>
-                        <label><strong>📤 Exportar datos (copiar):</strong></label>
-                        <textarea id="exportData" class="form-control" rows="10" readonly placeholder="Haz clic en 'Generar Exportación' para ver los datos aquí"></textarea>
-                        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
-                            <button class="btn btn-primary" onclick="exportData()">Generar Exportación</button>
-                            <button class="btn btn-outline" onclick="copyToClipboard('exportData')">Copiar al Portapapeles</button>
-                        </div>
-                    </div>
-                    <div>
-                        <label><strong>📥 Importar datos (pegar):</strong></label>
-                        <textarea id="importData" class="form-control" rows="10" placeholder="Pega aquí los datos exportados desde otro ordenador"></textarea>
-                        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
-                            <button class="btn btn-primary" onclick="importData()">Importar Datos</button>
-                            <button class="btn btn-outline" onclick="pasteFromClipboard('importData')">Pegar del Portapapeles</button>
-                        </div>
-                    </div>
-                </div>
-                <div style="margin-top: 2rem; text-align: center; padding-top: 2rem; border-top: 1px solid #e5e7eb;">
-                    <button class="btn btn-danger" onclick="resetAllData()">🗑️ Borrar Todos los Datos</button>
-                </div>
-            </div>
-
-            <div class="card" style="background:#f0f9ff; border:1px solid #38bdf8">
-                <h3 style="color:#0369a1">🔄 Cómo sincronizar entre ordenadores</h3>
-                <div style="color:#0c4a6e; line-height:1.6">
-                    <ol style="padding-left: 1.5rem;">
-                        <li><strong>En el ordenador A:</strong> Ve a "Sincronización" → "Generar Exportación" → Copia los datos</li>
-                        <li><strong>Comparte los datos:</strong> Email, WhatsApp, USB, etc.</li>
-                        <li><strong>En el ordenador B:</strong> Ve a "Sincronización" → Pega los datos → "Importar Datos"</li>
-                        <li><strong>¡Listo!</strong> Todos tus productos, categorías y almacenes estarán disponibles</li>
-                    </ol>
-                    <div style="margin-top:12px; padding:12px; background:rgba(59,130,246,0.1); border-radius:6px">
-                        💡 <strong>Tip:</strong> Exporta tus datos regularmente como respaldo
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <script>
-        // Variables globales
-        let products = JSON.parse(localStorage.getItem('libomi_products_v3') || '[]');
-        let categories = JSON.parse(localStorage.getItem('libomi_categories_v3') || '{"General": ["Varios"]}');
-        let warehouses = JSON.parse(localStorage.getItem('libomi_warehouses_v3') || '["Almacén Principal"]');
-        let config = JSON.parse(localStorage.getItem('libomi_config_v3') || '{}');
-        let currentEditId = null;
-
-        // Placeholder para imágenes
-        const PLACEHOLDER = 'data:image/svg+xml;utf8,' + encodeURIComponent(
-            `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300"><rect width="100%" height="100%" fill="#f3f4f6"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#9ca3af" font-size="16" font-family="Arial">Sin imagen</text></svg>`
-        );
-
-        // Inicialización
-        document.addEventListener('DOMContentLoaded', function() {
-            // AGREGAR ESTAS LÍNEAS EN DOMContentLoaded
-            loadWarehousesFilter();
-            updateUrlDisplay();
-            renderWarehouses();
-            renderCategories();
-            renderProducts();
-            renderCatalog();
-            loadConfig();
-            applyBannerConfig();
-            updateCloudStatus();
-
-            // Event listeners
-            document.getElementById('productForm').addEventListener('submit', saveProduct);
-            document.getElementById('productCategory').addEventListener('change', loadSubcategories);
-            document.getElementById('githubBaseUrl').addEventListener('input', updateExampleUrl);
-
-            // INICIO: MANEJO DEL LOGO
-            const logoFile = document.getElementById('logoFile');
-            const logoUrl = document.getElementById('logoUrl');
-            logoFile.addEventListener('change', function(event) {
-                const file = event.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const dataUrl = e.target.result;
-                        config.logoImage = dataUrl;
-                        saveConfig();
-                        updateLogoDisplay();
-                        logoUrl.value = ''; // Limpiar el campo de URL
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-            logoUrl.addEventListener('input', function() {
-                config.logoImage = logoUrl.value;
-                saveConfig();
-                updateLogoDisplay();
-            });
-            // FIN: MANEJO DEL LOGO
-        });
-
-        // Funciones de utilidad
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.className = `toast ${type === 'error' ? 'error' : type === 'warning' ? 'warning' : ''}`;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
+            .product-name {
+                font-size: 11px !important;
+                font-weight: bold !important;
+                margin-bottom: 4px !important;
+                color: black !important;
+            }
+            
+            .product-category, .product-description {
+                font-size: 9px !important;
+                color: #555 !important;
+                margin-bottom: 2px !important;
+                line-height: 1.2 !important;
+            }
         }
-
-        function updateUrlDisplay() {
-            const urlElement = document.getElementById('currentUrl');
-            if (urlElement) {
-                urlElement.textContent = window.location.href;
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
             }
         }
 
-        function showSection(sectionName) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        /* INICIO: Visibilidad de botones de acción en modo cliente */
+        body.client-mode .product-actions,
+        body.client-mode .nav,
+        body.client-mode .custom-header .header-content .url-info {
+            display: none !important;
+        }
+        body.client-mode #catalogo {
+            display: block !important;
+        }
+        /* FIN: Visibilidad de botones de acción en modo cliente */
 
-            document.getElementById(sectionName).classList.add('active');
-            event.target.classList.add('active');
+        /* Estilos para la sección de respaldo mejorada */
+        .sync-section {
+            background: #f0f9ff;
+            border: 1px solid #38bdf8;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .sync-section h3 {
+            color: #0369a1;
+            margin-bottom: 1rem;
+        }
+        
+        .sync-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        
+        .sync-instructions {
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            color: #0c4a6e;
+            line-height: 1.6;
+        }
+        
+        .sync-instructions ol {
+            padding-left: 1.5rem;
+        }
+        
+        .sync-instructions .tip {
+            margin-top: 12px;
+            padding: 12px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 6px;
+        }
+        
+        @media (max-width: 768px) {
+            .sync-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="toast-container"></div>
+    <div id="image-modal" class="image-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <img id="modalImage" class="modal-image" src="" alt="Amplified image">
+        </div>
+    </div>
 
-            if (sectionName === 'catalogo') {
+    <header class="custom-header">
+        <div class="header-content">
+            <h1 class="header-title">Catálogo Libomi</h1>
+            <p class="header-subtitle">Libomi, la mejor calidad en un solo lugar.</p>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <nav class="nav">
+            <div class="nav-content">
+                <button class="tab active" onclick="showSection('productos')">Entrada de Datos</button>
+                <button class="tab" onclick="showSection('catalogo')">Ver Catálogo</button>
+                <button class="tab" onclick="showSection('categorias')">Categorías</button>
+                <button class="tab" onclick="showSection('almacenes')">Almacenes</button>
+                <button class="tab" onclick="showSection('configuracion')">Configuración</button>
+                <button class="tab" onclick="showSection('respaldo')">Sincronización</button>
+            </div>
+        </nav>
+        
+        <main class="container">
+            <section id="productos" class="section active">
+                <!-- Estado de sincronización -->
+                <div class="cloud-status" id="cloudStatus">
+                    <span>📊</span>
+                    <span id="cloudStatusText">Estado de sincronización</span>
+                    <button class="btn btn-outline" onclick="syncData()" style="margin-left: auto; padding: 0.25rem 0.75rem;">
+                        Sincronizar
+                    </button>
+                </div>
+
+                <div class="card">
+                    <h3>Agregar / Editar Producto</h3>
+                    <form id="productForm" class="form-grid">
+                        <div>
+                            <div class="form-group">
+                                <label>Nombre *</label>
+                                <input type="text" id="productName" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Código</label>
+                                <input type="text" id="productCode" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Almacén *</label>
+                                <select id="productWarehouse" class="form-control" required></select>
+                            </div>
+                            <div class="form-group">
+                                <label>Categoría *</label>
+                                <select id="productCategory" class="form-control" required></select>
+                            </div>
+                            <div class="form-group">
+                                <label>Subcategoría</label>
+                                <select id="productSubcategory" class="form-control"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>Descripción</label>
+                                <textarea id="productDescription" class="form-control" rows="4"></textarea>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="form-group">
+                                <label>URL de Imagen</label>
+                                <input type="url" id="productImageUrl" class="form-control" placeholder="https://ejemplo.com/imagen.jpg">
+                            </div>
+                            <div class="form-group">
+                                <div id="imagePreview" class="image-preview empty">
+                                    <span>Ingresa una URL de imagen</span>
+                                </div>
+                                <button type="button" class="btn btn-outline" onclick="previewImageFromUrl()">Ver Vista Previa</button>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Guardar Producto</button>
+                                <button type="button" class="btn btn-secondary" onclick="clearForm()">Limpiar</button>
+                                <button type="button" class="btn btn-danger" onclick="deleteCurrentProduct()">Eliminar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card">
+                    <h3>Lista de Productos</h3>
+                    <div id="productsList" class="products-grid"></div>
+                </div>
+            </section>
+
+            <section id="catalogo" class="section">
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h3>Catálogo de Productos</h3>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn btn-primary" onclick="printCatalog()">🖨️ Imprimir Catálogo</button>
+                            <button class="btn btn-outline" onclick="downloadPDF()">📄 Descargar PDF</button>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <input type="text" id="searchInput" class="form-control" placeholder="Buscar por nombre, código o almacén...">
+                    </div>
+                    <div id="catalogContent"></div>
+                </div>
+            </section>
+
+            <section id="categorias" class="section">
+                <div class="card">
+                    <h3>Gestión de Categorías</h3>
+                    <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                        <input type="text" id="newCategoryName" class="form-control" placeholder="Nueva categoría">
+                        <input type="text" id="newSubcategoryName" class="form-control" placeholder="Nueva subcategoría">
+                        <button class="btn btn-primary" onclick="addCategory()">Agregar</button>
+                    </div>
+                    <div id="categoriesList"></div>
+                </div>
+            </section>
+
+            <section id="almacenes" class="section">
+                <div class="card">
+                    <h3>Gestión de Almacenes</h3>
+                    <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                        <input type="text" id="newWarehouseName" class="form-control" placeholder="Nuevo almacén">
+                        <button class="btn btn-primary" onclick="addWarehouse()">Agregar</button>
+                    </div>
+                    <div id="warehousesList"></div>
+                </div>
+            </section>
+
+            <section id="configuracion" class="section">
+                <div class="card">
+                    <h3>Personalización de Encabezado y Fondo</h3>
+                    <div class="form-group">
+                        <label>URL de Imagen del Encabezado</label>
+                        <input type="url" id="headerBgUrl" class="form-control" placeholder="https://ejemplo.com/header.jpg">
+                    </div>
+                    <div class="form-group">
+                        <label>URL de Imagen de Fondo del Catálogo</label>
+                        <input type="url" id="catalogBgUrl" class="form-control" placeholder="https://ejemplo.com/background.jpg">
+                    </div>
+                    <div class="form-group">
+                        <label>Opacidad del Contenido del Catálogo (0.0 - 1.0)</label>
+                        <input type="number" id="catalogOpacity" class="form-control" min="0" max="1" step="0.1" value="0.8">
+                    </div>
+                    <div class="form-group">
+                        <label>Color de Fondo del Catálogo (si no hay imagen)</label>
+                        <input type="color" id="catalogBgColor" class="form-control" value="#f5f7fa">
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Personalización del Logo</h3>
+                    <div class="form-group">
+                        <label>URL del Logo</label>
+                        <input type="url" id="logoUrl" class="form-control" placeholder="https://ejemplo.com/logo.png">
+                    </div>
+                    <div id="logo-display" class="draggable-image-container">
+                        <img id="logoImage" class="draggable-image" src="" alt="Logo">
+                        <div style="position: absolute; bottom: 5px; right: 5px; background: rgba(0,0,0,0.5); color: white; padding: 3px 8px; border-radius: 4px; font-size: 10px;">Arrastrar</div>
+                    </div>
+                    <input type="hidden" id="logoPositionX">
+                    <input type="hidden" id="logoPositionY">
+                </div>
+                <button class="btn btn-primary" onclick="saveConfig()">Guardar Configuración</button>
+            </section>
+
+            <section id="respaldo" class="section">
+                <div class="sync-section">
+                    <h3>📄 Cómo sincronizar entre ordenadores</h3>
+                    <div class="sync-instructions">
+                        <ol>
+                            <li><strong>En el ordenador A:</strong> Ve a "Sincronización" → "Generar Exportación" → Copia los datos</li>
+                            <li><strong>Comparte los datos:</strong> Email, WhatsApp, USB, etc.</li>
+                            <li><strong>En el ordenador B:</strong> Ve a "Sincronización" → Pega los datos → "Importar Datos"</li>
+                            <li><strong>¡Listo!</strong> Todos tus productos, categorías y almacenes estarán disponibles</li>
+                        </ol>
+                        <div class="tip">
+                            💡 <strong>Tip:</strong> Exporta tus datos regularmente como respaldo
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Exportar / Importar Datos</h3>
+                    <p style="color: #666; margin-bottom: 1rem;">
+                        Usa estas funciones para mantener tus datos sincronizados entre diferentes ordenadores.
+                    </p>
+                    <div class="sync-grid">
+                        <div>
+                            <label><strong>📤 Exportar datos (copiar):</strong></label>
+                            <textarea id="exportDataTextarea" class="form-control" rows="10" readonly placeholder="Haz clic en 'Generar Exportación' para ver los datos aquí"></textarea>
+                            <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                                <button class="btn btn-primary" onclick="exportData()">Generar Exportación</button>
+                                <button class="btn btn-outline" onclick="copyToClipboard('exportDataTextarea')">Copiar al Portapapeles</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label><strong>📥 Importar datos (pegar):</strong></label>
+                            <textarea id="importDataTextarea" class="form-control" rows="10" placeholder="Pega aquí los datos exportados desde otro ordenador"></textarea>
+                            <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                                <button class="btn btn-primary" onclick="importData()">Importar Datos</button>
+                                <button class="btn btn-outline" onclick="pasteFromClipboard('importDataTextarea')">Pegar del Portapapeles</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 2rem; text-align: center; padding-top: 2rem; border-top: 1px solid #e5e7eb;">
+                        <button class="btn btn-danger" onclick="confirmReset()">🗑️ Borrar Todos los Datos</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Variables globales
+        let products = [];
+        let warehouses = [];
+        let categories = [];
+        let subcategories = {};
+        let config = {
+            logoUrl: '',
+            headerBgUrl: '',
+            catalogBgUrl: '',
+            catalogBgColor: '#f5f7fa',
+            catalogOpacity: 0.8,
+            logoPositionX: 0,
+            logoPositionY: 0
+        };
+        let currentEditId = null;
+
+        // Utilidades para notificaciones (toasts)
+        function showToast(message, type = 'success') {
+            const toastContainer = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.classList.add('toast', type);
+            
+            let icon = '✓';
+            if (type === 'error') icon = '✗';
+            if (type === 'warning') icon = '⚠';
+            
+            toast.innerHTML = `<span class="toast-icon">${icon}</span><span>${message}</span>`;
+            toastContainer.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 100);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 500);
+            }, 5000);
+        }
+
+        // --- Lógica de la interfaz de usuario ---
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+            
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            const activeTab = document.querySelector(`[onclick="showSection('${sectionId}')"]`);
+            if (activeTab) {
+                activeTab.classList.add('active');
+            }
+
+            if (sectionId === 'respaldo') {
+                // Auto-generar exportación al abrir la sección
+                setTimeout(exportData, 100);
+            }
+            if (sectionId === 'catalogo') {
                 renderCatalog();
-            } else if (sectionName === 'categorias') {
+            }
+            if (sectionId === 'categorias') {
                 renderCategoryLists();
-            } else if (sectionName === 'almacenes') {
+            }
+            if (sectionId === 'almacenes') {
                 renderWarehouseList();
             }
         }
 
-        function generateId() {
-            return 'prod_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-        }
-
+        // Funciones de guardado y carga de datos
         function saveData() {
             try {
                 localStorage.setItem('libomi_products_v3', JSON.stringify(products));
                 localStorage.setItem('libomi_categories_v3', JSON.stringify(categories));
                 localStorage.setItem('libomi_warehouses_v3', JSON.stringify(warehouses));
+                localStorage.setItem('libomi_subcategories_v3', JSON.stringify(subcategories));
                 localStorage.setItem('libomi_config_v3', JSON.stringify(config));
                 updateCloudStatus();
             } catch (e) {
@@ -1193,169 +927,51 @@
             }
         }
 
-        function escapeHtml(text) {
-            if (!text) return '';
-            return String(text)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#39;');
-        }
+        function loadData() {
+            try {
+                const storedProducts = localStorage.getItem('libomi_products_v3');
+                const storedCategories = localStorage.getItem('libomi_categories_v3');
+                const storedWarehouses = localStorage.getItem('libomi_warehouses_v3');
+                const storedSubcategories = localStorage.getItem('libomi_subcategories_v3');
+                const storedConfig = localStorage.getItem('libomi_config_v3');
 
-        // Funciones de configuración
-        function loadConfig() {
-            const githubBaseUrl = document.getElementById('githubBaseUrl');
-            if (config.githubBaseUrl) {
-                githubBaseUrl.value = config.githubBaseUrl;
-            }
+                if (storedProducts) products = JSON.parse(storedProducts);
+                if (storedCategories) categories = JSON.parse(storedCategories);
+                if (storedWarehouses) warehouses = JSON.parse(storedWarehouses);
+                if (storedSubcategories) subcategories = JSON.parse(storedSubcategories);
+                if (storedConfig) config = JSON.parse(storedConfig);
 
-            // Cargar configuración del banner
-            if (config.bannerTitle) {
-                document.getElementById('bannerTitleConfig').value = config.bannerTitle;
-                document.getElementById('bannerTitle').textContent = config.bannerTitle;
-            }
-            if (config.bannerSubtitle) {
-                document.getElementById('bannerSubtitleConfig').value = config.bannerSubtitle;
-                document.getElementById('bannerSubtitle').textContent = config.bannerSubtitle;
-            }
-            if (config.bannerBgImage) {
-                document.getElementById('bannerBgImage').value = config.bannerBgImage;
-                document.documentElement.style.setProperty('--banner-bg-image', `url(${config.bannerBgImage})`);
-            }
-            if (config.headerBgImage) {
-                document.getElementById('headerBgImage').value = config.headerBgImage;
-                document.documentElement.style.setProperty('--header-bg-image', `url(${config.headerBgImage})`);
-            }
+                // Datos por defecto si no existen
+                if (warehouses.length === 0) {
+                    warehouses = ['Almacén Principal'];
+                }
+                if (categories.length === 0) {
+                    categories = ['General', 'Electrónicos', 'Ropa'];
+                }
+                if (Object.keys(subcategories).length === 0) {
+                    subcategories = {
+                        'General': ['Varios'],
+                        'Electrónicos': ['Móviles', 'Ordenadores'],
+                        'Ropa': ['Hombre', 'Mujer']
+                    };
+                }
 
-            // INICIO: CARGA DEL LOGO
-            if (config.logoImage) {
-                document.getElementById('logoImage').src = config.logoImage;
-            } else {
-                document.getElementById('logoImage').src = 'https://raw.githubusercontent.com/lucre0191-ai/catalogo-mejorado/main/images/logo.png';
-            }
-            if (config.logoImage && !config.logoImage.startsWith('data:')) {
-                document.getElementById('logoUrl').value = config.logoImage;
-            }
-            // FIN: CARGA DEL LOGO
-
-            updateExampleUrl();
-        }
-
-        function saveConfig() {
-            // Guardar configuración del logo
-            config.logoImage = document.getElementById('logoUrl').value || config.logoImage;
-            // Si el campo de archivo no tiene valor, usar la URL
-            if (document.getElementById('logoFile').files.length > 0) {
-                // El cambio ya fue manejado por el listener de 'change'
-            } else {
-                config.logoImage = document.getElementById('logoUrl').value;
-            }
-
-            config.githubBaseUrl = document.getElementById('githubBaseUrl').value;
-            config.bannerTitle = document.getElementById('bannerTitleConfig').value;
-            config.bannerSubtitle = document.getElementById('bannerSubtitleConfig').value;
-            config.bannerBgImage = document.getElementById('bannerBgImage').value;
-            config.headerBgImage = document.getElementById('headerBgImage').value;
-
-            localStorage.setItem('libomi_config_v3', JSON.stringify(config));
-            showToast('Configuración guardada');
-            updateExampleUrl();
-            applyBannerConfig();
-            updateLogoDisplay();
-        }
-
-        // INICIO: FUNCIÓN PARA ACTUALIZAR EL LOGO
-        function updateLogoDisplay() {
-            const logoImage = document.getElementById('logoImage');
-            if (config.logoImage) {
-                logoImage.src = config.logoImage;
-            } else {
-                logoImage.src = 'https://raw.githubusercontent.com/lucre0191-ai/catalogo-mejorado/main/images/logo.png';
-            }
-        }
-        // FIN: FUNCIÓN PARA ACTUALIZAR EL LOGO
-
-        function applyBannerConfig() {
-            // Aplicar configuración del banner
-            if (config.bannerTitle) {
-                document.getElementById('bannerTitle').textContent = config.bannerTitle;
-            }
-            if (config.bannerSubtitle) {
-                document.getElementById('bannerSubtitle').textContent = config.bannerSubtitle;
-            }
-            if (config.bannerBgImage) {
-                document.documentElement.style.setProperty('--banner-bg-image', `url(${config.bannerBgImage})`);
-            }
-            if (config.headerBgImage) {
-                document.documentElement.style.setProperty('--header-bg-image', `url(${config.headerBgImage})`);
+                renderWarehouses();
+                renderCategories();
+                renderProducts();
+                renderCatalog();
+                loadConfig();
+                updateCloudStatus();
+            } catch (e) {
+                console.error('Error cargando datos', e);
+                showToast('Error cargando datos guardados', 'error');
             }
         }
 
-        function previewBanner() {
-            const title = document.getElementById('bannerTitleConfig').value;
-            const subtitle = document.getElementById('bannerSubtitleConfig').value;
-            const bannerBg = document.getElementById('bannerBgImage').value;
-            const headerBg = document.getElementById('headerBgImage').value;
-
-            // Aplicar vista previa temporal
-            document.getElementById('bannerTitle').textContent = title || 'Catálogo de Productos - Libomi';
-            document.getElementById('bannerSubtitle').textContent = subtitle || 'Productos de calidad para tu negocio';
-
-            if (bannerBg) {
-                document.documentElement.style.setProperty('--banner-bg-image', `url(${bannerBg})`);
-            }
-            if (headerBg) {
-                document.documentElement.style.setProperty('--header-bg-image', `url(${headerBg})`);
-            }
-
-            // Cambiar a la pestaña del catálogo para ver la vista previa
-            showSection('catalogo');
-            showToast('Vista previa aplicada - Revisa el catálogo');
-        }
-
-        function updateExampleUrl() {
-            const baseUrl = document.getElementById('githubBaseUrl').value;
-            const exampleUrl = document.getElementById('exampleUrl');
-            if (baseUrl && exampleUrl) {
-                exampleUrl.textContent = baseUrl + 'producto1.jpg';
-            }
-        }
-
-        // Funciones de imagen
-        function previewImageFromUrl() {
-            const url = document.getElementById('productImageUrl').value.trim();
-            const preview = document.getElementById('imagePreview');
-
-            if (!url) {
-                preview.innerHTML = '<span>Ingresa una URL de imagen</span>';
-                preview.classList.add('empty');
-                return;
-            }
-
-            // Mostrar loading
-            preview.innerHTML = '<span>Cargando imagen...</span>';
-            preview.classList.add('empty');
-
-            // Crear imagen para probar si carga
-            const img = new Image();
-            img.onload = function() {
-                preview.innerHTML = `<img src="${url}" alt="Vista previa">`;
-                preview.classList.remove('empty');
-                showToast('Imagen cargada correctamente');
-            };
-            img.onerror = function() {
-                preview.innerHTML = '<span style="color: #dc2626;">Error: No se pudo cargar la imagen</span>';
-                preview.classList.add('empty');
-                showToast('No se pudo cargar la imagen. Verifica la URL', 'error');
-            };
-            img.src = url;
-        }
-
-        // Funciones de cloud status
         function updateCloudStatus() {
             const status = document.getElementById('cloudStatus');
             const statusText = document.getElementById('cloudStatusText');
+            if (!status || !statusText) return;
 
             const totalItems = products.length + Object.keys(categories).length + warehouses.length;
             const lastSync = localStorage.getItem('libomi_last_sync');
@@ -1371,257 +987,14 @@
         }
 
         function syncData() {
-            // Simular sincronización (en una implementación real, aquí conectarías con tu API)
             localStorage.setItem('libomi_last_sync', new Date().toISOString());
             updateCloudStatus();
             showToast('Datos sincronizados localmente');
         }
 
-        // Funciones de almacenes
-        function renderWarehouses() {
-            loadWarehousesFilter();
-            const warehouseSelect = document.getElementById('productWarehouse');
-
-            warehouseSelect.innerHTML = '<option value="">Seleccionar almacén...</option>';
-
-            warehouses.forEach(warehouse => {
-                const option = new Option(warehouse, warehouse);
-                warehouseSelect.add(option);
-            });
-        }
-
-        function renderWarehouseList() {
-            const warehousesList = document.getElementById('warehousesList');
-
-            let warehousesHtml = '';
-            warehouses.forEach(warehouse => {
-                warehousesHtml += `
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: white; border-radius: 8px; margin-bottom: 0.5rem; border: 1px solid #e5e7eb;">
-                        <span><strong>${escapeHtml(warehouse)}</strong></span>
-                        <button class="btn btn-danger" onclick="deleteWarehouse('${escapeHtml(warehouse)}')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">
-                            Eliminar
-                        </button>
-                    </div>
-                `;
-            });
-            warehousesList.innerHTML = warehousesHtml || '<p>No hay almacenes registrados.</p>';
-        }
-
-        function addWarehouse() {
-            const warehouseName = document.getElementById('newWarehouseName').value.trim();
-
-            if (!warehouseName) {
-                showToast('Ingresa el nombre del almacén', 'error');
-                return;
-            }
-
-            if (warehouses.includes(warehouseName)) {
-                showToast('Este almacén ya existe', 'warning');
-                return;
-            }
-
-            warehouses.push(warehouseName);
-            saveData();
-            renderWarehouses();
-            loadWarehousesFilter();
-            renderWarehouseList();
-            document.getElementById('newWarehouseName').value = '';
-            showToast('Almacén agregado exitosamente');
-        }
-
-        function deleteWarehouse(warehouseName) {
-            if (confirm(`¿Eliminar el almacén "${warehouseName}"?`)) {
-                warehouses = warehouses.filter(w => w !== warehouseName);
-                products.forEach(product => {
-                    if (product.warehouse === warehouseName) {
-                        product.warehouse = '';
-                    }
-                });
-                saveData();
-                renderWarehouses();
-                renderWarehouseList();
-                renderProducts();
-                showToast('Almacén eliminado', 'warning');
-            }
-        }
-
-        // Funciones de categorías
-        function renderCategories() {
-            const categorySelect = document.getElementById('productCategory');
-
-            categorySelect.innerHTML = '<option value="">Seleccionar categoría...</option>';
-
-            Object.keys(categories).forEach(cat => {
-                const option = new Option(cat, cat);
-                categorySelect.add(option);
-            });
-
-            if (Object.keys(categories).length > 0) {
-                loadSubcategories();
-            }
-        }
-
-        function loadSubcategories() {
-            const categorySelect = document.getElementById('productCategory');
-            const subcategorySelect = document.getElementById('productSubcategory');
-            const selectedCategory = categorySelect.value;
-
-            subcategorySelect.innerHTML = '<option value="">Sin subcategoría</option>';
-
-            if (selectedCategory && categories[selectedCategory]) {
-                categories[selectedCategory].forEach(sub => {
-                    subcategorySelect.add(new Option(sub, sub));
-                });
-            }
-        }
-
-        function renderCategoryLists() {
-            const categoriesList = document.getElementById('categoriesList');
-
-            let categoriesHtml = '<h4 style="margin-bottom: 1rem;">Categorías Existentes</h4>';
-            Object.keys(categories).forEach(cat => {
-                categoriesHtml += `
-                    <div style="margin-bottom: 1rem;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: white; border-radius: 8px; border: 1px solid #e5e7eb;">
-                            <span><strong>${escapeHtml(cat)}</strong></span>
-                            <button class="btn btn-danger" onclick="deleteCategory('${escapeHtml(cat)}')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">
-                                Eliminar
-                            </button>
-                        </div>
-                `;
-
-                if (categories[cat] && categories[cat].length > 0) {
-                    categoriesHtml += '<div style="margin-left: 1rem; margin-top: 0.5rem;">';
-                    categories[cat].forEach(sub => {
-                        categoriesHtml += `
-                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; background: #f8fafc; border-radius: 6px; margin-bottom: 0.25rem; border: 1px solid #e2e8f0;">
-                                <span>${escapeHtml(sub)}</span>
-                                <button class="btn btn-danger" onclick="deleteSubcategory('${escapeHtml(cat)}', '${escapeHtml(sub)}')" style="padding: 0.125rem 0.25rem; font-size: 0.625rem;">
-                                    ×
-                                </button>
-                            </div>
-                        `;
-                    });
-                    categoriesHtml += '</div>';
-                }
-
-                categoriesHtml += '</div>';
-            });
-
-            categoriesList.innerHTML = categoriesHtml;
-        }
-
-        function addCategory() {
-            const categoryName = document.getElementById('newCategoryName').value.trim();
-            const subcategoryName = document.getElementById('newSubcategoryName').value.trim();
-
-            if (!categoryName) {
-                showToast('Ingresa el nombre de la categoría', 'error');
-                return;
-            }
-
-            if (!categories[categoryName]) {
-                categories[categoryName] = [];
-            }
-
-            if (subcategoryName && !categories[categoryName].includes(subcategoryName)) {
-                categories[categoryName].push(subcategoryName);
-            }
-
-            saveData();
-            renderCategories();
-            renderCategoryLists();
-            document.getElementById('newCategoryName').value = '';
-            document.getElementById('newSubcategoryName').value = '';
-            showToast('Categoría agregada exitosamente');
-        }
-
-        function deleteCategory(categoryName) {
-            if (confirm(`¿Eliminar la categoría "${categoryName}" y todas sus subcategorías?`)) {
-                delete categories[categoryName];
-                products.forEach(product => {
-                    if (product.category === categoryName) {
-                        product.category = '';
-                        product.subcategory = '';
-                    }
-                });
-                saveData();
-                renderCategories();
-                renderCategoryLists();
-                renderProducts();
-                showToast('Categoría eliminada', 'warning');
-            }
-        }
-
-        function deleteSubcategory(categoryName, subcategoryName) {
-            if (confirm(`¿Eliminar la subcategoría "${subcategoryName}"?`)) {
-                categories[categoryName] = categories[categoryName].filter(sub => sub !== subcategoryName);
-                products.forEach(product => {
-                    if (product.category === categoryName && product.subcategory === subcategoryName) {
-                        product.subcategory = '';
-                    }
-                });
-                saveData();
-                renderCategories();
-                renderCategoryLists();
-                renderProducts();
-                showToast('Subcategoría eliminada', 'warning');
-            }
-        }
-
-        // Funciones de productos
-        function saveProduct(event) {
-            event.preventDefault();
-
-            const saveButton = event.target.querySelector('button[type="submit"]');
-            const originalText = saveButton.textContent;
-            saveButton.disabled = true;
-            saveButton.textContent = 'Guardando...';
-
-            const name = document.getElementById('productName').value.trim();
-            const code = document.getElementById('productCode').value.trim();
-            const warehouse = document.getElementById('productWarehouse').value;
-            const category = document.getElementById('productCategory').value;
-            const subcategory = document.getElementById('productSubcategory').value;
-            const description = document.getElementById('productDescription').value.trim();
-            const imageUrl = document.getElementById('productImageUrl').value.trim();
-
-            if (!name || !warehouse || !category) {
-                showToast('Nombre, almacén y categoría son obligatorios', 'error');
-                saveButton.disabled = false;
-                saveButton.textContent = originalText;
-                return;
-            }
-
-            const productId = currentEditId || generateId();
-            const existingProductIndex = products.findIndex(p => p.id === productId);
-
-            const productData = {
-                id: productId,
-                name: name,
-                code: code,
-                warehouse: warehouse,
-                category: category,
-                subcategory: subcategory,
-                description: description,
-                image: imageUrl || PLACEHOLDER
-            };
-
-            if (existingProductIndex !== -1) {
-                products[existingProductIndex] = productData;
-                showToast('Producto actualizado');
-            } else {
-                products.push(productData);
-                showToast('Producto agregado');
-            }
-
-            saveData();
-            renderProducts();
-            renderCatalog();
-            clearForm();
-
-            saveButton.disabled = false;
-            saveButton.textContent = originalText;
+        // Generar ID único para productos
+        function generateId() {
+            return 'prod_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
         }
 
         function clearForm() {
@@ -1629,38 +1002,40 @@
             document.getElementById('imagePreview').innerHTML = '<span>Ingresa una URL de imagen</span>';
             document.getElementById('imagePreview').classList.add('empty');
             currentEditId = null;
-            loadSubcategories();
+            updateSubcategorySelect('');
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
         }
 
         function editProduct(productId) {
             const product = products.find(p => p.id === productId);
-            if (!product) return;
-
-            currentEditId = productId;
-            document.getElementById('productName').value = product.name;
-            document.getElementById('productCode').value = product.code || '';
-            document.getElementById('productWarehouse').value = product.warehouse || '';
-            document.getElementById('productCategory').value = product.category;
-            loadSubcategories();
-            document.getElementById('productSubcategory').value = product.subcategory || '';
-            document.getElementById('productDescription').value = product.description || '';
-            document.getElementById('productImageUrl').value = product.image && product.image !== PLACEHOLDER ? product.image : '';
-
-            if (product.image && product.image !== PLACEHOLDER) {
-                const preview = document.getElementById('imagePreview');
-                preview.innerHTML = `<img src="${product.image}" alt="Vista previa">`;
-                preview.classList.remove('empty');
+            if (product) {
+                currentEditId = productId;
+                document.getElementById('productName').value = product.name;
+                document.getElementById('productCode').value = product.code || '';
+                document.getElementById('productWarehouse').value = product.warehouse;
+                document.getElementById('productCategory').value = product.category;
+                updateSubcategorySelect(product.category, product.subcategory);
+                document.getElementById('productImageUrl').value = product.imageUrl || '';
+                document.getElementById('productDescription').value = product.description || '';
+                previewImageFromUrl();
+                showToast('Producto cargado para editar', 'warning');
+                showSection('productos');
             }
-
-            showSection('productos');
-            document.querySelector('[onclick="showSection(\'productos\')"]').classList.add('active');
-
-            showToast('Producto cargado para editar');
-            window.scrollTo({top: 0, behavior: 'smooth'});
         }
 
         function deleteProduct(productId) {
-            if (confirm('¿Eliminar este producto?')) {
+            if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
                 products = products.filter(p => p.id !== productId);
                 saveData();
                 renderProducts();
@@ -1678,294 +1053,449 @@
             }
         }
 
-        function renderProducts() {
-            const container = document.getElementById('productsList');
-
-            if (products.length === 0) {
-                container.innerHTML = '<p>No hay productos registrados.</p>';
-                return;
-            }
-
-            container.innerHTML = products.map(product => `
-                <div class="product-card">
-                    <div class="product-image" onclick="openImageModal('${product.image && product.image !== PLACEHOLDER ? product.image : ''}', '${escapeHtml(product.name)}')">
-                        ${product.image && product.image !== PLACEHOLDER ?
-                            `<img src="${product.image}" alt="${escapeHtml(product.name)}" onerror="this.src='${PLACEHOLDER}'">` :
-                            '<div style="color: #999; font-size: 0.875rem;">Sin imagen</div>'
-                        }
-                    </div>
-                    <div class="product-info">
-                        <div class="product-title">${escapeHtml(product.name)}</div>
-                        <div class="product-meta">
-                            ${product.code ? `Código: ${escapeHtml(product.code)}` : ''}
-                        </div>
-                        <div class="product-meta">
-                            ${escapeHtml(product.warehouse || '')}
-                        </div>
-                        <div class="product-meta">
-                            ${escapeHtml(product.category)}${product.subcategory ? ` / ${escapeHtml(product.subcategory)}` : ''}
-                        </div>
-                        <div class="product-description">
-                            ${escapeHtml(product.description || 'Sin descripción')}
-                        </div>
-                    </div>
-                    <div class="product-actions">
-                        <button class="btn btn-outline" onclick="editProduct('${product.id}')">Editar</button>
-                        <button class="btn btn-danger" onclick="deleteProduct('${product.id}')">Eliminar</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // Funciones del catálogo
+        // --- Lógica del Catálogo (Ver Catálogo) ---
         function renderCatalog() {
-            const container = document.getElementById('catalogContent');
+            const catalogContent = document.getElementById('catalogContent');
+            if (!catalogContent) return;
+            
+            const searchInput = document.getElementById('searchInput');
+            const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+            catalogContent.innerHTML = '';
+            
+            const filteredProducts = products.filter(p => 
+                (p.name && p.name.toLowerCase().includes(searchTerm)) ||
+                (p.code && p.code.toLowerCase().includes(searchTerm)) ||
+                (p.warehouse && p.warehouse.toLowerCase().includes(searchTerm))
+            );
 
-            if (products.length === 0) {
-                container.innerHTML = '<p>No hay productos para mostrar en el catálogo.</p>';
+            if (filteredProducts.length === 0) {
+                catalogContent.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 2rem;">No se encontraron productos que coincidan con la búsqueda.</p>';
                 return;
             }
 
-            // Agrupar por almacenes, luego por categorías
-            const groupedProducts = {};
-            products.forEach(product => {
-                const warehouse = product.warehouse || 'Sin almacén';
-                const category = product.category || 'Sin categoría';
-                const subcategory = product.subcategory || 'General';
-
-                if (!groupedProducts[warehouse]) {
-                    groupedProducts[warehouse] = {};
+            const productsByCategory = filteredProducts.reduce((acc, p) => {
+                const category = p.category || 'Sin Categoría';
+                if (!acc[category]) {
+                    acc[category] = [];
                 }
-                if (!groupedProducts[warehouse][category]) {
-                    groupedProducts[warehouse][category] = {};
-                }
-                if (!groupedProducts[warehouse][category][subcategory]) {
-                    groupedProducts[warehouse][category][subcategory] = [];
-                }
+                acc[category].push(p);
+                return acc;
+            }, {});
 
-                groupedProducts[warehouse][category][subcategory].push(product);
-            });
+            for (const category in productsByCategory) {
+                const categorySection = document.createElement('div');
+                categorySection.className = 'category-section';
+                categorySection.innerHTML = `<h4 style="color: #1e293b; font-size: 1.5rem; margin: 2rem 0 1rem 0; padding-bottom: 0.5rem; border-bottom: 2px solid #e5e7eb;">${escapeHtml(category)}</h4>`;
 
-            // Renderizar agrupados
-            let html = '';
-            Object.keys(groupedProducts).forEach(warehouse => {
-                html += `<div style="margin-bottom: 2rem;">`;
-                html += `<h2 style="color: #1e293b; font-size: 1.5rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e5e7eb;">${escapeHtml(warehouse)}</h2>`;
+                const categoryGrid = document.createElement('div');
+                categoryGrid.className = 'products-grid';
 
-                Object.keys(groupedProducts[warehouse]).forEach(category => {
-                    html += `<div style="margin-bottom: 1.5rem;">`;
-                    html += `<h3 style="color: #4b5563; font-size: 1.25rem; margin-bottom: 0.75rem;">${escapeHtml(category)}</h3>`;
-
-                    Object.keys(groupedProducts[warehouse][category]).forEach(subcategory => {
-                        if (subcategory !== 'General') {
-                            html += `<h4 style="color: #6b7280; font-size: 1.1rem; margin: 1rem 0 0.5rem; font-weight: 500;">${escapeHtml(subcategory)}</h4>`;
-                        }
-
-                        html += `<div class="products-grid">`;
-                        groupedProducts[warehouse][category][subcategory].forEach(product => {
-                            html += `
-                                <div class="product-card">
-                                    <div class="product-image" onclick="openImageModal('${product.image && product.image !== PLACEHOLDER ? product.image : ''}', '${escapeHtml(product.name)}')">
-                                        ${product.image && product.image !== PLACEHOLDER ?
-                                            `<img src="${product.image}" alt="${escapeHtml(product.name)}" onerror="this.src='${PLACEHOLDER}'">` :
-                                            '<div style="color: #999; font-size: 0.875rem;">Sin imagen</div>'
-                                        }
-                                    </div>
-                                    <div class="product-info">
-                                        <div class="product-title">${escapeHtml(product.name)}</div>
-                                        <div class="product-meta">
-                                            ${product.code ? `Código: ${escapeHtml(product.code)}` : ''}
-                                        </div>
-                                        <div class="product-description">
-                                            ${escapeHtml(product.description || 'Sin descripción')}
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-                        });
-                        html += `</div>`;
-                    });
-
-                    html += `</div>`;
+                productsByCategory[category].forEach(product => {
+                    categoryGrid.appendChild(createProductCard(product, true));
                 });
-
-                html += `</div>`;
-            });
-
-            container.innerHTML = html;
+                categorySection.appendChild(categoryGrid);
+                catalogContent.appendChild(categorySection);
+            }
         }
-        // AGREGAR ESTAS FUNCIONES NUEVAS
+        
+        function createProductCard(product, isCatalogView = false) {
+            const card = document.createElement('div');
+            card.className = 'product-card';
 
-function loadWarehousesFilter() {
-    const warehouseFilter = document.getElementById('warehouseFilter');
-    if (!warehouseFilter) return;
-    
-    warehouseFilter.innerHTML = '<option value="all">Todos los almacenes</option>';
-    warehouses.forEach(warehouse => {
-        const option = new Option(warehouse, warehouse);
-        warehouseFilter.add(option);
-    });
-}
+            const imageUrl = product.imageUrl || '';
+            const description = product.description || '';
 
-function printSelectedWarehouse() {
-    const selectedWarehouse = document.getElementById('warehouseFilter').value;
-    
-    let productsToShow;
-    if (selectedWarehouse === 'all') {
-        productsToShow = products;
-    } else {
-        productsToShow = products.filter(p => p.warehouse === selectedWarehouse);
-    }
-    
-    if (productsToShow.length === 0) {
-        showToast('No hay productos para imprimir en el almacén seleccionado.', 'warning');
-        return;
-    }
-    
-    preparePrintContent(productsToShow);
-    setTimeout(() => {
-        window.print();
-    }, 500);
-}
-
-function printAllWarehouses() {
-    preparePrintContent(products);
-    setTimeout(() => {
-        window.print();
-    }, 500);
-}
-
-function preparePrintContent(productsToShow) {
-    // Mostrar header y banner para impresión
-    const printHeader = document.querySelector('.print-header');
-    const printBanner = document.querySelector('.print-banner');
-    
-    if (printHeader) printHeader.style.display = 'flex';
-    if (printBanner) printBanner.style.display = 'block';
-    
-    // Actualizar contenido para impresión
-    renderFilteredCatalog(productsToShow);
-    
-    // Sincronizar logos
-    const mainLogo = document.getElementById('logoImage');
-    const printLogo = document.getElementById('printLogo');
-    if (mainLogo && printLogo) {
-        printLogo.src = mainLogo.src;
-    }
-    
-    // Sincronizar títulos del banner
-    const bannerTitle = document.getElementById('bannerTitle');
-    const bannerSubtitle = document.getElementById('bannerSubtitle');
-    const printBannerTitle = document.getElementById('printBannerTitle');
-    const printBannerSubtitle = document.getElementById('printBannerSubtitle');
-    
-    if (bannerTitle && printBannerTitle) {
-        printBannerTitle.textContent = bannerTitle.textContent;
-    }
-    if (bannerSubtitle && printBannerSubtitle) {
-        printBannerSubtitle.textContent = bannerSubtitle.textContent;
-    }
-}
-
-        // Funciones del modal de imágenes
-        function openImageModal(imageSrc, productName) {
-            if (!imageSrc || imageSrc === PLACEHOLDER) return;
-
-            const modal = document.getElementById('imageModal');
-            const modalImage = document.getElementById('modalImage');
-            const modalProductName = document.getElementById('modalProductName');
-
-            modalImage.src = imageSrc;
-            modalImage.alt = productName;
-            modalProductName.textContent = productName;
-
-            modal.classList.add('show');
-            document.body.style.overflow = 'hidden'; // Prevenir scroll del body
+            card.innerHTML = `
+                <div class="product-image" onclick="openModal('${imageUrl}')">
+                    <img src="${imageUrl}" alt="${escapeHtml(product.name)}" onerror="this.src='https://via.placeholder.com/300x200.png?text=Sin+Imagen';" loading="lazy">
+                </div>
+                <div class="product-info">
+                    <div class="product-category">${escapeHtml(product.category)}</div>
+                    <div class="product-name">${escapeHtml(product.name)}</div>
+                    <div class="product-description">${escapeHtml(description)}</div>
+                    <div class="product-sku">SKU: ${escapeHtml(product.code || 'N/A')}</div>
+                    ${!isCatalogView ? `<div class="product-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                        <button class="btn btn-secondary" onclick="editProduct('${product.id}')">Editar</button>
+                        <button class="btn btn-danger" onclick="deleteProduct('${product.id}')">Eliminar</button>
+                    </div>` : ''}
+                </div>
+            `;
+            return card;
         }
 
-        function closeImageModal(event) {
-            // Si se hace clic en la imagen misma, no cerrar
-            if (event && event.target.classList.contains('modal-image')) {
+        function renderProducts() {
+            const productsList = document.getElementById('productsList');
+            if (!productsList) return;
+            
+            productsList.innerHTML = '';
+            
+            if (products.length === 0) {
+                productsList.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 2rem;">No hay productos registrados.</p>';
                 return;
             }
 
-            const modal = document.getElementById('imageModal');
-            modal.classList.remove('show');
-            document.body.style.overflow = ''; // Restaurar scroll del body
+            products.forEach(product => {
+                productsList.appendChild(createProductCard(product));
+            });
         }
 
-        // Cerrar modal con tecla Escape
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeImageModal();
+        // --- Lógica de Categorías y Almacenes ---
+        function addCategory() {
+            const newCategoryName = document.getElementById('newCategoryName').value.trim();
+            const newSubcategoryName = document.getElementById('newSubcategoryName').value.trim();
+            
+            if (newCategoryName) {
+                if (!categories.includes(newCategoryName)) {
+                    categories.push(newCategoryName);
+                    showToast(`Categoría "${newCategoryName}" agregada.`);
+                }
+                if (newSubcategoryName) {
+                    if (!subcategories[newCategoryName]) {
+                        subcategories[newCategoryName] = [];
+                    }
+                    if (!subcategories[newCategoryName].includes(newSubcategoryName)) {
+                        subcategories[newCategoryName].push(newSubcategoryName);
+                        showToast(`Subcategoría "${newSubcategoryName}" agregada a "${newCategoryName}".`);
+                    }
+                }
+                saveData();
+                renderCategories();
+                renderCategoryLists();
+                document.getElementById('newCategoryName').value = '';
+                document.getElementById('newSubcategoryName').value = '';
+            } else {
+                showToast('Ingresa el nombre de la categoría', 'error');
             }
-        });
-
-        // Funciones de impresión y PDF
-        function printCatalog() {
-            // Aplicar configuración antes de imprimir
-            applyBannerConfig();
-            updateLogoDisplay();
-
-            // Asegurarse de que el catálogo esté renderizado
-            renderCatalog();
-
-            // Cambiar a la vista de catálogo
-            showSection('catalogo');
-
-            // Imprimir después de un pequeño delay para asegurar que se renderice
-            setTimeout(() => {
-                window.print();
-            }, 500);
         }
 
-        function downloadPDF() {
-            // Para la descarga PDF, podríamos usar jsPDF o html2pdf
-            // Por ahora, mostraremos instrucciones para usar la función de impresión del navegador
-            showToast('Usa "Imprimir Catálogo" y selecciona "Guardar como PDF" en tu navegador');
-            printCatalog();
+        function renderCategories() {
+            const selectCategory = document.getElementById('productCategory');
+            if (!selectCategory) return;
+            
+            selectCategory.innerHTML = '<option value="">-- Selecciona Categoría --</option>';
+            
+            categories.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat;
+                option.textContent = cat;
+                selectCategory.appendChild(option);
+            });
         }
 
-        // Funciones de importar/exportar
+        function renderCategoryLists() {
+            const categoriesList = document.getElementById('categoriesList');
+            if (!categoriesList) return;
+            
+            categoriesList.innerHTML = '';
+
+            if (categories.length === 0) {
+                categoriesList.innerHTML = '<p>No hay categorías registradas.</p>';
+                return;
+            }
+
+            categories.forEach(cat => {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.style.marginBottom = '1rem';
+                categoryDiv.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: white; border-radius: 8px; border: 1px solid #e5e7eb;">
+                        <span><strong>${escapeHtml(cat)}</strong></span>
+                        <button class="btn btn-danger" onclick="deleteCategory('${escapeHtml(cat)}')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">Eliminar</button>
+                    </div>
+                `;
+                
+                if (subcategories[cat] && subcategories[cat].length > 0) {
+                    const subList = document.createElement('div');
+                    subList.style.marginLeft = '1rem';
+                    subList.style.marginTop = '0.5rem';
+                    
+                    subcategories[cat].forEach(sub => {
+                        const subDiv = document.createElement('div');
+                        subDiv.style.marginBottom = '0.25rem';
+                        subDiv.innerHTML = `
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; background: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0;">
+                                <span>${escapeHtml(sub)}</span>
+                                <button class="btn btn-danger" onclick="deleteSubcategory('${escapeHtml(cat)}', '${escapeHtml(sub)}')" style="padding: 0.125rem 0.25rem; font-size: 0.625rem;">×</button>
+                            </div>
+                        `;
+                        subList.appendChild(subDiv);
+                    });
+                    categoryDiv.appendChild(subList);
+                }
+                
+                categoriesList.appendChild(categoryDiv);
+            });
+        }
+        
+        function updateSubcategorySelect(category, selectedSubcategory = '') {
+            const selectSubcategory = document.getElementById('productSubcategory');
+            if (!selectSubcategory) return;
+            
+            selectSubcategory.innerHTML = '<option value="">-- Selecciona Subcategoría --</option>';
+            
+            if (subcategories[category]) {
+                subcategories[category].forEach(sub => {
+                    const option = document.createElement('option');
+                    option.value = sub;
+                    option.textContent = sub;
+                    if (sub === selectedSubcategory) option.selected = true;
+                    selectSubcategory.appendChild(option);
+                });
+            }
+        }
+
+        function deleteCategory(cat) {
+            if (confirm(`¿Eliminar la categoría "${cat}" y todas sus subcategorías?`)) {
+                categories = categories.filter(c => c !== cat);
+                delete subcategories[cat];
+                products.forEach(product => {
+                    if (product.category === cat) {
+                        product.category = '';
+                        product.subcategory = '';
+                    }
+                });
+                saveData();
+                renderCategories();
+                renderCategoryLists();
+                renderProducts();
+                showToast(`Categoría "${cat}" eliminada.`, 'warning');
+            }
+        }
+
+        function deleteSubcategory(cat, sub) {
+            if (confirm(`¿Eliminar la subcategoría "${sub}"?`)) {
+                subcategories[cat] = subcategories[cat].filter(s => s !== sub);
+                products.forEach(product => {
+                    if (product.category === cat && product.subcategory === sub) {
+                        product.subcategory = '';
+                    }
+                });
+                saveData();
+                renderCategories();
+                renderCategoryLists();
+                renderProducts();
+                showToast(`Subcategoría "${sub}" eliminada.`, 'warning');
+            }
+        }
+        
+        function addWarehouse() {
+            const newWarehouseName = document.getElementById('newWarehouseName').value.trim();
+            if (newWarehouseName && !warehouses.includes(newWarehouseName)) {
+                warehouses.push(newWarehouseName);
+                saveData();
+                renderWarehouses();
+                renderWarehouseList();
+                document.getElementById('newWarehouseName').value = '';
+                showToast(`Almacén "${newWarehouseName}" agregado.`);
+            } else if (warehouses.includes(newWarehouseName)) {
+                showToast('Este almacén ya existe', 'warning');
+            } else {
+                showToast('Ingresa el nombre del almacén', 'error');
+            }
+        }
+
+        function renderWarehouses() {
+            const selectWarehouse = document.getElementById('productWarehouse');
+            if (!selectWarehouse) return;
+            
+            selectWarehouse.innerHTML = '<option value="">-- Selecciona Almacén --</option>';
+
+            warehouses.forEach(wh => {
+                const option = document.createElement('option');
+                option.value = wh;
+                option.textContent = wh;
+                selectWarehouse.appendChild(option);
+            });
+        }
+
+        function renderWarehouseList() {
+            const warehousesList = document.getElementById('warehousesList');
+            if (!warehousesList) return;
+            
+            warehousesList.innerHTML = '';
+
+            if (warehouses.length === 0) {
+                warehousesList.innerHTML = '<p>No hay almacenes registrados.</p>';
+                return;
+            }
+
+            warehouses.forEach(wh => {
+                const warehouseDiv = document.createElement('div');
+                warehouseDiv.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: white; border-radius: 8px; margin-bottom: 0.5rem; border: 1px solid #e5e7eb;">
+                        <span><strong>${escapeHtml(wh)}</strong></span>
+                        <button class="btn btn-danger" onclick="deleteWarehouse('${escapeHtml(wh)}')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">Eliminar</button>
+                    </div>
+                `;
+                warehousesList.appendChild(warehouseDiv);
+            });
+        }
+
+        function deleteWarehouse(wh) {
+            if (confirm(`¿Eliminar el almacén "${wh}"?`)) {
+                warehouses = warehouses.filter(w => w !== wh);
+                products.forEach(product => {
+                    if (product.warehouse === wh) {
+                        product.warehouse = '';
+                    }
+                });
+                saveData();
+                renderWarehouses();
+                renderWarehouseList();
+                renderProducts();
+                showToast(`Almacén "${wh}" eliminado.`, 'warning');
+            }
+        }
+        
+        // --- Lógica de la Configuración ---
+        function loadConfig() {
+            const logoUrl = document.getElementById('logoUrl');
+            const headerBgUrl = document.getElementById('headerBgUrl');
+            const catalogBgUrl = document.getElementById('catalogBgUrl');
+            const catalogOpacity = document.getElementById('catalogOpacity');
+            const catalogBgColor = document.getElementById('catalogBgColor');
+            
+            if (logoUrl) logoUrl.value = config.logoUrl || '';
+            if (headerBgUrl) headerBgUrl.value = config.headerBgUrl || '';
+            if (catalogBgUrl) catalogBgUrl.value = config.catalogBgUrl || '';
+            if (catalogOpacity) catalogOpacity.value = config.catalogOpacity || 0.8;
+            if (catalogBgColor) catalogBgColor.value = config.catalogBgColor || '#f5f7fa';
+            
+            // Aplicar configuración visual
+            if (config.headerBgUrl) {
+                document.documentElement.style.setProperty('--header-bg-image', `url('${config.headerBgUrl}')`);
+            }
+            if (config.catalogBgUrl) {
+                document.documentElement.style.setProperty('--catalog-bg-image', `url('${config.catalogBgUrl}')`);
+            }
+            document.documentElement.style.setProperty('--catalog-bg-overlay', `rgba(255, 255, 255, ${config.catalogOpacity})`);
+            document.documentElement.style.setProperty('--catalog-bg-color', config.catalogBgColor);
+            
+            const logoImage = document.getElementById('logoImage');
+            if (logoImage && config.logoUrl) {
+                logoImage.src = config.logoUrl;
+            }
+            
+            // Aplicar posición del logo
+            if (logoImage) {
+                logoImage.style.left = `${config.logoPositionX || 0}px`;
+                logoImage.style.top = `${config.logoPositionY || 0}px`;
+            }
+        }
+
+        function saveConfig() {
+            const logoUrl = document.getElementById('logoUrl');
+            const headerBgUrl = document.getElementById('headerBgUrl');
+            const catalogBgUrl = document.getElementById('catalogBgUrl');
+            const catalogOpacity = document.getElementById('catalogOpacity');
+            const catalogBgColor = document.getElementById('catalogBgColor');
+            const logoPositionX = document.getElementById('logoPositionX');
+            const logoPositionY = document.getElementById('logoPositionY');
+            
+            if (logoUrl) config.logoUrl = logoUrl.value;
+            if (headerBgUrl) config.headerBgUrl = headerBgUrl.value;
+            if (catalogBgUrl) config.catalogBgUrl = catalogBgUrl.value;
+            if (catalogOpacity) config.catalogOpacity = catalogOpacity.value;
+            if (catalogBgColor) config.catalogBgColor = catalogBgColor.value;
+            if (logoPositionX) config.logoPositionX = parseInt(logoPositionX.value) || 0;
+            if (logoPositionY) config.logoPositionY = parseInt(logoPositionY.value) || 0;
+
+            saveData();
+            loadConfig();
+            showToast('Configuración guardada.');
+        }
+
+        // --- Modals y Vistas Previas ---
+        function openModal(imageSrc) {
+            if (!imageSrc) return;
+            const modal = document.getElementById('image-modal');
+            const modalImage = document.getElementById('modalImage');
+            if (modal && modalImage) {
+                modal.style.display = 'flex';
+                modalImage.src = imageSrc;
+            }
+        }
+        
+        function previewImageFromUrl() {
+            const url = document.getElementById('productImageUrl').value;
+            const imgPreview = document.getElementById('imagePreview');
+            if (!imgPreview) return;
+            
+            if (url) {
+                const img = new Image();
+                img.src = url;
+                img.onload = () => {
+                    imgPreview.innerHTML = `<img src="${url}" alt="Vista previa">`;
+                    imgPreview.classList.remove('empty');
+                    showToast('Vista previa de la imagen cargada.');
+                };
+                img.onerror = () => {
+                    imgPreview.innerHTML = '<span>Error al cargar imagen</span>';
+                    imgPreview.classList.add('empty');
+                    showToast('No se pudo cargar la imagen desde la URL.', 'error');
+                };
+            } else {
+                imgPreview.innerHTML = '<span>Ingresa una URL de imagen</span>';
+                imgPreview.classList.add('empty');
+            }
+        }
+
+        // --- Exportación e Importación de Datos ---
         function exportData() {
             const data = {
                 products: products,
                 categories: categories,
                 warehouses: warehouses,
+                subcategories: subcategories,
                 config: config,
                 exportDate: new Date().toISOString(),
                 version: 'v3'
             };
-            document.getElementById('exportData').value = JSON.stringify(data, null, 2);
-            showToast('Datos exportados - Listo para copiar');
+            const exportTextarea = document.getElementById('exportDataTextarea');
+            if (exportTextarea) {
+                exportTextarea.value = JSON.stringify(data, null, 2);
+                showToast('Datos exportados - Listo para copiar');
+            }
         }
 
         function importData() {
-            const jsonData = document.getElementById('importData').value.trim();
+            const importTextarea = document.getElementById('importDataTextarea');
+            if (!importTextarea) return;
+            
+            const jsonData = importTextarea.value.trim();
             if (!jsonData) {
                 showToast('Pega los datos JSON para importar', 'error');
                 return;
             }
-
+            
             try {
                 const data = JSON.parse(jsonData);
-
+                
+                // Validar estructura básica
+                if (!data || typeof data !== 'object') {
+                    throw new Error('Formato de datos inválido');
+                }
+                
+                // Importar datos
                 if (data.products && Array.isArray(data.products)) {
                     products = data.products;
                 }
-                if (data.categories && typeof data.categories === 'object') {
+                if (data.categories && Array.isArray(data.categories)) {
                     categories = data.categories;
+                } else if (data.categories && typeof data.categories === 'object') {
+                    // Mantener compatibilidad con formato anterior
+                    categories = Object.keys(data.categories);
                 }
                 if (data.warehouses && Array.isArray(data.warehouses)) {
                     warehouses = data.warehouses;
                 }
-                if (data.config && typeof data.config === 'object') {
-                    config = data.config;
+                if (data.subcategories && typeof data.subcategories === 'object') {
+                    subcategories = data.subcategories;
                 }
-
+                if (data.config && typeof data.config === 'object') {
+                    config = { ...config, ...data.config };
+                }
+                
                 saveData();
-
-                // Actualizar toda la interfaz
                 renderWarehouses();
                 renderCategories();
                 renderProducts();
@@ -1974,45 +1504,22 @@ function preparePrintContent(productsToShow) {
                 renderCategoryLists();
                 loadConfig();
                 updateCloudStatus();
-
                 showToast('Datos importados exitosamente');
-                document.getElementById('importData').value = '';
-
+                importTextarea.value = '';
+                
             } catch (error) {
                 console.error('Error parsing JSON:', error);
                 showToast('Error en el formato JSON. Verifica que los datos estén correctos.', 'error');
             }
         }
 
-        function resetAllData() {
-            if (confirm('¿Estás seguro de que quieres borrar todos los datos? Esta acción no se puede deshacer.')) {
-                products = [];
-                categories = {"General": ["Varios"]};
-                warehouses = ["Almacén Principal"];
-                config = {};
-
-                localStorage.removeItem('libomi_products_v3');
-                localStorage.removeItem('libomi_categories_v3');
-                localStorage.removeItem('libomi_warehouses_v3');
-                localStorage.removeItem('libomi_config_v3');
-                localStorage.removeItem('libomi_last_sync');
-
-                renderWarehouses();
-                renderCategories();
-                renderProducts();
-                renderCatalog();
-                clearForm();
-                loadConfig();
-                updateCloudStatus();
-
-                showToast('Todos los datos han sido eliminados', 'warning');
-            }
-        }
-
-        // Funciones de clipboard
+        // --- Funciones de Copiar/Pegar ---
         async function copyToClipboard(elementId) {
             try {
-                const text = document.getElementById(elementId).value;
+                const element = document.getElementById(elementId);
+                if (!element) return;
+                
+                const text = element.value;
                 if (!text) {
                     showToast('No hay datos para copiar', 'warning');
                     return;
@@ -2024,30 +1531,201 @@ function preparePrintContent(productsToShow) {
                 showToast('No se pudo copiar. Selecciona el texto manualmente.', 'error');
             }
         }
-
+        
         async function pasteFromClipboard(elementId) {
             try {
                 const text = await navigator.clipboard.readText();
-                document.getElementById(elementId).value = text;
-                showToast('Datos pegados desde el portapapeles');
+                const element = document.getElementById(elementId);
+                if (element) {
+                    element.value = text;
+                    showToast('Datos pegados desde el portapapeles');
+                }
             } catch (err) {
                 console.error('Error pasting from clipboard:', err);
                 showToast('No se pudo pegar. Pega manualmente con Ctrl+V.', 'error');
             }
         }
-        // AGREGAR AL FINAL DEL SCRIPT
+        
+        // --- Impresión y PDF ---
+        function printCatalog() {
+            showSection('catalogo');
+            setTimeout(() => {
+                window.print();
+            }, 500);
+        }
+        
+        function downloadPDF() {
+            showToast("La funcionalidad de PDF requiere una librería adicional y conexión a internet. Por favor, utiliza la opción de 'Imprimir Catálogo' y guarda como PDF desde tu navegador.", 'warning');
+            printCatalog();
+        }
+        
+        function confirmReset() {
+            if (confirm("¿Estás seguro de que quieres ELIMINAR TODOS los datos del catálogo? Esta acción es irreversible.")) {
+                resetData();
+            }
+        }
+        
+        function resetData() {
+            localStorage.clear();
+            products = [];
+            warehouses = ['Almacén Principal'];
+            categories = ['General', 'Electrónicos', 'Ropa'];
+            subcategories = {
+                'General': ['Varios'],
+                'Electrónicos': ['Móviles', 'Ordenadores'],
+                'Ropa': ['Hombre', 'Mujer']
+            };
+            config = {
+                logoUrl: '',
+                headerBgUrl: '',
+                catalogBgUrl: '',
+                catalogBgColor: '#f5f7fa',
+                catalogOpacity: 0.8,
+                logoPositionX: 0,
+                logoPositionY: 0
+            };
+            saveData();
+            renderWarehouses();
+            renderCategories();
+            renderProducts();
+            renderCatalog();
+            renderWarehouseList();
+            renderCategoryLists();
+            loadConfig();
+            updateCloudStatus();
+            showToast('Todos los datos han sido eliminados', 'warning');
+        }
 
-// Ocultar elementos de impresión después de imprimir
-window.addEventListener('afterprint', function() {
-    const printHeader = document.querySelector('.print-header');
-    const printBanner = document.querySelector('.print-banner');
-    
-    if (printHeader) printHeader.style.display = 'none';
-    if (printBanner) printBanner.style.display = 'none';
-    
-    // Restaurar contenido completo
-    renderCatalog();
-});
+        // --- Inicialización y Event Listeners ---
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cargar datos al inicializar
+            loadData();
+            
+            // Event listener para el formulario de productos
+            const productForm = document.getElementById('productForm');
+            if (productForm) {
+                productForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    const productName = document.getElementById('productName').value.trim();
+                    const productCode = document.getElementById('productCode').value.trim();
+                    const productWarehouse = document.getElementById('productWarehouse').value;
+                    const productCategory = document.getElementById('productCategory').value;
+                    const productSubcategory = document.getElementById('productSubcategory').value;
+                    const productImageUrl = document.getElementById('productImageUrl').value.trim();
+                    const productDescription = document.getElementById('productDescription').value.trim();
+
+                    if (!productName || !productWarehouse || !productCategory) {
+                        showToast('Nombre, almacén y categoría son obligatorios', 'error');
+                        return;
+                    }
+
+                    const productId = currentEditId || generateId();
+                    const existingProductIndex = products.findIndex(p => p.id === productId);
+
+                    const productData = {
+                        id: productId,
+                        name: productName,
+                        code: productCode,
+                        warehouse: productWarehouse,
+                        category: productCategory,
+                        subcategory: productSubcategory,
+                        imageUrl: productImageUrl,
+                        description: productDescription
+                    };
+
+                    if (existingProductIndex !== -1) {
+                        products[existingProductIndex] = productData;
+                        showToast('Producto actualizado correctamente');
+                    } else {
+                        products.push(productData);
+                        showToast('Producto agregado correctamente');
+                    }
+
+                    saveData();
+                    renderProducts();
+                    renderCatalog();
+                    clearForm();
+                });
+            }
+
+            // Event listener para cambio de categoría
+            const productCategory = document.getElementById('productCategory');
+            if (productCategory) {
+                productCategory.addEventListener('change', function(e) {
+                    updateSubcategorySelect(e.target.value);
+                });
+            }
+
+            // Event listener para búsqueda
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', renderCatalog);
+            }
+
+            // Event listeners para el modal de imagen
+            const modal = document.getElementById('image-modal');
+            const closeModal = document.getElementsByClassName('close-modal')[0];
+            
+            if (closeModal) {
+                closeModal.onclick = function() {
+                    if (modal) modal.style.display = 'none';
+                };
+            }
+            
+            window.onclick = function(event) {
+                if (event.target === modal && modal) {
+                    modal.style.display = 'none';
+                }
+            };
+
+            // --- Drag and Drop para el logo ---
+            const logoContainer = document.getElementById('logo-display');
+            const logoImg = document.getElementById('logoImage');
+            const logoPositionX = document.getElementById('logoPositionX');
+            const logoPositionY = document.getElementById('logoPositionY');
+            
+            if (logoContainer && logoImg && logoPositionX && logoPositionY) {
+                let isDragging = false;
+                let startX, startY, imgStartX, imgStartY;
+
+                logoContainer.addEventListener('mousedown', (e) => {
+                    isDragging = true;
+                    startX = e.clientX;
+                    startY = e.clientY;
+                    imgStartX = logoImg.offsetLeft;
+                    imgStartY = logoImg.offsetTop;
+                    logoContainer.style.cursor = 'grabbing';
+                });
+
+                document.addEventListener('mousemove', (e) => {
+                    if (!isDragging) return;
+                    const dx = e.clientX - startX;
+                    const dy = e.clientY - startY;
+                    const newX = imgStartX + dx;
+                    const newY = imgStartY + dy;
+
+                    const containerWidth = logoContainer.offsetWidth;
+                    const containerHeight = logoContainer.offsetHeight;
+                    const imgWidth = logoImg.offsetWidth;
+                    const imgHeight = logoImg.offsetHeight;
+
+                    // Restricciones para que la imagen no salga del contenedor
+                    let finalX = Math.min(Math.max(newX, -imgWidth + containerWidth), 0);
+                    let finalY = Math.min(Math.max(newY, -imgHeight + containerHeight), 0);
+
+                    logoImg.style.left = `${finalX}px`;
+                    logoImg.style.top = `${finalY}px`;
+                    logoPositionX.value = finalX;
+                    logoPositionY.value = finalY;
+                });
+
+                document.addEventListener('mouseup', () => {
+                    isDragging = false;
+                    logoContainer.style.cursor = 'grab';
+                });
+            }
+        });
+
     </script>
 </body>
 </html>
