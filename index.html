@@ -584,6 +584,51 @@
             display: block !important;
         }
         /* FIN: Visibilidad de botones de acción en modo cliente */
+
+        /* Estilos para la sección de respaldo mejorada */
+        .sync-section {
+            background: #f0f9ff;
+            border: 1px solid #38bdf8;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .sync-section h3 {
+            color: #0369a1;
+            margin-bottom: 1rem;
+        }
+        
+        .sync-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        
+        .sync-instructions {
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            color: #0c4a6e;
+            line-height: 1.6;
+        }
+        
+        .sync-instructions ol {
+            padding-left: 1.5rem;
+        }
+        
+        .sync-instructions .tip {
+            margin-top: 12px;
+            padding: 12px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 6px;
+        }
+        
+        @media (max-width: 768px) {
+            .sync-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -616,11 +661,15 @@
         
         <main class="container">
             <section id="productos" class="section active">
+                <!-- Estado de sincronización -->
                 <div class="cloud-status" id="cloudStatus">
                     <span>📊</span>
                     <span id="cloudStatusText">Estado de sincronización</span>
-                    <button class="btn btn-outline" onclick="syncData()" style="margin-left: auto; padding: 0.25rem 0.75rem;">Sincronizar</button>
+                    <button class="btn btn-outline" onclick="syncData()" style="margin-left: auto; padding: 0.25rem 0.75rem;">
+                        Sincronizar
+                    </button>
                 </div>
+
                 <div class="card">
                     <h3>Agregar / Editar Producto</h3>
                     <form id="productForm" class="form-grid">
@@ -652,9 +701,8 @@
                         </div>
                         <div>
                             <div class="form-group">
-                                <label>Imagen (usar URL de GitHub)</label>
-                                <input type="url" id="productImageUrl" class="form-control" placeholder="https://raw.githubusercontent.com/usuario/repo/main/images/producto.jpg">
-                                <small style="color: #666; font-size: 0.8rem; margin-top: 0.25rem; display: block;">Sube tu imagen a GitHub y pega aquí la URL raw</small>
+                                <label>URL de Imagen</label>
+                                <input type="url" id="productImageUrl" class="form-control" placeholder="https://ejemplo.com/imagen.jpg">
                             </div>
                             <div class="form-group">
                                 <div id="imagePreview" class="image-preview empty">
@@ -718,70 +766,93 @@
             <section id="configuracion" class="section">
                 <div class="card">
                     <h3>Personalización de Encabezado y Fondo</h3>
-                    <div class="github-config">
-                        <div class="form-group">
-                            <label>Imagen del Encabezado (URL de GitHub)</label>
-                            <input type="url" id="headerBgUrl" class="form-control" placeholder="https://raw.githubusercontent.com/usuario/repo/main/images/header.jpg">
-                        </div>
-                        <div class="form-group">
-                            <label>Imagen de Fondo del Catálogo (URL de GitHub)</label>
-                            <input type="url" id="catalogBgUrl" class="form-control" placeholder="https://raw.githubusercontent.com/usuario/repo/main/images/background.jpg">
-                        </div>
-                        <div class="form-group">
-                            <label>Opacidad del Contenido del Catálogo (0.0 - 1.0)</label>
-                            <input type="number" id="catalogOpacity" class="form-control" min="0" max="1" step="0.1" value="0.8">
-                        </div>
-                        <div class="form-group">
-                            <label>Color de Fondo del Catálogo (si no hay imagen)</label>
-                            <input type="color" id="catalogBgColor" class="form-control" value="#f5f7fa">
-                        </div>
+                    <div class="form-group">
+                        <label>URL de Imagen del Encabezado</label>
+                        <input type="url" id="headerBgUrl" class="form-control" placeholder="https://ejemplo.com/header.jpg">
+                    </div>
+                    <div class="form-group">
+                        <label>URL de Imagen de Fondo del Catálogo</label>
+                        <input type="url" id="catalogBgUrl" class="form-control" placeholder="https://ejemplo.com/background.jpg">
+                    </div>
+                    <div class="form-group">
+                        <label>Opacidad del Contenido del Catálogo (0.0 - 1.0)</label>
+                        <input type="number" id="catalogOpacity" class="form-control" min="0" max="1" step="0.1" value="0.8">
+                    </div>
+                    <div class="form-group">
+                        <label>Color de Fondo del Catálogo (si no hay imagen)</label>
+                        <input type="color" id="catalogBgColor" class="form-control" value="#f5f7fa">
                     </div>
                 </div>
                 <div class="card">
                     <h3>Personalización del Logo</h3>
-                    <div class="github-config">
-                        <div class="form-group">
-                            <label>Logo (URL de GitHub)</label>
-                            <input type="url" id="logoUrl" class="form-control" placeholder="https://raw.githubusercontent.com/usuario/repo/main/images/logo.png">
-                            <small style="color: #666; font-size: 0.8rem; margin-top: 0.25rem; display: block;">Sube tu imagen a GitHub y pega aquí la URL raw</small>
-                        </div>
-                        <div id="logo-display" class="draggable-image-container">
-                            <img id="logoImage" class="draggable-image" src="" alt="Logo">
-                            <div style="position: absolute; bottom: 5px; right: 5px; background: rgba(0,0,0,0.5); color: white; padding: 3px 8px; border-radius: 4px; font-size: 10px;">Drag me</div>
-                        </div>
-                        <input type="hidden" id="logoPositionX">
-                        <input type="hidden" id="logoPositionY">
+                    <div class="form-group">
+                        <label>URL del Logo</label>
+                        <input type="url" id="logoUrl" class="form-control" placeholder="https://ejemplo.com/logo.png">
                     </div>
-                    <button class="btn btn-primary" onclick="saveConfig()">Guardar Configuración</button>
+                    <div id="logo-display" class="draggable-image-container">
+                        <img id="logoImage" class="draggable-image" src="" alt="Logo">
+                        <div style="position: absolute; bottom: 5px; right: 5px; background: rgba(0,0,0,0.5); color: white; padding: 3px 8px; border-radius: 4px; font-size: 10px;">Arrastrar</div>
+                    </div>
+                    <input type="hidden" id="logoPositionX">
+                    <input type="hidden" id="logoPositionY">
                 </div>
+                <button class="btn btn-primary" onclick="saveConfig()">Guardar Configuración</button>
             </section>
 
             <section id="respaldo" class="section">
+                <div class="sync-section">
+                    <h3>📄 Cómo sincronizar entre ordenadores</h3>
+                    <div class="sync-instructions">
+                        <ol>
+                            <li><strong>En el ordenador A:</strong> Ve a "Sincronización" → "Generar Exportación" → Copia los datos</li>
+                            <li><strong>Comparte los datos:</strong> Email, WhatsApp, USB, etc.</li>
+                            <li><strong>En el ordenador B:</strong> Ve a "Sincronización" → Pega los datos → "Importar Datos"</li>
+                            <li><strong>¡Listo!</strong> Todos tus productos, categorías y almacenes estarán disponibles</li>
+                        </ol>
+                        <div class="tip">
+                            💡 <strong>Tip:</strong> Exporta tus datos regularmente como respaldo
+                        </div>
+                    </div>
+                </div>
+
                 <div class="card">
-                    <h3>Sincronización de Datos</h3>
-                    <div class="cloud-status connected">
-                        <span>☁️</span>
-                        <span>Sincronización con GitHub activada.</span>
+                    <h3>Exportar / Importar Datos</h3>
+                    <p style="color: #666; margin-bottom: 1rem;">
+                        Usa estas funciones para mantener tus datos sincronizados entre diferentes ordenadores.
+                    </p>
+                    <div class="sync-grid">
+                        <div>
+                            <label><strong>📤 Exportar datos (copiar):</strong></label>
+                            <textarea id="exportDataTextarea" class="form-control" rows="10" readonly placeholder="Haz clic en 'Generar Exportación' para ver los datos aquí"></textarea>
+                            <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                                <button class="btn btn-primary" onclick="exportData()">Generar Exportación</button>
+                                <button class="btn btn-outline" onclick="copyToClipboard('exportDataTextarea')">Copiar al Portapapeles</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label><strong>📥 Importar datos (pegar):</strong></label>
+                            <textarea id="importDataTextarea" class="form-control" rows="10" placeholder="Pega aquí los datos exportados desde otro ordenador"></textarea>
+                            <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                                <button class="btn btn-primary" onclick="importData()">Importar Datos</button>
+                                <button class="btn btn-outline" onclick="pasteFromClipboard('importDataTextarea')">Pegar del Portapapeles</button>
+                            </div>
+                        </div>
                     </div>
-                    <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
-                        <button class="btn btn-primary" onclick="syncData()">Sincronizar Ahora</button>
-                        <button class="btn btn-secondary" onclick="exportData()">Exportar JSON</button>
-                        <input type="file" id="importFile" accept=".json" style="display: none;">
-                        <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">Importar JSON</button>
-                        <button class="btn btn-danger" onclick="confirmReset()">Eliminar todos los datos</button>
+                    <div style="margin-top: 2rem; text-align: center; padding-top: 2rem; border-top: 1px solid #e5e7eb;">
+                        <button class="btn btn-danger" onclick="confirmReset()">🗑️ Borrar Todos los Datos</button>
                     </div>
-                    <div id="syncStatus"></div>
                 </div>
             </section>
         </main>
     </div>
 
     <script>
+        // Variables globales
         let products = [];
         let warehouses = [];
         let categories = [];
         let subcategories = {};
-        let githubConfig = {
+        let config = {
             logoUrl: '',
             headerBgUrl: '',
             catalogBgUrl: '',
@@ -790,14 +861,19 @@
             logoPositionX: 0,
             logoPositionY: 0
         };
-        const ghRawBaseUrl = "https://raw.githubusercontent.com/";
+        let currentEditId = null;
 
         // Utilidades para notificaciones (toasts)
         function showToast(message, type = 'success') {
             const toastContainer = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.classList.add('toast', type);
-            toast.innerHTML = `<span>${message}</span>`;
+            
+            let icon = '✓';
+            if (type === 'error') icon = '✗';
+            if (type === 'warning') icon = '⚠';
+            
+            toast.innerHTML = `<span class="toast-icon">${icon}</span><span>${message}</span>`;
             toastContainer.appendChild(toast);
             setTimeout(() => toast.classList.add('show'), 100);
             setTimeout(() => {
@@ -806,16 +882,190 @@
             }, 5000);
         }
 
+        // --- Lógica de la interfaz de usuario ---
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+            
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            const activeTab = document.querySelector(`[onclick="showSection('${sectionId}')"]`);
+            if (activeTab) {
+                activeTab.classList.add('active');
+            }
+
+            if (sectionId === 'respaldo') {
+                // Auto-generar exportación al abrir la sección
+                setTimeout(exportData, 100);
+            }
+            if (sectionId === 'catalogo') {
+                renderCatalog();
+            }
+            if (sectionId === 'categorias') {
+                renderCategoryLists();
+            }
+            if (sectionId === 'almacenes') {
+                renderWarehouseList();
+            }
+        }
+
+        // Funciones de guardado y carga de datos
+        function saveData() {
+            try {
+                localStorage.setItem('libomi_products_v3', JSON.stringify(products));
+                localStorage.setItem('libomi_categories_v3', JSON.stringify(categories));
+                localStorage.setItem('libomi_warehouses_v3', JSON.stringify(warehouses));
+                localStorage.setItem('libomi_subcategories_v3', JSON.stringify(subcategories));
+                localStorage.setItem('libomi_config_v3', JSON.stringify(config));
+                updateCloudStatus();
+            } catch (e) {
+                console.error('Error guardando en localStorage', e);
+                showToast('No se pudo guardar localmente', 'error');
+            }
+        }
+
+        function loadData() {
+            try {
+                const storedProducts = localStorage.getItem('libomi_products_v3');
+                const storedCategories = localStorage.getItem('libomi_categories_v3');
+                const storedWarehouses = localStorage.getItem('libomi_warehouses_v3');
+                const storedSubcategories = localStorage.getItem('libomi_subcategories_v3');
+                const storedConfig = localStorage.getItem('libomi_config_v3');
+
+                if (storedProducts) products = JSON.parse(storedProducts);
+                if (storedCategories) categories = JSON.parse(storedCategories);
+                if (storedWarehouses) warehouses = JSON.parse(storedWarehouses);
+                if (storedSubcategories) subcategories = JSON.parse(storedSubcategories);
+                if (storedConfig) config = JSON.parse(storedConfig);
+
+                // Datos por defecto si no existen
+                if (warehouses.length === 0) {
+                    warehouses = ['Almacén Principal'];
+                }
+                if (categories.length === 0) {
+                    categories = ['General', 'Electrónicos', 'Ropa'];
+                }
+                if (Object.keys(subcategories).length === 0) {
+                    subcategories = {
+                        'General': ['Varios'],
+                        'Electrónicos': ['Móviles', 'Ordenadores'],
+                        'Ropa': ['Hombre', 'Mujer']
+                    };
+                }
+
+                renderWarehouses();
+                renderCategories();
+                renderProducts();
+                renderCatalog();
+                loadConfig();
+                updateCloudStatus();
+            } catch (e) {
+                console.error('Error cargando datos', e);
+                showToast('Error cargando datos guardados', 'error');
+            }
+        }
+
+        function updateCloudStatus() {
+            const status = document.getElementById('cloudStatus');
+            const statusText = document.getElementById('cloudStatusText');
+            if (!status || !statusText) return;
+
+            const totalItems = products.length + Object.keys(categories).length + warehouses.length;
+            const lastSync = localStorage.getItem('libomi_last_sync');
+
+            if (lastSync) {
+                const syncDate = new Date(lastSync);
+                statusText.textContent = `Última sincronización: ${syncDate.toLocaleString()} (${totalItems} elementos)`;
+                status.className = 'cloud-status connected';
+            } else {
+                statusText.textContent = `${totalItems} elementos guardados localmente - Sin sincronizar`;
+                status.className = 'cloud-status';
+            }
+        }
+
+        function syncData() {
+            localStorage.setItem('libomi_last_sync', new Date().toISOString());
+            updateCloudStatus();
+            showToast('Datos sincronizados localmente');
+        }
+
+        // Generar ID único para productos
+        function generateId() {
+            return 'prod_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        function clearForm() {
+            document.getElementById('productForm').reset();
+            document.getElementById('imagePreview').innerHTML = '<span>Ingresa una URL de imagen</span>';
+            document.getElementById('imagePreview').classList.add('empty');
+            currentEditId = null;
+            updateSubcategorySelect('');
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+        }
+
+        function editProduct(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                currentEditId = productId;
+                document.getElementById('productName').value = product.name;
+                document.getElementById('productCode').value = product.code || '';
+                document.getElementById('productWarehouse').value = product.warehouse;
+                document.getElementById('productCategory').value = product.category;
+                updateSubcategorySelect(product.category, product.subcategory);
+                document.getElementById('productImageUrl').value = product.imageUrl || '';
+                document.getElementById('productDescription').value = product.description || '';
+                previewImageFromUrl();
+                showToast('Producto cargado para editar', 'warning');
+                showSection('productos');
+            }
+        }
+
+        function deleteProduct(productId) {
+            if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
+                products = products.filter(p => p.id !== productId);
+                saveData();
+                renderProducts();
+                renderCatalog();
+                showToast('Producto eliminado', 'warning');
+            }
+        }
+
+        function deleteCurrentProduct() {
+            if (currentEditId) {
+                deleteProduct(currentEditId);
+                clearForm();
+            } else {
+                showToast('No hay producto seleccionado para eliminar', 'error');
+            }
+        }
+
         // --- Lógica del Catálogo (Ver Catálogo) ---
         function renderCatalog() {
             const catalogContent = document.getElementById('catalogContent');
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            if (!catalogContent) return;
+            
+            const searchInput = document.getElementById('searchInput');
+            const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
             catalogContent.innerHTML = '';
             
             const filteredProducts = products.filter(p => 
-                p.name.toLowerCase().includes(searchTerm) ||
-                p.code.toLowerCase().includes(searchTerm) ||
-                p.warehouse.toLowerCase().includes(searchTerm)
+                (p.name && p.name.toLowerCase().includes(searchTerm)) ||
+                (p.code && p.code.toLowerCase().includes(searchTerm)) ||
+                (p.warehouse && p.warehouse.toLowerCase().includes(searchTerm))
             );
 
             if (filteredProducts.length === 0) {
@@ -835,7 +1085,7 @@
             for (const category in productsByCategory) {
                 const categorySection = document.createElement('div');
                 categorySection.className = 'category-section';
-                categorySection.innerHTML = `<h4>${category}</h4>`;
+                categorySection.innerHTML = `<h4 style="color: #1e293b; font-size: 1.5rem; margin: 2rem 0 1rem 0; padding-bottom: 0.5rem; border-bottom: 2px solid #e5e7eb;">${escapeHtml(category)}</h4>`;
 
                 const categoryGrid = document.createElement('div');
                 categoryGrid.className = 'products-grid';
@@ -847,214 +1097,635 @@
                 catalogContent.appendChild(categorySection);
             }
         }
-
+        
         function createProductCard(product, isCatalogView = false) {
             const card = document.createElement('div');
             card.className = 'product-card';
-            
-            const imageUrl = product.imageUrl.startsWith('http') ? product.imageUrl : githubConfig.logoUrl;
-            
+
+            const imageUrl = product.imageUrl || '';
+            const description = product.description || '';
+
             card.innerHTML = `
-                <div class="product-image" onclick="openModal('${imageUrl}', '${product.name}')">
-                    <img src="${imageUrl}" alt="${product.name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'200\\' height=\\'200\\'%3E%3Crect width=\\'100%25\\' height=\\'100%25\\' fill=\\'%23f3f4f6\\'/%3E%3Ctext x=\\'50%25\\' y=\\'50%25\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' fill=\\'%239ca3af\\' font-size=\\'20\\'%3ESin Imagen%3C/text%3E%3C/svg%3E'">
+                <div class="product-image" onclick="openModal('${imageUrl}')">
+                    <img src="${imageUrl}" alt="${escapeHtml(product.name)}" onerror="this.src='https://via.placeholder.com/300x200.png?text=Sin+Imagen';" loading="lazy">
                 </div>
                 <div class="product-info">
-                    <h4 class="product-name">${product.name}</h4>
-                    <p class="product-category">${product.category}</p>
-                    <p class="product-description">${product.description || 'Sin descripción.'}</p>
-                    <p class="product-price">${product.price || 'Precio no disponible'}</p>
-                    <div class="product-meta">
-                        <span class="product-sku">SKU: ${product.code || 'N/A'}</span><br>
-                        <span class="product-stock ${product.stock > 10 ? 'high' : product.stock > 0 ? 'low' : ''}">Stock: ${product.stock || '0'}</span>
-                    </div>
-                </div>
-                <div class="product-actions" style="padding: 1rem;">
-                    <button class="btn btn-outline" onclick="editProduct('${product.code}')">Editar</button>
-                    <button class="btn btn-danger" onclick="deleteProduct('${product.code}')">Eliminar</button>
+                    <div class="product-category">${escapeHtml(product.category)}</div>
+                    <div class="product-name">${escapeHtml(product.name)}</div>
+                    <div class="product-description">${escapeHtml(description)}</div>
+                    <div class="product-sku">SKU: ${escapeHtml(product.code || 'N/A')}</div>
+                    ${!isCatalogView ? `<div class="product-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                        <button class="btn btn-secondary" onclick="editProduct('${product.id}')">Editar</button>
+                        <button class="btn btn-danger" onclick="deleteProduct('${product.id}')">Eliminar</button>
+                    </div>` : ''}
                 </div>
             `;
             return card;
         }
 
-        document.getElementById('searchInput').addEventListener('input', renderCatalog);
-
-        // --- Lógica del Formulario (Entrada de Datos) ---
         function renderProducts() {
             const productsList = document.getElementById('productsList');
+            if (!productsList) return;
+            
             productsList.innerHTML = '';
+            
+            if (products.length === 0) {
+                productsList.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 2rem;">No hay productos registrados.</p>';
+                return;
+            }
+
             products.forEach(product => {
                 productsList.appendChild(createProductCard(product));
             });
         }
-        
-        function clearForm() {
-            document.getElementById('productForm').reset();
-            document.getElementById('imagePreview').innerHTML = '<span>Ingresa una URL de imagen</span>';
-            document.getElementById('productCode').disabled = false;
-            document.getElementById('productForm').dataset.editing = 'false';
+
+        // --- Lógica de Categorías y Almacenes ---
+        function addCategory() {
+            const newCategoryName = document.getElementById('newCategoryName').value.trim();
+            const newSubcategoryName = document.getElementById('newSubcategoryName').value.trim();
+            
+            if (newCategoryName) {
+                if (!categories.includes(newCategoryName)) {
+                    categories.push(newCategoryName);
+                    showToast(`Categoría "${newCategoryName}" agregada.`);
+                }
+                if (newSubcategoryName) {
+                    if (!subcategories[newCategoryName]) {
+                        subcategories[newCategoryName] = [];
+                    }
+                    if (!subcategories[newCategoryName].includes(newSubcategoryName)) {
+                        subcategories[newCategoryName].push(newSubcategoryName);
+                        showToast(`Subcategoría "${newSubcategoryName}" agregada a "${newCategoryName}".`);
+                    }
+                }
+                saveData();
+                renderCategories();
+                renderCategoryLists();
+                document.getElementById('newCategoryName').value = '';
+                document.getElementById('newSubcategoryName').value = '';
+            } else {
+                showToast('Ingresa el nombre de la categoría', 'error');
+            }
         }
 
-        // --- Lógica de las Secciones ---
-        function showSection(sectionId) {
-            document.querySelectorAll('.section').forEach(section => {
-                section.classList.remove('active');
-            });
-            document.getElementById(sectionId).classList.add('active');
+        function renderCategories() {
+            const selectCategory = document.getElementById('productCategory');
+            if (!selectCategory) return;
             
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.classList.remove('active');
+            selectCategory.innerHTML = '<option value="">-- Selecciona Categoría --</option>';
+            
+            categories.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat;
+                option.textContent = cat;
+                selectCategory.appendChild(option);
             });
-            event.target.classList.add('active');
+        }
 
-            if (sectionId === 'catalogo') {
-                renderCatalog();
-            } else if (sectionId === 'productos') {
-                renderProducts();
-            } else if (sectionId === 'categorias') {
+        function renderCategoryLists() {
+            const categoriesList = document.getElementById('categoriesList');
+            if (!categoriesList) return;
+            
+            categoriesList.innerHTML = '';
+
+            if (categories.length === 0) {
+                categoriesList.innerHTML = '<p>No hay categorías registradas.</p>';
+                return;
+            }
+
+            categories.forEach(cat => {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.style.marginBottom = '1rem';
+                categoryDiv.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: white; border-radius: 8px; border: 1px solid #e5e7eb;">
+                        <span><strong>${escapeHtml(cat)}</strong></span>
+                        <button class="btn btn-danger" onclick="deleteCategory('${escapeHtml(cat)}')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">Eliminar</button>
+                    </div>
+                `;
+                
+                if (subcategories[cat] && subcategories[cat].length > 0) {
+                    const subList = document.createElement('div');
+                    subList.style.marginLeft = '1rem';
+                    subList.style.marginTop = '0.5rem';
+                    
+                    subcategories[cat].forEach(sub => {
+                        const subDiv = document.createElement('div');
+                        subDiv.style.marginBottom = '0.25rem';
+                        subDiv.innerHTML = `
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; background: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0;">
+                                <span>${escapeHtml(sub)}</span>
+                                <button class="btn btn-danger" onclick="deleteSubcategory('${escapeHtml(cat)}', '${escapeHtml(sub)}')" style="padding: 0.125rem 0.25rem; font-size: 0.625rem;">×</button>
+                            </div>
+                        `;
+                        subList.appendChild(subDiv);
+                    });
+                    categoryDiv.appendChild(subList);
+                }
+                
+                categoriesList.appendChild(categoryDiv);
+            });
+        }
+        
+        function updateSubcategorySelect(category, selectedSubcategory = '') {
+            const selectSubcategory = document.getElementById('productSubcategory');
+            if (!selectSubcategory) return;
+            
+            selectSubcategory.innerHTML = '<option value="">-- Selecciona Subcategoría --</option>';
+            
+            if (subcategories[category]) {
+                subcategories[category].forEach(sub => {
+                    const option = document.createElement('option');
+                    option.value = sub;
+                    option.textContent = sub;
+                    if (sub === selectedSubcategory) option.selected = true;
+                    selectSubcategory.appendChild(option);
+                });
+            }
+        }
+
+        function deleteCategory(cat) {
+            if (confirm(`¿Eliminar la categoría "${cat}" y todas sus subcategorías?`)) {
+                categories = categories.filter(c => c !== cat);
+                delete subcategories[cat];
+                products.forEach(product => {
+                    if (product.category === cat) {
+                        product.category = '';
+                        product.subcategory = '';
+                    }
+                });
+                saveData();
                 renderCategories();
-            } else if (sectionId === 'almacenes') {
+                renderCategoryLists();
+                renderProducts();
+                showToast(`Categoría "${cat}" eliminada.`, 'warning');
+            }
+        }
+
+        function deleteSubcategory(cat, sub) {
+            if (confirm(`¿Eliminar la subcategoría "${sub}"?`)) {
+                subcategories[cat] = subcategories[cat].filter(s => s !== sub);
+                products.forEach(product => {
+                    if (product.category === cat && product.subcategory === sub) {
+                        product.subcategory = '';
+                    }
+                });
+                saveData();
+                renderCategories();
+                renderCategoryLists();
+                renderProducts();
+                showToast(`Subcategoría "${sub}" eliminada.`, 'warning');
+            }
+        }
+        
+        function addWarehouse() {
+            const newWarehouseName = document.getElementById('newWarehouseName').value.trim();
+            if (newWarehouseName && !warehouses.includes(newWarehouseName)) {
+                warehouses.push(newWarehouseName);
+                saveData();
                 renderWarehouses();
+                renderWarehouseList();
+                document.getElementById('newWarehouseName').value = '';
+                showToast(`Almacén "${newWarehouseName}" agregado.`);
+            } else if (warehouses.includes(newWarehouseName)) {
+                showToast('Este almacén ya existe', 'warning');
+            } else {
+                showToast('Ingresa el nombre del almacén', 'error');
+            }
+        }
+
+        function renderWarehouses() {
+            const selectWarehouse = document.getElementById('productWarehouse');
+            if (!selectWarehouse) return;
+            
+            selectWarehouse.innerHTML = '<option value="">-- Selecciona Almacén --</option>';
+
+            warehouses.forEach(wh => {
+                const option = document.createElement('option');
+                option.value = wh;
+                option.textContent = wh;
+                selectWarehouse.appendChild(option);
+            });
+        }
+
+        function renderWarehouseList() {
+            const warehousesList = document.getElementById('warehousesList');
+            if (!warehousesList) return;
+            
+            warehousesList.innerHTML = '';
+
+            if (warehouses.length === 0) {
+                warehousesList.innerHTML = '<p>No hay almacenes registrados.</p>';
+                return;
+            }
+
+            warehouses.forEach(wh => {
+                const warehouseDiv = document.createElement('div');
+                warehouseDiv.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: white; border-radius: 8px; margin-bottom: 0.5rem; border: 1px solid #e5e7eb;">
+                        <span><strong>${escapeHtml(wh)}</strong></span>
+                        <button class="btn btn-danger" onclick="deleteWarehouse('${escapeHtml(wh)}')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">Eliminar</button>
+                    </div>
+                `;
+                warehousesList.appendChild(warehouseDiv);
+            });
+        }
+
+        function deleteWarehouse(wh) {
+            if (confirm(`¿Eliminar el almacén "${wh}"?`)) {
+                warehouses = warehouses.filter(w => w !== wh);
+                products.forEach(product => {
+                    if (product.warehouse === wh) {
+                        product.warehouse = '';
+                    }
+                });
+                saveData();
+                renderWarehouses();
+                renderWarehouseList();
+                renderProducts();
+                showToast(`Almacén "${wh}" eliminado.`, 'warning');
             }
         }
         
         // --- Lógica de la Configuración ---
         function loadConfig() {
-            const storedConfig = localStorage.getItem('githubConfig');
-            if (storedConfig) {
-                githubConfig = JSON.parse(storedConfig);
-                document.getElementById('logoUrl').value = githubConfig.logoUrl;
-                document.getElementById('headerBgUrl').value = githubConfig.headerBgUrl;
-                document.getElementById('catalogBgUrl').value = githubConfig.catalogBgUrl;
-                document.getElementById('catalogOpacity').value = githubConfig.catalogOpacity;
-                document.getElementById('catalogBgColor').value = githubConfig.catalogBgColor;
-                document.documentElement.style.setProperty('--header-bg-image', `url('${githubConfig.headerBgUrl}')`);
-                document.documentElement.style.setProperty('--catalog-bg-image', `url('${githubConfig.catalogBgUrl}')`);
-                document.documentElement.style.setProperty('--catalog-bg-overlay', `rgba(255, 255, 255, ${githubConfig.catalogOpacity})`);
-                document.documentElement.style.setProperty('--catalog-bg-color', githubConfig.catalogBgColor);
-                document.getElementById('logoImage').src = githubConfig.logoUrl;
-                
-                // Aplicar posición del logo
-                const logoContainer = document.getElementById('logo-display');
-                const logoImg = document.getElementById('logoImage');
-                logoImg.style.left = `${githubConfig.logoPositionX}px`;
-                logoImg.style.top = `${githubConfig.logoPositionY}px`;
+            const logoUrl = document.getElementById('logoUrl');
+            const headerBgUrl = document.getElementById('headerBgUrl');
+            const catalogBgUrl = document.getElementById('catalogBgUrl');
+            const catalogOpacity = document.getElementById('catalogOpacity');
+            const catalogBgColor = document.getElementById('catalogBgColor');
+            
+            if (logoUrl) logoUrl.value = config.logoUrl || '';
+            if (headerBgUrl) headerBgUrl.value = config.headerBgUrl || '';
+            if (catalogBgUrl) catalogBgUrl.value = config.catalogBgUrl || '';
+            if (catalogOpacity) catalogOpacity.value = config.catalogOpacity || 0.8;
+            if (catalogBgColor) catalogBgColor.value = config.catalogBgColor || '#f5f7fa';
+            
+            // Aplicar configuración visual
+            if (config.headerBgUrl) {
+                document.documentElement.style.setProperty('--header-bg-image', `url('${config.headerBgUrl}')`);
+            }
+            if (config.catalogBgUrl) {
+                document.documentElement.style.setProperty('--catalog-bg-image', `url('${config.catalogBgUrl}')`);
+            }
+            document.documentElement.style.setProperty('--catalog-bg-overlay', `rgba(255, 255, 255, ${config.catalogOpacity})`);
+            document.documentElement.style.setProperty('--catalog-bg-color', config.catalogBgColor);
+            
+            const logoImage = document.getElementById('logoImage');
+            if (logoImage && config.logoUrl) {
+                logoImage.src = config.logoUrl;
+            }
+            
+            // Aplicar posición del logo
+            if (logoImage) {
+                logoImage.style.left = `${config.logoPositionX || 0}px`;
+                logoImage.style.top = `${config.logoPositionY || 0}px`;
             }
         }
 
         function saveConfig() {
-            githubConfig.logoUrl = document.getElementById('logoUrl').value;
-            githubConfig.headerBgUrl = document.getElementById('headerBgUrl').value;
-            githubConfig.catalogBgUrl = document.getElementById('catalogBgUrl').value;
-            githubConfig.catalogOpacity = document.getElementById('catalogOpacity').value;
-            githubConfig.catalogBgColor = document.getElementById('catalogBgColor').value;
+            const logoUrl = document.getElementById('logoUrl');
+            const headerBgUrl = document.getElementById('headerBgUrl');
+            const catalogBgUrl = document.getElementById('catalogBgUrl');
+            const catalogOpacity = document.getElementById('catalogOpacity');
+            const catalogBgColor = document.getElementById('catalogBgColor');
+            const logoPositionX = document.getElementById('logoPositionX');
+            const logoPositionY = document.getElementById('logoPositionY');
             
-            // Guardar la posición del logo
-            githubConfig.logoPositionX = parseInt(document.getElementById('logoPositionX').value) || 0;
-            githubConfig.logoPositionY = parseInt(document.getElementById('logoPositionY').value) || 0;
+            if (logoUrl) config.logoUrl = logoUrl.value;
+            if (headerBgUrl) config.headerBgUrl = headerBgUrl.value;
+            if (catalogBgUrl) config.catalogBgUrl = catalogBgUrl.value;
+            if (catalogOpacity) config.catalogOpacity = catalogOpacity.value;
+            if (catalogBgColor) config.catalogBgColor = catalogBgColor.value;
+            if (logoPositionX) config.logoPositionX = parseInt(logoPositionX.value) || 0;
+            if (logoPositionY) config.logoPositionY = parseInt(logoPositionY.value) || 0;
 
-            localStorage.setItem('githubConfig', JSON.stringify(githubConfig));
+            saveData();
             loadConfig();
             showToast('Configuración guardada.');
         }
 
-        // --- Lógica de los datos y sincronización ---
-        function saveProducts() {
-            localStorage.setItem('productsData', JSON.stringify(products));
-        }
-
-        function saveWarehouses() {
-            localStorage.setItem('warehousesData', JSON.stringify(warehouses));
-        }
-
-        function saveCategories() {
-            localStorage.setItem('categoriesData', JSON.stringify(categories));
-        }
-
-        function saveSubcategories() {
-            localStorage.setItem('subcategoriesData', JSON.stringify(subcategories));
+        // --- Modals y Vistas Previas ---
+        function openModal(imageSrc) {
+            if (!imageSrc) return;
+            const modal = document.getElementById('image-modal');
+            const modalImage = document.getElementById('modalImage');
+            if (modal && modalImage) {
+                modal.style.display = 'flex';
+                modalImage.src = imageSrc;
+            }
         }
         
-        // --- Drag and Drop para el logo ---
-        const logoContainer = document.getElementById('logo-display');
-        const logoImg = document.getElementById('logoImage');
-        const logoPositionX = document.getElementById('logoPositionX');
-        const logoPositionY = document.getElementById('logoPositionY');
-        let isDragging = false;
-        let startX, startY, imgStartX, imgStartY;
-
-        logoContainer.addEventListener('mousedown', (e) => {
-            isDragging = true;
-            startX = e.clientX;
-            startY = e.clientY;
-            imgStartX = logoImg.offsetLeft;
-            imgStartY = logoImg.offsetTop;
-            logoContainer.style.cursor = 'grabbing';
-        });
-
-        document.addEventListener('mousemove', (e) => {
-            if (!isDragging) return;
-            const dx = e.clientX - startX;
-            const dy = e.clientY - startY;
-            const newX = imgStartX + dx;
-            const newY = imgStartY + dy;
-
-            const containerWidth = logoContainer.offsetWidth;
-            const containerHeight = logoContainer.offsetHeight;
-            const imgWidth = logoImg.offsetWidth;
-            const imgHeight = logoImg.offsetHeight;
-
-            // Restricciones para que la imagen no salga del contenedor
-            let finalX = Math.min(Math.max(newX, -imgWidth + containerWidth), 0);
-            let finalY = Math.min(Math.max(newY, -imgHeight + containerHeight), 0);
-
-            logoImg.style.left = `${finalX}px`;
-            logoImg.style.top = `${finalY}px`;
-            logoPositionX.value = finalX;
-            logoPositionY.value = finalY;
-        });
-
-        document.addEventListener('mouseup', () => {
-            isDragging = false;
-            logoContainer.style.cursor = 'grab';
-        });
-
-        // --- Modals y Vistas Previas ---
-        const modal = document.getElementById('image-modal');
-        const modalImage = document.getElementById('modalImage');
-        const closeModal = document.getElementsByClassName('close-modal')[0];
-        function openModal(imageSrc) {
-            modal.style.display = 'flex';
-            modalImage.src = imageSrc;
-        }
-        closeModal.onclick = function() {
-            modal.style.display = 'none';
-        };
-        window.onclick = function(event) {
-            if (event.target === modal) {
-                modal.style.display = 'none';
+        function previewImageFromUrl() {
+            const url = document.getElementById('productImageUrl').value;
+            const imgPreview = document.getElementById('imagePreview');
+            if (!imgPreview) return;
+            
+            if (url) {
+                const img = new Image();
+                img.src = url;
+                img.onload = () => {
+                    imgPreview.innerHTML = `<img src="${url}" alt="Vista previa">`;
+                    imgPreview.classList.remove('empty');
+                    showToast('Vista previa de la imagen cargada.');
+                };
+                img.onerror = () => {
+                    imgPreview.innerHTML = '<span>Error al cargar imagen</span>';
+                    imgPreview.classList.add('empty');
+                    showToast('No se pudo cargar la imagen desde la URL.', 'error');
+                };
+            } else {
+                imgPreview.innerHTML = '<span>Ingresa una URL de imagen</span>';
+                imgPreview.classList.add('empty');
             }
-        };
+        }
 
-        // --- Inicialización ---
-        window.onload = () => {
-            const storedProducts = localStorage.getItem('productsData');
-            const storedWarehouses = localStorage.getItem('warehousesData');
-            const storedCategories = localStorage.getItem('categoriesData');
-            const storedSubcategories = localStorage.getItem('subcategoriesData');
+        // --- Exportación e Importación de Datos ---
+        function exportData() {
+            const data = {
+                products: products,
+                categories: categories,
+                warehouses: warehouses,
+                subcategories: subcategories,
+                config: config,
+                exportDate: new Date().toISOString(),
+                version: 'v3'
+            };
+            const exportTextarea = document.getElementById('exportDataTextarea');
+            if (exportTextarea) {
+                exportTextarea.value = JSON.stringify(data, null, 2);
+                showToast('Datos exportados - Listo para copiar');
+            }
+        }
+
+        function importData() {
+            const importTextarea = document.getElementById('importDataTextarea');
+            if (!importTextarea) return;
             
-            if (storedProducts) products = JSON.parse(storedProducts);
-            if (storedWarehouses) warehouses = JSON.parse(storedWarehouses);
-            if (storedCategories) categories = JSON.parse(storedCategories);
-            if (storedSubcategories) subcategories = JSON.parse(storedSubcategories);
+            const jsonData = importTextarea.value.trim();
+            if (!jsonData) {
+                showToast('Pega los datos JSON para importar', 'error');
+                return;
+            }
             
-            loadConfig();
+            try {
+                const data = JSON.parse(jsonData);
+                
+                // Validar estructura básica
+                if (!data || typeof data !== 'object') {
+                    throw new Error('Formato de datos inválido');
+                }
+                
+                // Importar datos
+                if (data.products && Array.isArray(data.products)) {
+                    products = data.products;
+                }
+                if (data.categories && Array.isArray(data.categories)) {
+                    categories = data.categories;
+                } else if (data.categories && typeof data.categories === 'object') {
+                    // Mantener compatibilidad con formato anterior
+                    categories = Object.keys(data.categories);
+                }
+                if (data.warehouses && Array.isArray(data.warehouses)) {
+                    warehouses = data.warehouses;
+                }
+                if (data.subcategories && typeof data.subcategories === 'object') {
+                    subcategories = data.subcategories;
+                }
+                if (data.config && typeof data.config === 'object') {
+                    config = { ...config, ...data.config };
+                }
+                
+                saveData();
+                renderWarehouses();
+                renderCategories();
+                renderProducts();
+                renderCatalog();
+                renderWarehouseList();
+                renderCategoryLists();
+                loadConfig();
+                updateCloudStatus();
+                showToast('Datos importados exitosamente');
+                importTextarea.value = '';
+                
+            } catch (error) {
+                console.error('Error parsing JSON:', error);
+                showToast('Error en el formato JSON. Verifica que los datos estén correctos.', 'error');
+            }
+        }
+
+        // --- Funciones de Copiar/Pegar ---
+        async function copyToClipboard(elementId) {
+            try {
+                const element = document.getElementById(elementId);
+                if (!element) return;
+                
+                const text = element.value;
+                if (!text) {
+                    showToast('No hay datos para copiar', 'warning');
+                    return;
+                }
+                await navigator.clipboard.writeText(text);
+                showToast('Datos copiados al portapapeles');
+            } catch (err) {
+                console.error('Error copying to clipboard:', err);
+                showToast('No se pudo copiar. Selecciona el texto manualmente.', 'error');
+            }
+        }
+        
+        async function pasteFromClipboard(elementId) {
+            try {
+                const text = await navigator.clipboard.readText();
+                const element = document.getElementById(elementId);
+                if (element) {
+                    element.value = text;
+                    showToast('Datos pegados desde el portapapeles');
+                }
+            } catch (err) {
+                console.error('Error pasting from clipboard:', err);
+                showToast('No se pudo pegar. Pega manualmente con Ctrl+V.', 'error');
+            }
+        }
+        
+        // --- Impresión y PDF ---
+        function printCatalog() {
+            showSection('catalogo');
+            setTimeout(() => {
+                window.print();
+            }, 500);
+        }
+        
+        function downloadPDF() {
+            showToast("La funcionalidad de PDF requiere una librería adicional y conexión a internet. Por favor, utiliza la opción de 'Imprimir Catálogo' y guarda como PDF desde tu navegador.", 'warning');
+            printCatalog();
+        }
+        
+        function confirmReset() {
+            if (confirm("¿Estás seguro de que quieres ELIMINAR TODOS los datos del catálogo? Esta acción es irreversible.")) {
+                resetData();
+            }
+        }
+        
+        function resetData() {
+            localStorage.clear();
+            products = [];
+            warehouses = ['Almacén Principal'];
+            categories = ['General', 'Electrónicos', 'Ropa'];
+            subcategories = {
+                'General': ['Varios'],
+                'Electrónicos': ['Móviles', 'Ordenadores'],
+                'Ropa': ['Hombre', 'Mujer']
+            };
+            config = {
+                logoUrl: '',
+                headerBgUrl: '',
+                catalogBgUrl: '',
+                catalogBgColor: '#f5f7fa',
+                catalogOpacity: 0.8,
+                logoPositionX: 0,
+                logoPositionY: 0
+            };
+            saveData();
             renderWarehouses();
             renderCategories();
             renderProducts();
             renderCatalog();
-        };
+            renderWarehouseList();
+            renderCategoryLists();
+            loadConfig();
+            updateCloudStatus();
+            showToast('Todos los datos han sido eliminados', 'warning');
+        }
 
-        // ... (resto de las funciones JavaScript)
+        // --- Inicialización y Event Listeners ---
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cargar datos al inicializar
+            loadData();
+            
+            // Event listener para el formulario de productos
+            const productForm = document.getElementById('productForm');
+            if (productForm) {
+                productForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    const productName = document.getElementById('productName').value.trim();
+                    const productCode = document.getElementById('productCode').value.trim();
+                    const productWarehouse = document.getElementById('productWarehouse').value;
+                    const productCategory = document.getElementById('productCategory').value;
+                    const productSubcategory = document.getElementById('productSubcategory').value;
+                    const productImageUrl = document.getElementById('productImageUrl').value.trim();
+                    const productDescription = document.getElementById('productDescription').value.trim();
+
+                    if (!productName || !productWarehouse || !productCategory) {
+                        showToast('Nombre, almacén y categoría son obligatorios', 'error');
+                        return;
+                    }
+
+                    const productId = currentEditId || generateId();
+                    const existingProductIndex = products.findIndex(p => p.id === productId);
+
+                    const productData = {
+                        id: productId,
+                        name: productName,
+                        code: productCode,
+                        warehouse: productWarehouse,
+                        category: productCategory,
+                        subcategory: productSubcategory,
+                        imageUrl: productImageUrl,
+                        description: productDescription
+                    };
+
+                    if (existingProductIndex !== -1) {
+                        products[existingProductIndex] = productData;
+                        showToast('Producto actualizado correctamente');
+                    } else {
+                        products.push(productData);
+                        showToast('Producto agregado correctamente');
+                    }
+
+                    saveData();
+                    renderProducts();
+                    renderCatalog();
+                    clearForm();
+                });
+            }
+
+            // Event listener para cambio de categoría
+            const productCategory = document.getElementById('productCategory');
+            if (productCategory) {
+                productCategory.addEventListener('change', function(e) {
+                    updateSubcategorySelect(e.target.value);
+                });
+            }
+
+            // Event listener para búsqueda
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', renderCatalog);
+            }
+
+            // Event listeners para el modal de imagen
+            const modal = document.getElementById('image-modal');
+            const closeModal = document.getElementsByClassName('close-modal')[0];
+            
+            if (closeModal) {
+                closeModal.onclick = function() {
+                    if (modal) modal.style.display = 'none';
+                };
+            }
+            
+            window.onclick = function(event) {
+                if (event.target === modal && modal) {
+                    modal.style.display = 'none';
+                }
+            };
+
+            // --- Drag and Drop para el logo ---
+            const logoContainer = document.getElementById('logo-display');
+            const logoImg = document.getElementById('logoImage');
+            const logoPositionX = document.getElementById('logoPositionX');
+            const logoPositionY = document.getElementById('logoPositionY');
+            
+            if (logoContainer && logoImg && logoPositionX && logoPositionY) {
+                let isDragging = false;
+                let startX, startY, imgStartX, imgStartY;
+
+                logoContainer.addEventListener('mousedown', (e) => {
+                    isDragging = true;
+                    startX = e.clientX;
+                    startY = e.clientY;
+                    imgStartX = logoImg.offsetLeft;
+                    imgStartY = logoImg.offsetTop;
+                    logoContainer.style.cursor = 'grabbing';
+                });
+
+                document.addEventListener('mousemove', (e) => {
+                    if (!isDragging) return;
+                    const dx = e.clientX - startX;
+                    const dy = e.clientY - startY;
+                    const newX = imgStartX + dx;
+                    const newY = imgStartY + dy;
+
+                    const containerWidth = logoContainer.offsetWidth;
+                    const containerHeight = logoContainer.offsetHeight;
+                    const imgWidth = logoImg.offsetWidth;
+                    const imgHeight = logoImg.offsetHeight;
+
+                    // Restricciones para que la imagen no salga del contenedor
+                    let finalX = Math.min(Math.max(newX, -imgWidth + containerWidth), 0);
+                    let finalY = Math.min(Math.max(newY, -imgHeight + containerHeight), 0);
+
+                    logoImg.style.left = `${finalX}px`;
+                    logoImg.style.top = `${finalY}px`;
+                    logoPositionX.value = finalX;
+                    logoPositionY.value = finalY;
+                });
+
+                document.addEventListener('mouseup', () => {
+                    isDragging = false;
+                    logoContainer.style.cursor = 'grab';
+                });
+            }
+        });
+
     </script>
 </body>
 </html>
