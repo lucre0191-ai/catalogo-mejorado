@@ -684,7 +684,6 @@
         
         <main class="container">
             <section id="productos" class="section active">
-                <!-- Estado de sincronización -->
                 <div class="cloud-status" id="cloudStatus">
                     <span>📊</span>
                     <span id="cloudStatusText">Estado de sincronización</span>
@@ -1078,61 +1077,61 @@
 
         // --- Lógica del Catálogo (Ver Catálogo) ---
         function renderCatalog() {
-    const catalogContent = document.getElementById('catalogContent');
-    if (!catalogContent) return;
-    
-    const searchInput = document.getElementById('searchInput');
-    const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
-    catalogContent.innerHTML = '';
-    
-    const filteredProducts = products.filter(p => 
-        (p.name && p.name.toLowerCase().includes(searchTerm)) ||
-        (p.code && p.code.toLowerCase().includes(searchTerm)) ||
-        (p.warehouse && p.warehouse.toLowerCase().includes(searchTerm))
-    );
+            const catalogContent = document.getElementById('catalogContent');
+            if (!catalogContent) return;
+            
+            const searchInput = document.getElementById('searchInput');
+            const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+            catalogContent.innerHTML = '';
+            
+            const filteredProducts = products.filter(p => 
+                (p.name && p.name.toLowerCase().includes(searchTerm)) ||
+                (p.code && p.code.toLowerCase().includes(searchTerm)) ||
+                (p.warehouse && p.warehouse.toLowerCase().includes(searchTerm))
+            );
 
-    if (filteredProducts.length === 0) {
-        catalogContent.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 2rem;">No se encontraron productos que coincidan con la búsqueda.</p>';
-        return;
-    }
+            if (filteredProducts.length === 0) {
+                catalogContent.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 2rem;">No se encontraron productos que coincidan con la búsqueda.</p>';
+                return;
+            }
 
-    // Agrupar productos primero por almacén y luego por categoría
-    const productsByWarehouse = filteredProducts.reduce((acc, p) => {
-        const warehouse = p.warehouse || 'Sin Almacén';
-        if (!acc[warehouse]) {
-            acc[warehouse] = {};
+            // Agrupar productos primero por almacén y luego por categoría
+            const productsByWarehouse = filteredProducts.reduce((acc, p) => {
+                const warehouse = p.warehouse || 'Sin Almacén';
+                if (!acc[warehouse]) {
+                    acc[warehouse] = {};
+                }
+                const category = p.category || 'Sin Categoría';
+                if (!acc[warehouse][category]) {
+                    acc[warehouse][category] = [];
+                }
+                acc[warehouse][category].push(p);
+                return acc;
+            }, {});
+            
+            // Generar la visualización
+            for (const warehouse in productsByWarehouse) {
+                const warehouseSection = document.createElement('div');
+                warehouseSection.className = 'warehouse-section';
+                warehouseSection.innerHTML = `<h2 style="color: #1d4ed8; font-size: 2rem; margin: 2rem 0 1rem 0; padding-bottom: 0.5rem; border-bottom: 3px solid #667eea;">Almacén: ${escapeHtml(warehouse)}</h2>`;
+                
+                for (const category in productsByWarehouse[warehouse]) {
+                    const categorySection = document.createElement('div');
+                    categorySection.className = 'category-section';
+                    categorySection.innerHTML = `<h4 style="color: #1e293b; font-size: 1.5rem; margin: 2rem 0 1rem 0; padding-bottom: 0.5rem; border-bottom: 2px solid #e5e7eb;">${escapeHtml(category)}</h4>`;
+
+                    const categoryGrid = document.createElement('div');
+                    categoryGrid.className = 'products-grid';
+
+                    productsByWarehouse[warehouse][category].forEach(product => {
+                        categoryGrid.appendChild(createProductCard(product, true));
+                    });
+                    categorySection.appendChild(categoryGrid);
+                    warehouseSection.appendChild(categorySection);
+                }
+                catalogContent.appendChild(warehouseSection);
+            }
         }
-        const category = p.category || 'Sin Categoría';
-        if (!acc[warehouse][category]) {
-            acc[warehouse][category] = [];
-        }
-        acc[warehouse][category].push(p);
-        return acc;
-    }, {});
-    
-    // Generar la visualización
-    for (const warehouse in productsByWarehouse) {
-        const warehouseSection = document.createElement('div');
-        warehouseSection.className = 'warehouse-section';
-        warehouseSection.innerHTML = `<h2 style="color: #1d4ed8; font-size: 2rem; margin: 2rem 0 1rem 0; padding-bottom: 0.5rem; border-bottom: 3px solid #667eea;">Almacén: ${escapeHtml(warehouse)}</h2>`;
-        
-        for (const category in productsByWarehouse[warehouse]) {
-            const categorySection = document.createElement('div');
-            categorySection.className = 'category-section';
-            categorySection.innerHTML = `<h4 style="color: #1e293b; font-size: 1.5rem; margin: 2rem 0 1rem 0; padding-bottom: 0.5rem; border-bottom: 2px solid #e5e7eb;">${escapeHtml(category)}</h4>`;
-
-            const categoryGrid = document.createElement('div');
-            categoryGrid.className = 'products-grid';
-
-            productsByWarehouse[warehouse][category].forEach(product => {
-                categoryGrid.appendChild(createProductCard(product, true));
-            });
-            categorySection.appendChild(categoryGrid);
-            warehouseSection.appendChild(categorySection);
-        }
-        catalogContent.appendChild(warehouseSection);
-    }
-}
         
         function createProductCard(product, isCatalogView = false) {
             const card = document.createElement('div');
@@ -1384,47 +1383,53 @@
         
         // --- Lógica de la Configuración ---
         function loadConfig() {
-            const logoImage = document.getElementById('logoImage');
-            const logoHeaderImg = document.getElementById('logo-header-img');
-            const logoHeaderContainer = document.getElementById('logo-header-container');
+            const logoUrl = document.getElementById('logoUrl');
+            const headerBgUrl = document.getElementById('headerBgUrl');
             const catalogBgUrl = document.getElementById('catalogBgUrl');
             const catalogOpacity = document.getElementById('catalogOpacity');
             const catalogBgColor = document.getElementById('catalogBgColor');
+            const logoImage = document.getElementById('logoImage');
+            const logoHeaderImg = document.getElementById('logo-header-img');
+            const logoHeaderContainer = document.getElementById('logo-header-container');
+            const logoPositionX = document.getElementById('logoPositionX');
+            const logoPositionY = document.getElementById('logoPositionY');
             
-          if (logoUrl) logoUrl.value = config.logoUrl || '';
-          if (headerBgUrl) headerBgUrl.value = config.headerBgUrl || '';
-          if (catalogBgUrl) catalogBgUrl.value = config.catalogBgUrl || '';
-          if (catalogOpacity) catalogOpacity.value = config.catalogOpacity || 0.8;
-          if (catalogBgColor) catalogBgColor.value = config.catalogBgColor || '#f5f7fa';
+            if (logoUrl) logoUrl.value = config.logoUrl || '';
+            if (headerBgUrl) headerBgUrl.value = config.headerBgUrl || '';
+            if (catalogBgUrl) catalogBgUrl.value = config.catalogBgUrl || '';
+            if (catalogOpacity) catalogOpacity.value = config.catalogOpacity || 0.8;
+            if (catalogBgColor) catalogBgColor.value = config.catalogBgColor || '#f5f7fa';
 
-                // Aplicar configuración visual
-          if (config.headerBgUrl) {
-    document.documentElement.style.setProperty('--header-bg-image', `url('${config.headerBgUrl}')`);
-} else {
-    document.documentElement.style.setProperty('--header-bg-image', 'none');
-}
-         if (config.catalogBgUrl) {
-    document.documentElement.style.setProperty('--catalog-bg-image', `url('${config.catalogBgUrl}')`);
-} else {
-    document.documentElement.style.setProperty('--catalog-bg-image', 'none');
-}
+            // Aplicar configuración visual
+            if (config.headerBgUrl) {
+                document.documentElement.style.setProperty('--header-bg-image', `url('${config.headerBgUrl}')`);
+            } else {
+                document.documentElement.style.setProperty('--header-bg-image', 'none');
+            }
+            if (config.catalogBgUrl) {
+                document.documentElement.style.setProperty('--catalog-bg-image', `url('${config.catalogBgUrl}')`);
+            } else {
+                document.documentElement.style.setProperty('--catalog-bg-image', 'none');
+            }
+            
+            document.documentElement.style.setProperty('--catalog-bg-overlay', `rgba(255, 255, 255, ${config.catalogOpacity})`);
+            document.documentElement.style.setProperty('--catalog-bg-color', config.catalogBgColor);
 
-document.documentElement.style.setProperty('--catalog-bg-overlay', `rgba(255, 255, 255, ${config.catalogOpacity})`);
-document.documentElement.style.setProperty('--catalog-bg-color', config.catalogBgColor);
+            if (logoImage && logoHeaderImg && logoHeaderContainer && config.logoUrl) {
+                logoImage.src = config.logoUrl;
+                logoHeaderImg.src = config.logoUrl;
+                logoHeaderContainer.style.display = 'block';
+            } else if (logoHeaderContainer) {
+                logoHeaderContainer.style.display = 'none';
+            }
 
-       if (logoImage && logoHeaderImg && config.logoUrl) {
-       logoImage.src = config.logoUrl;
-       logoHeaderImg.src = config.logoUrl;
-       logoHeaderContainer.style.display = 'block';
-} else if (logoHeaderContainer) {
-    logoHeaderContainer.style.display = 'none';
-}
+            // Aplicar posición del logo
+            if (logoImage && logoPositionX && logoPositionY) {
+                logoImage.style.left = `${config.logoPositionX || 0}px`;
+                logoImage.style.top = `${config.logoPositionY || 0}px`;
+            }
+        }
 
-             // Aplicar posición del logo
-       if (logoImage) {
-       logoImage.style.left = `${config.logoPositionX || 0}px`;
-       logoImage.style.top = `${config.logoPositionY || 0}px`;
-}
         function saveConfig() {
             const logoUrl = document.getElementById('logoUrl');
             const headerBgUrl = document.getElementById('headerBgUrl');
@@ -1768,7 +1773,6 @@ document.documentElement.style.setProperty('--catalog-bg-color', config.catalogB
                 });
             }
         });
-
     </script>
 </body>
 </html>
