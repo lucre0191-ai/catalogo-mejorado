@@ -5,6 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo Libomi</title>
     <style>
+        /* Nuevo estilo para el logo en el encabezado principal */
+.logo-header-container {
+    position: absolute; /* Para que el logo se pueda mover independientemente */
+    top: 1rem;
+    left: 1rem;
+    width: 150px;
+    height: 75px;
+    overflow: hidden;
+}
+
+.logo-header-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    position: absolute;
+}
         /* CSS se mantiene dentro de este archivo */
         /* Estilos de la página y catálogo */
         /* Reset básico */
@@ -494,26 +510,30 @@
 
         /* Estilos de impresión */
         @media print {
-            .nav, .btn, .form-control, .card h3, .product-actions, #toast-container, .cloud-status, .github-config, .form-group, .form-grid, #search-form, .nav, .custom-header, #logo-display {
-                display: none !important;
-            }
-            
-            body {
-                font-size: 12px;
-                background: white !important;
-                color: black !important;
-                line-height: 1.4;
-            }
+    .nav, .btn, .form-control, .card h3, .product-actions, #toast-container, .cloud-status, .github-config, .form-group, .form-grid, #search-form, .nav, #logo-display {
+        display: none !important;
+    }
 
-            .container {
-                max-width: none !important;
-                margin: 0 !important;
-                padding: 10px !important;
-            }
-
-            .main-content {
-                background-color: transparent !important;
-            }
+    /* Eliminar la regla que oculta el encabezado personalizado en la impresión */
+    .custom-header {
+        display: block !important;
+        box-shadow: none !important;
+        padding: 1rem 0 !important;
+        margin-bottom: 1rem !important;
+    }
+    
+    body {
+        font-size: 12px;
+        background: var(--catalog-bg-color, white) !important; /* Usar el color del catálogo o blanco */
+        background-image: var(--catalog-bg-image, none) !important; /* Usar la imagen de fondo si existe */
+        color: black !important;
+        line-height: 1.4;
+    }
+    
+    .main-content {
+        background-color: var(--catalog-bg-overlay, rgba(255, 255, 255, 0.8)) !important;
+        z-index: 1;
+    }
 
             .products-grid {
                 display: grid !important;
@@ -642,6 +662,9 @@
 
     <header class="custom-header">
         <div class="header-content">
+            <div id="logo-header-container" class="logo-header-container">
+    <img id="logo-header-img" src="" alt="Logo del Catálogo">
+</div>
             <h1 class="header-title">Catálogo Libomi</h1>
             <p class="header-subtitle">Libomi, la mejor calidad en un solo lugar.</p>
         </div>
@@ -1055,48 +1078,61 @@
 
         // --- Lógica del Catálogo (Ver Catálogo) ---
         function renderCatalog() {
-            const catalogContent = document.getElementById('catalogContent');
-            if (!catalogContent) return;
-            
-            const searchInput = document.getElementById('searchInput');
-            const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
-            catalogContent.innerHTML = '';
-            
-            const filteredProducts = products.filter(p => 
-                (p.name && p.name.toLowerCase().includes(searchTerm)) ||
-                (p.code && p.code.toLowerCase().includes(searchTerm)) ||
-                (p.warehouse && p.warehouse.toLowerCase().includes(searchTerm))
-            );
+    const catalogContent = document.getElementById('catalogContent');
+    if (!catalogContent) return;
+    
+    const searchInput = document.getElementById('searchInput');
+    const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+    catalogContent.innerHTML = '';
+    
+    const filteredProducts = products.filter(p => 
+        (p.name && p.name.toLowerCase().includes(searchTerm)) ||
+        (p.code && p.code.toLowerCase().includes(searchTerm)) ||
+        (p.warehouse && p.warehouse.toLowerCase().includes(searchTerm))
+    );
 
-            if (filteredProducts.length === 0) {
-                catalogContent.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 2rem;">No se encontraron productos que coincidan con la búsqueda.</p>';
-                return;
-            }
+    if (filteredProducts.length === 0) {
+        catalogContent.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 2rem;">No se encontraron productos que coincidan con la búsqueda.</p>';
+        return;
+    }
 
-            const productsByCategory = filteredProducts.reduce((acc, p) => {
-                const category = p.category || 'Sin Categoría';
-                if (!acc[category]) {
-                    acc[category] = [];
-                }
-                acc[category].push(p);
-                return acc;
-            }, {});
-
-            for (const category in productsByCategory) {
-                const categorySection = document.createElement('div');
-                categorySection.className = 'category-section';
-                categorySection.innerHTML = `<h4 style="color: #1e293b; font-size: 1.5rem; margin: 2rem 0 1rem 0; padding-bottom: 0.5rem; border-bottom: 2px solid #e5e7eb;">${escapeHtml(category)}</h4>`;
-
-                const categoryGrid = document.createElement('div');
-                categoryGrid.className = 'products-grid';
-
-                productsByCategory[category].forEach(product => {
-                    categoryGrid.appendChild(createProductCard(product, true));
-                });
-                categorySection.appendChild(categoryGrid);
-                catalogContent.appendChild(categorySection);
-            }
+    // Agrupar productos primero por almacén y luego por categoría
+    const productsByWarehouse = filteredProducts.reduce((acc, p) => {
+        const warehouse = p.warehouse || 'Sin Almacén';
+        if (!acc[warehouse]) {
+            acc[warehouse] = {};
         }
+        const category = p.category || 'Sin Categoría';
+        if (!acc[warehouse][category]) {
+            acc[warehouse][category] = [];
+        }
+        acc[warehouse][category].push(p);
+        return acc;
+    }, {});
+    
+    // Generar la visualización
+    for (const warehouse in productsByWarehouse) {
+        const warehouseSection = document.createElement('div');
+        warehouseSection.className = 'warehouse-section';
+        warehouseSection.innerHTML = `<h2 style="color: #1d4ed8; font-size: 2rem; margin: 2rem 0 1rem 0; padding-bottom: 0.5rem; border-bottom: 3px solid #667eea;">Almacén: ${escapeHtml(warehouse)}</h2>`;
+        
+        for (const category in productsByWarehouse[warehouse]) {
+            const categorySection = document.createElement('div');
+            categorySection.className = 'category-section';
+            categorySection.innerHTML = `<h4 style="color: #1e293b; font-size: 1.5rem; margin: 2rem 0 1rem 0; padding-bottom: 0.5rem; border-bottom: 2px solid #e5e7eb;">${escapeHtml(category)}</h4>`;
+
+            const categoryGrid = document.createElement('div');
+            categoryGrid.className = 'products-grid';
+
+            productsByWarehouse[warehouse][category].forEach(product => {
+                categoryGrid.appendChild(createProductCard(product, true));
+            });
+            categorySection.appendChild(categoryGrid);
+            warehouseSection.appendChild(categorySection);
+        }
+        catalogContent.appendChild(warehouseSection);
+    }
+}
         
         function createProductCard(product, isCatalogView = false) {
             const card = document.createElement('div');
@@ -1348,40 +1384,47 @@
         
         // --- Lógica de la Configuración ---
         function loadConfig() {
-            const logoUrl = document.getElementById('logoUrl');
-            const headerBgUrl = document.getElementById('headerBgUrl');
+            const logoImage = document.getElementById('logoImage');
+            const logoHeaderImg = document.getElementById('logo-header-img');
+            const logoHeaderContainer = document.getElementById('logo-header-container');
             const catalogBgUrl = document.getElementById('catalogBgUrl');
             const catalogOpacity = document.getElementById('catalogOpacity');
             const catalogBgColor = document.getElementById('catalogBgColor');
             
-            if (logoUrl) logoUrl.value = config.logoUrl || '';
-            if (headerBgUrl) headerBgUrl.value = config.headerBgUrl || '';
-            if (catalogBgUrl) catalogBgUrl.value = config.catalogBgUrl || '';
-            if (catalogOpacity) catalogOpacity.value = config.catalogOpacity || 0.8;
-            if (catalogBgColor) catalogBgColor.value = config.catalogBgColor || '#f5f7fa';
-            
-            // Aplicar configuración visual
-            if (config.headerBgUrl) {
-                document.documentElement.style.setProperty('--header-bg-image', `url('${config.headerBgUrl}')`);
-            }
-            if (config.catalogBgUrl) {
-                document.documentElement.style.setProperty('--catalog-bg-image', `url('${config.catalogBgUrl}')`);
-            }
-            document.documentElement.style.setProperty('--catalog-bg-overlay', `rgba(255, 255, 255, ${config.catalogOpacity})`);
-            document.documentElement.style.setProperty('--catalog-bg-color', config.catalogBgColor);
-            
-            const logoImage = document.getElementById('logoImage');
-            if (logoImage && config.logoUrl) {
-                logoImage.src = config.logoUrl;
-            }
-            
-            // Aplicar posición del logo
-            if (logoImage) {
-                logoImage.style.left = `${config.logoPositionX || 0}px`;
-                logoImage.style.top = `${config.logoPositionY || 0}px`;
-            }
-        }
+          if (logoUrl) logoUrl.value = config.logoUrl || '';
+          if (headerBgUrl) headerBgUrl.value = config.headerBgUrl || '';
+          if (catalogBgUrl) catalogBgUrl.value = config.catalogBgUrl || '';
+          if (catalogOpacity) catalogOpacity.value = config.catalogOpacity || 0.8;
+          if (catalogBgColor) catalogBgColor.value = config.catalogBgColor || '#f5f7fa';
 
+                // Aplicar configuración visual
+          if (config.headerBgUrl) {
+    document.documentElement.style.setProperty('--header-bg-image', `url('${config.headerBgUrl}')`);
+} else {
+    document.documentElement.style.setProperty('--header-bg-image', 'none');
+}
+         if (config.catalogBgUrl) {
+    document.documentElement.style.setProperty('--catalog-bg-image', `url('${config.catalogBgUrl}')`);
+} else {
+    document.documentElement.style.setProperty('--catalog-bg-image', 'none');
+}
+
+document.documentElement.style.setProperty('--catalog-bg-overlay', `rgba(255, 255, 255, ${config.catalogOpacity})`);
+document.documentElement.style.setProperty('--catalog-bg-color', config.catalogBgColor);
+
+       if (logoImage && logoHeaderImg && config.logoUrl) {
+       logoImage.src = config.logoUrl;
+       logoHeaderImg.src = config.logoUrl;
+       logoHeaderContainer.style.display = 'block';
+} else if (logoHeaderContainer) {
+    logoHeaderContainer.style.display = 'none';
+}
+
+             // Aplicar posición del logo
+       if (logoImage) {
+       logoImage.style.left = `${config.logoPositionX || 0}px`;
+       logoImage.style.top = `${config.logoPositionY || 0}px`;
+}
         function saveConfig() {
             const logoUrl = document.getElementById('logoUrl');
             const headerBgUrl = document.getElementById('headerBgUrl');
