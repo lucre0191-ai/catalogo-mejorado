@@ -1607,11 +1607,36 @@
         
         // --- Impresión y PDF ---
         function printCatalog() {
-            showSection('catalogo');
-            setTimeout(() => {
+    showSection('catalogo');
+    
+    // Espera un momento para que el DOM se actualice
+    setTimeout(() => {
+        const images = document.querySelectorAll('#catalogContent img');
+        const imagePromises = [];
+
+        images.forEach(img => {
+            const promise = new Promise((resolve) => {
+                const imgElement = new Image();
+                imgElement.src = img.src;
+                
+                imgElement.onload = () => resolve();
+                imgElement.onerror = () => resolve(); // Resuelve incluso si hay un error para no bloquear la impresión
+            });
+            imagePromises.push(promise);
+        });
+
+        Promise.all(imagePromises)
+            .then(() => {
+                // Todas las imágenes (o la mayoría) se han cargado, ahora imprime
                 window.print();
-            }, 500);
-        }
+            })
+            .catch(error => {
+                console.error("Error al cargar imágenes:", error);
+                // Si algo sale mal, aún puedes intentar imprimir
+                window.print();
+            });
+    }, 500); // Pequeño retraso para que el navegador procese los cambios del DOM
+}
         
         function downloadPDF() {
             showToast("La funcionalidad de PDF requiere una librería adicional y conexión a internet. Por favor, utiliza la opción de 'Imprimir Catálogo' y guarda como PDF desde tu navegador.", 'warning');
