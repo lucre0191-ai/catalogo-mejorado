@@ -510,19 +510,21 @@
 
         /* Estilos de impresión */
      @media print {
-    /* Oculta los elementos que no deben aparecer al imprimir (barra de navegación, botones, etc.) */
-    .nav, .btn, .form-control, .card h3, .product-actions, #toast-container, .cloud-status, .github-config, .form-group, .form-grid, #search-form, #logo-display {
-        display: none !important;
-    }
-
-    /* Elimina márgenes y rellenos del body, encabezado y otros contenedores principales */
-    body, .custom-header, .header-content, .logo-header-container, .warehouse-section, .category-section {
+    /* Reinicio de márgenes y rellenos para todos los elementos */
+    body, h1, h2, h3, h4, h5, h6, p, ul, ol, li, div, section, header, footer {
         margin: 0 !important;
         padding: 0 !important;
     }
 
-    /* Ajusta el body para impresión */
+    /* Ocultar elementos que no son parte del catálogo */
+    .nav, .btn, .form-control, .card h3, .product-actions, #toast-container, .cloud-status, .github-config, .form-group, .form-grid, #search-form, #logo-display {
+        display: none !important;
+    }
+
+    /* Asegurar que el cuerpo de la página comience desde la parte superior */
     body {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
         font-size: 12px;
         background: var(--catalog-bg-color, white) !important;
         background-image: var(--catalog-bg-image, none) !important;
@@ -534,13 +536,21 @@
     .custom-header {
         display: block !important;
         box-shadow: none !important;
-        padding: 0.5rem 1rem !important; /* Ajuste el padding para un espacio mínimo */
+        padding: 0.5rem 1rem !important;
         margin-bottom: 0 !important;
+        position: relative !important;
+        top: auto !important;
+    }
+
+    /* Estilos para los títulos de sección, eliminando cualquier espacio sobrante */
+    .warehouse-section, .category-section {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
     }
     
     .warehouse-section h2, .category-section h4 {
         margin: 0 !important;
-        padding: 0.5rem 1rem 0 1rem !important; /* Mantiene un padding horizontal y superior mínimo */
+        padding: 0.5rem 1rem !important; /* Mantiene un padding mínimo */
     }
 
     /* Estilos del grid de productos para impresión */
@@ -595,7 +605,6 @@
         line-height: 1.2 !important;
     }
 }
-
         /* INICIO: Visibilidad de botones de acción en modo cliente */
         body.client-mode .product-actions,
         body.client-mode .nav,
