@@ -509,90 +509,97 @@
         }
 
         /* Estilos de impresión */
-        @media print {
+      @media print {
+    /* Ocultar elementos que no son parte del catálogo */
     .nav, .btn, .form-control, .card h3, .product-actions, #toast-container, .cloud-status, .github-config, .form-group, .form-grid, #search-form, .nav, #logo-display {
         display: none !important;
     }
+    
+    /* Eliminar márgenes y rellenos del body y del encabezado para eliminar el espacio en blanco */
+    body, .custom-header, .header-content {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    /* Eliminar el relleno superior del encabezado si lo tiene */
+    .custom-header {
+        padding-top: 0 !important;
+    }
 
-    /* Eliminar la regla que oculta el encabezado personalizado en la impresión */
+    /* Asegurar que el encabezado y el contenido principal se muestren */
     .custom-header {
         display: block !important;
         box-shadow: none !important;
-        padding: 1rem 0 !important;
-        margin-bottom: 1rem !important;
+        margin-bottom: 1rem !important; /* Mantiene un pequeño espacio entre el encabezado y el contenido */
     }
-    
+
+    /* Estilos del body en impresión */
     body {
         font-size: 12px;
-        background: var(--catalog-bg-color, white) !important; /* Usar el color del catálogo o blanco */
-        background-image: var(--catalog-bg-image, none) !important; /* Usar la imagen de fondo si existe */
+        background: var(--catalog-bg-color, white) !important;
+        background-image: var(--catalog-bg-image, none) !important;
         color: black !important;
         line-height: 1.4;
     }
     
+    /* Configuración del contenido principal */
     .main-content {
         background-color: var(--catalog-bg-overlay, rgba(255, 255, 255, 0.8)) !important;
         z-index: 1;
     }
 
-            .products-grid {
-                display: grid !important;
-                grid-template-columns: repeat(3, 1fr) !important;
-                gap: 10px !important;
-                page-break-inside: avoid;
-            }
-            .section {
-                display: none;
-            }
-            .section.active {
-                display: block !important;
-            }
-            #catalogo {
-                display: block !important;
-            }
+    /* Estilos del grid de productos para impresión */
+    .products-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 10px !important;
+        page-break-inside: avoid;
+    }
+    .section {
+        display: none;
+    }
+    .section.active {
+        display: block !important;
+    }
+    #catalogo {
+        display: block !important;
+    }
 
-            .product-card {
-                border: 1px solid #ddd !important;
-                border-radius: 8px !important;
-                padding: 8px !important;
-                margin-bottom: 10px !important;
-                page-break-inside: avoid;
-                background: white !important;
-                box-shadow: none !important;
-            }
+    .product-card {
+        border: 1px solid #ddd !important;
+        border-radius: 8px !important;
+        padding: 8px !important;
+        margin-bottom: 10px !important;
+        page-break-inside: avoid;
+        background: white !important;
+        box-shadow: none !important;
+    }
 
-            .product-image {
-                height: 120px !important;
-                margin-bottom: 8px !important;
-                border: 1px solid #eee !important;
-                border-radius: 4px !important;
-            }
+    .product-image {
+        height: 120px !important;
+        margin-bottom: 8px !important;
+        border: 1px solid #eee !important;
+        border-radius: 4px !important;
+    }
 
-            .product-image img {
-                object-fit: contain !important;
-            }
+    .product-image img {
+        object-fit: contain !important;
+    }
 
-            .product-name {
-                font-size: 11px !important;
-                font-weight: bold !important;
-                margin-bottom: 4px !important;
-                color: black !important;
-            }
-            
-            .product-category, .product-description {
-                font-size: 9px !important;
-                color: #555 !important;
-                margin-bottom: 2px !important;
-                line-height: 1.2 !important;
-            }
-        }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-        }
+    .product-name {
+        font-size: 11px !important;
+        font-weight: bold !important;
+        margin-bottom: 4px !important;
+        color: black !important;
+    }
+    
+    .product-category, .product-description {
+        font-size: 9px !important;
+        color: #555 !important;
+        margin-bottom: 2px !important;
+        line-height: 1.2 !important;
+    }
+}
 
         /* INICIO: Visibilidad de botones de acción en modo cliente */
         body.client-mode .product-actions,
