@@ -510,30 +510,18 @@
 
         /* Estilos de impresión */
       @media print {
-    /* Ocultar elementos que no son parte del catálogo */
-    .nav, .btn, .form-control, .card h3, .product-actions, #toast-container, .cloud-status, .github-config, .form-group, .form-grid, #search-form, .nav, #logo-display {
+    /* Oculta los elementos que no deben aparecer al imprimir (barra de navegación, botones, etc.) */
+    .nav, .btn, .form-control, .card h3, .product-actions, #toast-container, .cloud-status, .github-config, .form-group, .form-grid, #search-form, #logo-display {
         display: none !important;
     }
-    
-    /* Eliminar márgenes y rellenos del body y del encabezado para eliminar el espacio en blanco */
-    body, .custom-header, .header-content {
+
+    /* Elimina márgenes y rellenos del body y del header para eliminar el espacio en blanco */
+    body, .custom-header, .header-content, .logo-header-container, .warehouse-section {
         margin: 0 !important;
         padding: 0 !important;
     }
-    
-    /* Eliminar el relleno superior del encabezado si lo tiene */
-    .custom-header {
-        padding-top: 0 !important;
-    }
 
-    /* Asegurar que el encabezado y el contenido principal se muestren */
-    .custom-header {
-        display: block !important;
-        box-shadow: none !important;
-        margin-bottom: 1rem !important; /* Mantiene un pequeño espacio entre el encabezado y el contenido */
-    }
-
-    /* Estilos del body en impresión */
+    /* Ajusta el body para impresión */
     body {
         font-size: 12px;
         background: var(--catalog-bg-color, white) !important;
@@ -541,11 +529,28 @@
         color: black !important;
         line-height: 1.4;
     }
+
+    /* Asegura que el encabezado y el contenido principal se muestren correctamente */
+    .custom-header {
+        display: block !important;
+        box-shadow: none !important;
+        padding: 1rem 0 !important; /* Puedes ajustar este valor si quieres un pequeño espacio */
+        margin-bottom: 0 !important;
+    }
+
+    /* Ajusta los elementos dentro del encabezado para que se vean bien */
+    .header-content {
+        padding: 0 1rem !important;
+    }
     
-    /* Configuración del contenido principal */
-    .main-content {
-        background-color: var(--catalog-bg-overlay, rgba(255, 255, 255, 0.8)) !important;
-        z-index: 1;
+    .warehouse-section h2 {
+        margin: 1rem 0 0.5rem 0 !important;
+        padding-bottom: 0.25rem !important;
+    }
+
+    .category-section h4 {
+        margin: 1rem 0 0.5rem 0 !important;
+        padding-bottom: 0.25rem !important;
     }
 
     /* Estilos del grid de productos para impresión */
