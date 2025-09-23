@@ -509,14 +509,14 @@
         }
 
         /* Estilos de impresión */
-      @media print {
+     @media print {
     /* Oculta los elementos que no deben aparecer al imprimir (barra de navegación, botones, etc.) */
     .nav, .btn, .form-control, .card h3, .product-actions, #toast-container, .cloud-status, .github-config, .form-group, .form-grid, #search-form, #logo-display {
         display: none !important;
     }
 
-    /* Elimina márgenes y rellenos del body y del header para eliminar el espacio en blanco */
-    body, .custom-header, .header-content, .logo-header-container, .warehouse-section {
+    /* Elimina márgenes y rellenos del body, encabezado y otros contenedores principales */
+    body, .custom-header, .header-content, .logo-header-container, .warehouse-section, .category-section {
         margin: 0 !important;
         padding: 0 !important;
     }
@@ -534,23 +534,13 @@
     .custom-header {
         display: block !important;
         box-shadow: none !important;
-        padding: 1rem 0 !important; /* Puedes ajustar este valor si quieres un pequeño espacio */
+        padding: 0.5rem 1rem !important; /* Ajuste el padding para un espacio mínimo */
         margin-bottom: 0 !important;
     }
-
-    /* Ajusta los elementos dentro del encabezado para que se vean bien */
-    .header-content {
-        padding: 0 1rem !important;
-    }
     
-    .warehouse-section h2 {
-        margin: 1rem 0 0.5rem 0 !important;
-        padding-bottom: 0.25rem !important;
-    }
-
-    .category-section h4 {
-        margin: 1rem 0 0.5rem 0 !important;
-        padding-bottom: 0.25rem !important;
+    .warehouse-section h2, .category-section h4 {
+        margin: 0 !important;
+        padding: 0.5rem 1rem 0 1rem !important; /* Mantiene un padding horizontal y superior mínimo */
     }
 
     /* Estilos del grid de productos para impresión */
